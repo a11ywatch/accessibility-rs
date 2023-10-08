@@ -1,8 +1,8 @@
-extern crate getopts;
 extern crate accessibility_scraper;
+extern crate getopts;
 
-use getopts::Options;
 use accessibility_scraper::{Html, Selector};
+use getopts::Options;
 use std::env;
 use std::fs::{self, File};
 use std::io::{self, Read};

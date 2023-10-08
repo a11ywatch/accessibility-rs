@@ -2,9 +2,9 @@ use crate::dom;
 use crate::style::declaration_block::DeclarationBlock;
 use crate::style::properties::{ComputedValues, Phase};
 use crate::style::rules::{CssRule, RulesParser};
-use cssparser::{Parser, ParserInput, RuleListParser};
 use accessibility_scraper::selectors::matching::MatchingContext;
 use accessibility_scraper::{ElementRef, Html};
+use cssparser::{Parser, ParserInput, RuleListParser};
 use smallvec::SmallVec;
 use std::sync::Arc;
 

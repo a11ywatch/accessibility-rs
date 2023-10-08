@@ -1,9 +1,9 @@
 use crate::dom::{Document, Node, NodeId};
 use crate::style::errors::RuleParseErrorKind;
-use cssparser::ToCss;
-use html5ever::Namespace;
 use accessibility_scraper::selector::CssLocalName;
 use accessibility_scraper::selector::Simple;
+use cssparser::ToCss;
+use html5ever::Namespace;
 use selectors::attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint};
 use selectors::context::{MatchingContext, MatchingMode, QuirksMode};
 use selectors::matching::{matches_selector, ElementSelectorFlags};

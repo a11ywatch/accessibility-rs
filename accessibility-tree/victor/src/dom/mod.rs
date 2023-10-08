@@ -3,8 +3,8 @@
 mod html;
 
 use crate::style::{StyleSet, StyleSetBuilder};
-use html5ever::{LocalName, QualName};
 use accessibility_scraper::selector::CssLocalName;
+use html5ever::{LocalName, QualName};
 use std::borrow::Cow;
 use std::fmt;
 use std::iter::successors;

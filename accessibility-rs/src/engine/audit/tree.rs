@@ -87,7 +87,7 @@ pub fn push_leaf<'a, 'b, 'c>(
     document: &'a Html,
     mut matching_context: &mut MatchingContext<'c, Simple>,
     taffy: &mut Taffy,
-    mut l_leafs: &mut Vec<Node>,
+    l_leafs: &mut Vec<Node>,
 ) {
     match ElementRef::wrap(*node) {
         Some(element) => {
@@ -100,18 +100,11 @@ pub fn push_leaf<'a, 'b, 'c>(
                     &mut matching_context,
                 );
 
-                // TOOD: Only push leaf empty without children
-
-                let leaf = taffy.new_leaf(node_layout_style(style, &element));
-
-                l_leafs.push(leaf.unwrap());
-
-                // TODO: If node has children push leaf with children
-                // push leaf until children finished
                 if node.has_children() {
                     let children = node.children();
+                    let mut child_leafs: Vec<Node> = vec![];
 
-                    // iterate all children
+                    // iterate all children and push into one leaf
                     for child in children {
                         push_leaf(
                             &child,
@@ -119,9 +112,17 @@ pub fn push_leaf<'a, 'b, 'c>(
                             document,
                             matching_context,
                             taffy,
-                            &mut l_leafs,
+                            &mut child_leafs,
                         );
                     }
+
+                    l_leafs.push(
+                        taffy
+                            .new_with_children(node_layout_style(style, &element), &child_leafs)
+                            .unwrap(),
+                    );
+                } else {
+                    l_leafs.push(taffy.new_leaf(node_layout_style(style, &element)).unwrap());
                 }
             }
         }
@@ -218,11 +219,7 @@ pub fn parse_accessibility_tree<'a, 'b, 'c>(
             for child in node[0].0.children() {
                 match ElementRef::wrap(child) {
                     Some(element) => {
-                        let name = element.value().name();
-
-                        if !NODE_IGNORE.contains(name) {
-                            println!("BODY {:?}", name);
-
+                        if !NODE_IGNORE.contains(element.value().name()) {
                             let leaf = leaf(
                                 &element,
                                 &author,
