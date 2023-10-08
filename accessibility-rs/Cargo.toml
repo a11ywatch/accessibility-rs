@@ -1,0 +1,38 @@
+[package]
+name = "accessibility-rs"
+version = "0.0.2"
+authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Incredibly fast and precise universal web accessibility engine for Rust."
+repository = "https://github.com/a11ywatch/accessibility-rs"
+categories = ["accessibility"]
+documentation = "https://docs.rs/accessibility-rs"
+
+[features]
+default = ["taffy"]
+
+[dependencies]
+url = "2.4.0"
+lazy_static = { workspace = true }
+accessibility-scraper = { version = "0.0.1", features = ["main"], default-features = false, path = "../accessibility-scraper" }
+getrandom = { version = "0.2", features = ["js"] }
+taffy = { version = "0.3.13", optional = true }
+serde = { version = "1.0", features = ["derive"] }
+selectors = { workspace = true }
+smallvec = { workspace = true }
+ego-tree = { workspace = true }
+accessibility-tree = { version = "0.0.1", path = "../accessibility-tree/victor" }
+markup5ever = "0.11.0"
+cssparser = { workspace = true }
+slotmap = "1.0.6"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.37"
+
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+opt-level = "s"
+lto = true
