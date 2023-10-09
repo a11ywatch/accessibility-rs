@@ -1,4 +1,5 @@
 use super::tree::parse_accessibility_tree;
+use super::tree::parse_accessibility_tree_bounded;
 use accessibility_scraper::ElementRef;
 use accessibility_scraper::Html;
 use accessibility_tree::style::StyleSet;
@@ -11,14 +12,14 @@ pub struct Auditor<'a> {
     /// the html document
     pub document: &'a Html,
     /// the tree to map to nodes
-    pub tree: std::collections::BTreeMap<&'a str, Vec<(ElementRef<'a>, DefaultKey)>>,
+    pub tree: std::collections::BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<DefaultKey>)>>,
     /// styles for the audit
     pub author: StyleSet,
     /// the matching context for css selectors
     pub match_context:
         selectors::matching::MatchingContext<'a, accessibility_scraper::selector::Simple>,
     /// layout handling
-    pub taffy: Taffy,
+    pub taffy: Option<Taffy>,
 }
 
 impl<'a> Auditor<'a> {
@@ -29,6 +30,7 @@ impl<'a> Auditor<'a> {
             'a,
             accessibility_scraper::selector::Simple,
         >,
+        bounds: bool,
     ) -> Auditor<'a> {
         // TODO: make stylesheet building optional and only on first requirement
         let author = {
@@ -52,8 +54,11 @@ impl<'a> Auditor<'a> {
             author.finish()
         };
 
-        let (tree, taffy, match_context) =
-            parse_accessibility_tree(&document, &author, match_context);
+        let (tree, taffy, match_context) = if bounds {
+            parse_accessibility_tree_bounded(&document, &author, match_context)
+        } else {
+            parse_accessibility_tree(&document, &author, match_context)
+        };
 
         Auditor {
             document,

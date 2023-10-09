@@ -13,7 +13,6 @@ impl WCAG3AA {
     pub fn audit(
         // allow tree mutation until threads or setup the tree with initial elements.
         auditor: &Auditor<'_>,
-        // todo: get configs like viewport
     ) -> Vec<Issue> {
         let mut issues: Vec<Issue> = Vec::new();
 

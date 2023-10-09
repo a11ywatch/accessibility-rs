@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-rs"
-version = "0.0.4"
+version = "0.0.5-rc-1"
 authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -10,14 +10,14 @@ categories = ["accessibility"]
 documentation = "https://docs.rs/accessibility-rs"
 
 [features]
-default = ["taffy"]
+default = []
 
 [dependencies]
 url = "2.4.0"
 lazy_static = { workspace = true }
 accessibility-scraper = { version = "0.0.1", features = ["main"], default-features = false, path = "../accessibility-scraper" }
 getrandom = { version = "0.2", features = ["js"] }
-taffy = { version = "0.3.13", optional = true }
+taffy = { version = "0.3.13" }
 serde = { version = "1.0", features = ["derive"] }
 selectors = { workspace = true }
 smallvec = { workspace = true }
