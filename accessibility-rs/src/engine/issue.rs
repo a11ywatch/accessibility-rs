@@ -18,6 +18,10 @@ pub struct Clip {
 pub struct RunnerExtras {
     /// the url to get more information on the issue
     pub help_url: &'static str,
+    /// a detailed description of the issue
+    pub description: &'static str,
+    /// the impact level criteria
+    pub impact: &'static str,
 }
 
 /// issue details

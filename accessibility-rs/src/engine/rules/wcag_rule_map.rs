@@ -9,6 +9,16 @@ lazy_static! {
     /// a list of rules that should be applied for WCAG1
     pub static ref RULES_A: BTreeMap<&'static str, Vec<Rule>> =
         vec![
+            ("html", Vec::from([
+                Rule::new(Techniques::H57, Criteria::Error, Principle::Understandable, Guideline::Readable, |_rule, nodes| {
+                    (!nodes[0].0.attr("lang").unwrap_or_default().is_empty(), "2", Default::default())
+                }),
+                Rule::new(Techniques::H57, Criteria::Error, Principle::Understandable, Guideline::Readable, |_rule, nodes| {
+                    let lang = nodes[0].0.attr("lang").unwrap_or_default();
+                    // <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>
+                    (lang.chars().all(|x| x.is_alphanumeric()) && !lang.contains("_") && lang.len() < 12, "3.Lang", Default::default())
+                }),
+            ])),
             // empty titles
             ("title", Vec::from([
                 Rule::new(Techniques::H25, Criteria::Error, Principle::Operable, Guideline::Navigable, |_rule, nodes| {

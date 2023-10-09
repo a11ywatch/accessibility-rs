@@ -47,6 +47,8 @@ impl Principle {
 pub enum Guideline {
     /// Provide ways to help users navigate, find content, and determine where they are.
     Navigable,
+    /// Make text content readable and understandable.
+    Readable,
     /// Make Web pages appear and operate in predictable ways.
     Predictable,
 }
@@ -55,6 +57,7 @@ impl Guideline {
     pub fn as_str(&self) -> &'static str {
         match self {
             Guideline::Navigable => "Guideline2_4",
+            Guideline::Readable => "Guideline3_1",
             Guideline::Predictable => "Guideline3_2",
         }
     }
