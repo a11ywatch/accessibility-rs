@@ -1,6 +1,7 @@
 //! Test suite for handling accessibility in Rust.
 
-mod mock;
+mod mocks;
+use mocks::mock;
 
 #[test]
 fn _audit() {

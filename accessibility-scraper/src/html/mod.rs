@@ -60,12 +60,12 @@ impl Html {
     ///
     /// ```
     /// # extern crate html5ever;
-    /// # extern crate accessibility-scraper;
+    /// # extern crate accessibility_scraper;
     /// # extern crate tendril;
     /// # fn main() {
     /// # let document = "";
     /// use html5ever::driver::{self, ParseOpts};
-    /// use accessibility-scraper::Html;
+    /// use accessibility_scraper::Html;
     /// use tendril::TendrilSink;
     ///
     /// let parser = driver::parse_document(Html::new_document(), ParseOpts::default());

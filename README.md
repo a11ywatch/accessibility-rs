@@ -21,6 +21,14 @@ let audit = accessibility_rs::audit(&html, &css_rules, false);
 3. Clean architecure maybe the code gets merged into a browser one day.
 4. Improve Layout bounding accuracy to re-create leafs.
 
+## Contributing
+
+To help improve the rules the following needs to be done:
+
+1. Add the rule to the [Rules List](./RULES.md).
+1. Add the logic of handling the rule to [wcag_rule_map](./accessibility-rs/src/engine/rules/wcag_rule_map.rs) and the [id](./accessibility-rs/src/engine/rules/ids.rs).
+1. Add a unit test.
+
 ## About
 
 This crate is actively being developed. Some of the initial code is set as stubs until the feature is complete.

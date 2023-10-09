@@ -1,9 +1,11 @@
 use std::vec;
 
 #[derive(PartialOrd, Ord, std::cmp::Eq, PartialEq, Hash, Debug)]
-/// techniques for WCAG https://www.w3.org/TR/WCAG20-TECHS/
+/// techniques for WCAG <https://www.w3.org/TR/WCAG20-TECHS/>
 pub enum Techniques {
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H25.html>
     H25,
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H32.html>
     H32,
 }
 
@@ -22,14 +24,4 @@ impl Techniques {
             Techniques::H32 => vec!["H32.2"],
         }
     }
-    // /// get the value of the rule id with the pair
-    // pub fn index(&self, i: usize) -> String {
-    //     let pair = self.pairs();
-
-    //     if pair.len() <= i {
-    //         self.as_str().to_owned() + pair[i]
-    //     } else {
-    //         self.as_str().into()
-    //     }
-    // }
 }

@@ -1,6 +1,6 @@
 //! HTML parsing and querying with CSS selectors.
 //!
-//! `accessibility-scraper` is on [Crates.io][crate] and [GitHub][github].
+//! `accessibility_scraper` is on [Crates.io][crate] and [GitHub][github].
 //!
 //! [crate]: https://crates.io/crates/accessibility-scraper
 //! [github]: https://github.com/programble/accessibility-scraper
@@ -13,7 +13,7 @@
 //! ## Parsing a document
 //!
 //! ```
-//! use accessibility-scraper::Html;
+//! use accessibility_scraper::Html;
 //!
 //! let html = r#"
 //!     <!DOCTYPE html>
@@ -28,21 +28,21 @@
 //! ## Parsing a fragment
 //!
 //! ```
-//! use accessibility-scraper::Html;
+//! use accessibility_scraper::Html;
 //! let fragment = Html::parse_fragment("<h1>Hello, <i>world!</i></h1>");
 //! ```
 //!
 //! ## Parsing a selector
 //!
 //! ```
-//! use accessibility-scraper::Selector;
+//! use accessibility_scraper::Selector;
 //! let selector = Selector::parse("h1.foo").unwrap();
 //! ```
 //!
 //! ## Selecting elements
 //!
 //! ```
-//! use accessibility-scraper::{Html, Selector};
+//! use accessibility_scraper::{Html, Selector};
 //!
 //! let html = r#"
 //!     <ul>
@@ -63,7 +63,7 @@
 //! ## Selecting descendent elements
 //!
 //! ```
-//! use accessibility-scraper::{Html, Selector};
+//! use accessibility_scraper::{Html, Selector};
 //!
 //! let html = r#"
 //!     <ul>
@@ -86,7 +86,7 @@
 //! ## Accessing element attributes
 //!
 //! ```
-//! use accessibility-scraper::{Html, Selector};
+//! use accessibility_scraper::{Html, Selector};
 //!
 //! let fragment = Html::parse_fragment(r#"<input name="foo" value="bar">"#);
 //! let selector = Selector::parse(r#"input[name="foo"]"#).unwrap();
@@ -98,7 +98,7 @@
 //! ## Serializing HTML and inner HTML
 //!
 //! ```
-//! use accessibility-scraper::{Html, Selector};
+//! use accessibility_scraper::{Html, Selector};
 //!
 //! let fragment = Html::parse_fragment("<h1>Hello, <i>world!</i></h1>");
 //! let selector = Selector::parse("h1").unwrap();
@@ -112,7 +112,7 @@
 //! ## Accessing descendent text
 //!
 //! ```
-//! use accessibility-scraper::{Html, Selector};
+//! use accessibility_scraper::{Html, Selector};
 //!
 //! let fragment = Html::parse_fragment("<h1>Hello, <i>world!</i></h1>");
 //! let selector = Selector::parse("h1").unwrap();

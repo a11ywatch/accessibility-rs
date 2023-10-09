@@ -8,9 +8,9 @@ mod i18n;
 /// app utilities.
 mod utils;
 
-use crate::engine::audit::auditor::Auditor;
-use crate::engine::issue::Issue;
-use accessibility_scraper::ElementRef;
+pub use crate::engine::audit::auditor::Auditor;
+pub use crate::engine::issue::Issue;
+pub use accessibility_scraper::ElementRef;
 
 /// audit a web page passing the html and css rules.
 pub fn audit(html: &str, css_rules: &str, bounding_box: bool) -> Vec<Issue> {

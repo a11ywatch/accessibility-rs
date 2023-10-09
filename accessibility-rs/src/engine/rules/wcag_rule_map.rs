@@ -18,7 +18,7 @@ lazy_static! {
                     (nodes.is_empty() || nodes[0].0.html().is_empty(), "2", Default::default())
                 }),
             ])),
-            // missing label
+            // missing form submit
             ("form", Vec::from([
                 Rule::new(Techniques::H32, Criteria::Error, Principle::Operable, Guideline::Predictable, |_rule, nodes| {
                     // check the first element for now
