@@ -8,6 +8,7 @@ description = "Incredibly fast and precise universal web accessibility engine fo
 repository = "https://github.com/a11ywatch/accessibility-rs"
 categories = ["accessibility"]
 documentation = "https://docs.rs/accessibility-rs"
+include = ["/src", "LICENSE_MIT", "LICENSE_APACHE"]
 
 [features]
 default = []
