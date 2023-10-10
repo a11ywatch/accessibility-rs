@@ -67,8 +67,7 @@ impl Langs {
 /// the context of the issue
 impl Messages {
     /// create a new message
-    pub fn new(en: M, es: M, de: M, ja: M) -> Messages 
-    {
+    pub fn new(en: M, es: M, de: M, ja: M) -> Messages {
         Messages {
             en,
             es,
@@ -107,8 +106,8 @@ lazy_static! {
     pub static ref LOCALES: BTreeMap<&'static str, Messages> = {
         BTreeMap::from([
             (Techniques::H25.pairs()[0], Messages::new(
-                "A title should be provided for the document, using a non-empty title element in the head section.", 
-                "Se debe proporcionar un título para el documento, utilizando un elemento de título no vacío en la sección head.", 
+                "A title should be provided for the document, using a non-empty title element in the head section.",
+                "Se debe proporcionar un título para el documento, utilizando un elemento de título no vacío en la sección head.",
                 "",
                 "head セクションの空でない title 要素を使って、文書にタイトルをつけるべきです。"
             )),

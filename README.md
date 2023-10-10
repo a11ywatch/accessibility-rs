@@ -3,8 +3,7 @@
 The Rust web accessibility engine.
 
 ```rs
-// pass in html and css rules prior. If css rules are not passed in internal extraction is performed.
-let audit = accessibility_rs::audit(&html, &css_rules, false);
+let audit = accessibility_rs::audit(&AuditConfig::new(&html, &css, false, "en"));
 ```
 
 ## Features
