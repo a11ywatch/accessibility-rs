@@ -51,11 +51,14 @@ pub enum Guideline {
     Readable,
     /// Make Web pages appear and operate in predictable ways.
     Predictable,
+    /// Provide users enough time to read and use content.
+    EnoughTime
 }
 
 impl Guideline {
     pub fn as_str(&self) -> &'static str {
         match self {
+            Guideline::EnoughTime => "Guideline2_2",
             Guideline::Navigable => "Guideline2_4",
             Guideline::Readable => "Guideline3_1",
             Guideline::Predictable => "Guideline3_2",

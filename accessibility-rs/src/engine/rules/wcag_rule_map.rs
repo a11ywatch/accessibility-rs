@@ -19,13 +19,48 @@ lazy_static! {
                     (lang.chars().all(|x| x.is_alphanumeric()) && !lang.contains("_") && lang.len() < 12, "3.Lang", Default::default())
                 }),
             ])),
+           // empty titles
+           ("meta", Vec::from([
+                Rule::new(Techniques::F40, Criteria::Error, Principle::Operable, Guideline::EnoughTime, |_rule, nodes| {
+                    let mut valid = true;
+
+                    for node in nodes {
+                        let element = node.0;
+                        let meta_refresh = element.attr("http-equiv").unwrap_or_default();
+                        if meta_refresh == "refresh" {
+                            let content = element.attr("content").unwrap_or_default();
+                            if content.contains("url") {
+                                valid = content.starts_with("0;");
+                            }
+                        }
+                    }
+
+                    (valid, "2", Default::default())
+                }),
+                Rule::new(Techniques::F41, Criteria::Error, Principle::Understandable, Guideline::EnoughTime, |_rule, nodes| {
+                    let mut valid = true;
+
+                    for node in nodes {
+                        let element = node.0;
+                        let meta_refresh = element.attr("http-equiv").unwrap_or_default();
+                        if meta_refresh == "refresh" {
+                            let content = element.attr("content").unwrap_or_default();
+                            if !content.is_empty() {
+                                valid = content == "0";
+                            }
+                        }
+                    }
+
+                    (valid, "2", Default::default())
+                }),
+            ])),
             // empty titles
             ("title", Vec::from([
                 Rule::new(Techniques::H25, Criteria::Error, Principle::Operable, Guideline::Navigable, |_rule, nodes| {
                     (!nodes.is_empty(), "1.NoTitleEl", Default::default())
                 }),
                 Rule::new(Techniques::H25, Criteria::Error, Principle::Understandable, Guideline::Predictable, |_rule, nodes| {
-                    (nodes.is_empty() || nodes[0].0.html().is_empty(), "2", Default::default())
+                    (nodes.is_empty() || nodes[0].0.html().is_empty(), "1.EmptyTitle", Default::default())
                 }),
             ])),
             // missing form submit

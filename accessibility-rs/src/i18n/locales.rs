@@ -105,6 +105,8 @@ lazy_static! {
             (Techniques::H57.pairs()[0], Messages::new(&"The html element should have a lang or xml:lang attribute which describes the language of the document.", "", "")),
             (Techniques::H57.pairs()[1], Messages::new(&"The language specified in the lang attribute of the document element does not appear to be well-formed.", "", "")),
             (Techniques::H57.pairs()[2], Messages::new(&"The language specified in the xml:lang attribute of the document element does not appear to be well-formed.", "", "")),
+            (Techniques::F40.pairs()[0], Messages::new(&"Meta refresh tag used to redirect to another page, with a time limit that is not zero. Users cannot control this time limit.", "", "")),
+            (Techniques::F41.pairs()[0], Messages::new(&"Meta refresh tag used to refresh the current page. Users cannot control the time limit for this refresh.", "", "")),
         ])
     };
 }

@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "accessibility-rs"
-version = "0.0.6"
+version = "0.0.7"
 dependencies = [
  "accessibility-scraper",
  "accessibility-tree",
@@ -1049,9 +1049,9 @@ dependencies = [
 
 [[package]]
 name = "taffy"
-version = "0.3.15"
+version = "0.3.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "798053135b826949571726ab5e30bf9509a65b3bae6425d2e2b2dd391c50a101"
+checksum = "c488aa2bf4bb0cafed312e0876b79a591e3cfa47391f842b7198f9a56547561b"
 dependencies = [
  "arrayvec",
  "grid",
