@@ -66,6 +66,16 @@ lazy_static! {
                     (nodes.is_empty(), "", Default::default())
                 }),
             ])),
+            ("iframe", Vec::from([
+                Rule::new(Techniques::H64, Criteria::Error, Principle::Operable, Guideline::Navigable, |_rule, nodes| {
+                    (nodes.iter().all(|e| !e.0.attr("title").unwrap_or_default().is_empty()), "", Default::default())
+                }),
+            ])),
+            ("frame", Vec::from([
+                Rule::new(Techniques::H64, Criteria::Error, Principle::Operable, Guideline::Navigable, |_rule, nodes| {
+                    (nodes.iter().all(|e| !e.0.attr("title").unwrap_or_default().is_empty()), "", Default::default())
+                }),
+            ])),
             ("form", Vec::from([
                 Rule::new(Techniques::H32, Criteria::Error, Principle::Operable, Guideline::Predictable, |_rule, nodes| {
                     // check the first element for now

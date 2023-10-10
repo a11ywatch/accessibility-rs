@@ -101,3 +101,91 @@ fn _audit_blink_found() {
 
     assert_eq!(valid, false);
 }
+
+#[test]
+/// iframe missing title
+fn _iframe_missing_title() {
+    let audit = accessibility_rs::audit(
+        r###"<html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+          <title>A simple frameset document</title>
+        </head>
+        <frameset cols="10%, 90%">
+          <frame src="nav.html" title="Main menu" />
+          <frame src="doc.html" title="Documents" />
+          <noframes>
+            <body>
+              <a href="lib.html" title="Library link">Select to
+              go to the electronic library</a>
+            </body>
+          </noframes>
+        </frameset>
+      </html>"###,
+        &"",
+        false,
+    );
+    let mut valid = true;
+
+    for x in &audit {
+        if x.code == "WCAGAAA.Principle2.Guideline2_4.H64" {
+            valid = false;
+            break;
+        }
+    }
+
+    assert_eq!(valid, true);
+
+    let audit = accessibility_rs::audit(
+        r###"<html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+          <title>A simple frameset document</title>
+        </head>
+        <frameset cols="10%, 90%">
+          <frame src="nav.html" />
+          <frame src="doc.html" />
+          <noframes>
+            <body>
+              <a href="lib.html" title="Library link">Select to
+              go to the electronic library</a>
+            </body>
+          </noframes>
+        </frameset>
+      </html>"###,
+        &"",
+        false,
+    );
+    let mut valid = true;
+
+    for x in &audit {
+        if x.code == "WCAGAAA.Principle2.Guideline2_4.H64" {
+            valid = false;
+            break;
+        }
+    }
+
+    assert_eq!(valid, false);
+
+    let audit = accessibility_rs::audit(
+        r###" <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+          <title>A document using iframe</title>
+        </head>
+      <iframe src="banner-ad.html" id="testiframe" 
+        name="testiframe" title="Advertisement">
+          <a href="banner-ad.html">Advertisement</a>
+      </iframe>
+      </html>"###,
+        &"",
+        false,
+    );
+    let mut valid = true;
+
+    for x in &audit {
+        if x.code == "WCAGAAA.Principle2.Guideline2_4.H64" {
+            valid = false;
+            break;
+        }
+    }
+
+    assert_eq!(valid, true);
+}
