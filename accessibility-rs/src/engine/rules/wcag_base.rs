@@ -52,7 +52,7 @@ pub enum Guideline {
     /// Make Web pages appear and operate in predictable ways.
     Predictable,
     /// Provide users enough time to read and use content.
-    EnoughTime
+    EnoughTime,
 }
 
 impl Guideline {

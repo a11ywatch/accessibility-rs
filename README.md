@@ -13,6 +13,7 @@ let audit = accessibility_rs::audit(&html, &css_rules, false);
 2. Re-creating layout trees to get element positions.
 3. Ideal shapes for audits that scale.
 4. Amazingly fast audits.
+5. Internationalization support for translations.
 
 ## Roadmap
 

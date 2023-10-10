@@ -82,8 +82,12 @@ impl Messages {
 
 /// parse
 pub fn get_message(rule_id: &Techniques, section: &str, lang: &str) -> &'static str {
-    let k = &[rule_id.as_str(), section].join(".");
-    let message = LOCALES.get(&k.as_str());
+    let rule_id = rule_id.as_str();
+    let message = if section.is_empty() {
+        LOCALES.get(&rule_id)
+    } else {
+        LOCALES.get([rule_id, section].join(".").as_str())
+    };
 
     match message {
         Some(m) => match lang {
@@ -107,6 +111,7 @@ lazy_static! {
             (Techniques::H57.pairs()[2], Messages::new(&"The language specified in the xml:lang attribute of the document element does not appear to be well-formed.", "", "")),
             (Techniques::F40.pairs()[0], Messages::new(&"Meta refresh tag used to redirect to another page, with a time limit that is not zero. Users cannot control this time limit.", "", "")),
             (Techniques::F41.pairs()[0], Messages::new(&"Meta refresh tag used to refresh the current page. Users cannot control the time limit for this refresh.", "", "")),
+            (Techniques::F47.pairs()[0], Messages::new(&"Blink elements cannot satisfy the requirement that blinking information can be stopped within five seconds.", "", "")),
         ])
     };
 }

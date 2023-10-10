@@ -19,7 +19,6 @@ lazy_static! {
                     (lang.chars().all(|x| x.is_alphanumeric()) && !lang.contains("_") && lang.len() < 12, "3.Lang", Default::default())
                 }),
             ])),
-           // empty titles
            ("meta", Vec::from([
                 Rule::new(Techniques::F40, Criteria::Error, Principle::Operable, Guideline::EnoughTime, |_rule, nodes| {
                     let mut valid = true;
@@ -54,7 +53,6 @@ lazy_static! {
                     (valid, "2", Default::default())
                 }),
             ])),
-            // empty titles
             ("title", Vec::from([
                 Rule::new(Techniques::H25, Criteria::Error, Principle::Operable, Guideline::Navigable, |_rule, nodes| {
                     (!nodes.is_empty(), "1.NoTitleEl", Default::default())
@@ -63,7 +61,11 @@ lazy_static! {
                     (nodes.is_empty() || nodes[0].0.html().is_empty(), "1.EmptyTitle", Default::default())
                 }),
             ])),
-            // missing form submit
+            ("blink", Vec::from([
+                Rule::new(Techniques::F47, Criteria::Error, Principle::Operable, Guideline::EnoughTime, |_rule, nodes| {
+                    (nodes.is_empty(), "", Default::default())
+                }),
+            ])),
             ("form", Vec::from([
                 Rule::new(Techniques::H32, Criteria::Error, Principle::Operable, Guideline::Predictable, |_rule, nodes| {
                     // check the first element for now

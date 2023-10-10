@@ -18,11 +18,11 @@ fn _audit_missing_headers() {
     assert_eq!(valid, false)
 }
 
-
 #[test]
 /// meta refresh redirect
 fn _audit_meta_refresh() {
-    let audit = accessibility_rs::audit(r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    let audit = accessibility_rs::audit(
+        r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>     
        <title>Do not use this!</title>     
        <meta http-equiv="refresh"
@@ -36,7 +36,10 @@ fn _audit_meta_refresh() {
           in 5 seconds, otherwise, select the link manually.     
        </p>   
     </body> 
- </html>"###, &"", false);
+ </html>"###,
+        &"",
+        false,
+    );
     let mut valid = true;
 
     for x in &audit {
@@ -48,14 +51,18 @@ fn _audit_meta_refresh() {
 
     assert_eq!(valid, false);
 
-    let audit = accessibility_rs::audit(r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    let audit = accessibility_rs::audit(
+        r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>     
       <title>HTML Techniques for WCAG 2.0</title>     
       <meta http-equiv="refresh" content="60" />   
     </head>   
     <body>
     </body> 
-  </html>"###, &"", false);
+  </html>"###,
+        &"",
+        false,
+    );
     let mut valid = true;
 
     for x in &audit {
@@ -68,3 +75,29 @@ fn _audit_meta_refresh() {
     assert_eq!(valid, false);
 }
 
+#[test]
+/// no blink elements
+fn _audit_blink_found() {
+    let audit = accessibility_rs::audit(
+        r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head>     
+       <title>Do not use this!</title>      
+    </head>   
+    <body>     
+    <p>My Great Product <blink>Sale! $44,995!</blink></p>  
+    </body> 
+ </html>"###,
+        &"",
+        false,
+    );
+    let mut valid = true;
+
+    for x in &audit {
+        if x.code == "WCAGAAA.Principle2.Guideline2_2.F47" {
+            valid = false;
+            break;
+        }
+    }
+
+    assert_eq!(valid, false);
+}
