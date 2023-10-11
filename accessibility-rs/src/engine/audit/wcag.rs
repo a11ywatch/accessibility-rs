@@ -23,12 +23,20 @@ impl WCAG3AA {
                 match rules {
                     Some(rules) => {
                         for rule in rules {
-                            let (valid, section, selector) = (rule.validate)(&node.0, &node.1);
+                            let validation = (rule.validate)(&node.0, &node.1);
+                            let valid = validation.valid;
+                            let section = validation.id;
+                            let selector = validation.elements;
+                            let message = validation.message;
 
                             if !valid {
                                 // get locales prior or from document
-                                let message =
-                                    get_message(&rule.rule_id, &section, &Langs::En.as_str());
+                                let message = if !message.is_empty() {
+                                    message
+                                } else {
+                                    get_message(&rule.rule_id, &section, &Langs::En.as_str())
+                                };
+
                                 let issue = Issue::new(
                                     message,
                                     &node.0,

@@ -1,5 +1,5 @@
 use crate::engine::rules::ids::Techniques;
-use crate::engine::rules::rule::Rule;
+use crate::engine::rules::rule::{Rule, Validation};
 use crate::engine::rules::wcag_base::{Criteria, Guideline, Principle};
 use accessibility_scraper::Selector;
 use std::collections::BTreeMap;
@@ -11,12 +11,12 @@ lazy_static! {
         vec![
             ("html", Vec::from([
                 Rule::new(Techniques::H57, Criteria::Error, Principle::Understandable, Guideline::Readable, |_rule, nodes| {
-                    (!nodes[0].0.attr("lang").unwrap_or_default().is_empty(), "2", Default::default())
+                    Validation::new_issue(!nodes[0].0.attr("lang").unwrap_or_default().is_empty(), "2")
                 }),
                 Rule::new(Techniques::H57, Criteria::Error, Principle::Understandable, Guideline::Readable, |_rule, nodes| {
                     let lang = nodes[0].0.attr("lang").unwrap_or_default();
                     // <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>
-                    (lang.chars().all(|x| x.is_alphanumeric()) && !lang.contains("_") && lang.len() < 12, "3.Lang", Default::default())
+                    Validation::new_issue(lang.chars().all(|x| x.is_alphanumeric()) && !lang.contains("_") && lang.len() < 12, "3.Lang")
                 }),
             ])),
            ("meta", Vec::from([
@@ -34,7 +34,7 @@ lazy_static! {
                         }
                     }
 
-                    (valid, "2", Default::default())
+                    Validation::new_issue(valid, "2")
                 }),
                 Rule::new(Techniques::F41, Criteria::Error, Principle::Understandable, Guideline::EnoughTime, |_rule, nodes| {
                     let mut valid = true;
@@ -50,30 +50,30 @@ lazy_static! {
                         }
                     }
 
-                    (valid, "2", Default::default())
+                    Validation::new_issue(valid, "2")
                 }),
             ])),
             ("title", Vec::from([
                 Rule::new(Techniques::H25, Criteria::Error, Principle::Operable, Guideline::Navigable, |_rule, nodes| {
-                    (!nodes.is_empty(), "1.NoTitleEl", Default::default())
+                    Validation::new_issue(!nodes.is_empty(), "1.NoTitleEl")
                 }),
                 Rule::new(Techniques::H25, Criteria::Error, Principle::Understandable, Guideline::Predictable, |_rule, nodes| {
-                    (nodes.is_empty() || nodes[0].0.html().is_empty(), "1.EmptyTitle", Default::default())
+                    Validation::new_issue(nodes.is_empty() || nodes[0].0.html().is_empty(), "1.EmptyTitle")
                 }),
             ])),
             ("blink", Vec::from([
                 Rule::new(Techniques::F47, Criteria::Error, Principle::Operable, Guideline::EnoughTime, |_rule, nodes| {
-                    (nodes.is_empty(), "", Default::default())
+                    Validation::new_issue(nodes.is_empty(), "")
                 }),
             ])),
             ("iframe", Vec::from([
                 Rule::new(Techniques::H64, Criteria::Error, Principle::Operable, Guideline::Navigable, |_rule, nodes| {
-                    (nodes.iter().all(|e| !e.0.attr("title").unwrap_or_default().is_empty()), "", Default::default())
+                   Validation::new_issue(nodes.iter().all(|e| !e.0.attr("title").unwrap_or_default().is_empty()), "")
                 }),
             ])),
             ("frame", Vec::from([
                 Rule::new(Techniques::H64, Criteria::Error, Principle::Operable, Guideline::Navigable, |_rule, nodes| {
-                    (nodes.iter().all(|e| !e.0.attr("title").unwrap_or_default().is_empty()), "", Default::default())
+                    Validation::new_issue(nodes.iter().all(|e| !e.0.attr("title").unwrap_or_default().is_empty()), "")
                 }),
             ])),
             ("form", Vec::from([
@@ -90,7 +90,7 @@ lazy_static! {
                         };
                     }
 
-                    (valid, "2", Default::default())
+                    Validation::new_issue(valid, "2")
                 }),
             ]))
         ]

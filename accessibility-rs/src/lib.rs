@@ -1,5 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate rust_i18n;
 
 /// the main engine for audits.
 mod engine;
@@ -11,6 +13,8 @@ mod utils;
 pub use crate::engine::audit::auditor::Auditor;
 pub use crate::engine::issue::Issue;
 pub use accessibility_scraper::ElementRef;
+
+i18n!();
 
 /// configs for the audit
 #[derive(Default)]

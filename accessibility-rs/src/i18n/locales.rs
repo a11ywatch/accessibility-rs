@@ -82,7 +82,7 @@ impl Messages {
     }
 }
 
-/// parse
+/// parse message translation
 pub fn get_message(rule_id: &Techniques, section: &str, lang: &str) -> &'static str {
     let rule_id = rule_id.as_str();
     let message = if section.is_empty() {
@@ -99,6 +99,18 @@ pub fn get_message(rule_id: &Techniques, section: &str, lang: &str) -> &'static 
         },
         _ => Default::default(),
     }
+}
+
+/// get message config type
+pub fn get_message_i18n(rule_id: &Techniques, section: &str, lang: &str) -> String {
+    let rule_id = rule_id.as_str();
+    let message = if section.is_empty() {
+        rule_id.to_string()
+    } else {
+        [rule_id, section].join(".").to_string()
+    };
+
+    message
 }
 
 lazy_static! {
