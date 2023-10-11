@@ -21,6 +21,7 @@ impl Criteria {
 }
 
 /// wcag principle to follow
+#[derive(Debug)]
 pub enum Principle {
     /// Provide text alternatives for any non-text content so that it can be changed into other forms people need, such as large print, braille, speech, symbols or simpler language.
     Perceivable,
@@ -33,6 +34,7 @@ pub enum Principle {
 }
 
 impl Principle {
+    /// the principle to string code
     pub fn as_str(&self) -> &'static str {
         match self {
             Principle::Perceivable => "Principle1",
@@ -41,9 +43,19 @@ impl Principle {
             Principle::Robust => "Principle4",
         }
     }
+    /// the principle index
+    pub fn as_index(&self) -> &'static str {
+        match self {
+            Principle::Perceivable => "1",
+            Principle::Operable => "2",
+            Principle::Understandable => "3",
+            Principle::Robust => "4",
+        }
+    }
 }
 
 /// wcag principle to follow
+#[derive(Debug)]
 pub enum Guideline {
     /// Provide ways to help users navigate, find content, and determine where they are.
     Navigable,
@@ -56,12 +68,22 @@ pub enum Guideline {
 }
 
 impl Guideline {
+    /// the guideline to string code
     pub fn as_str(&self) -> &'static str {
         match self {
             Guideline::EnoughTime => "Guideline2_2",
             Guideline::Navigable => "Guideline2_4",
             Guideline::Readable => "Guideline3_1",
             Guideline::Predictable => "Guideline3_2",
+        }
+    }
+    /// the principle index
+    pub fn as_index(&self) -> &'static str {
+        match self {
+            Guideline::EnoughTime => "2_2",
+            Guideline::Navigable => "2_4",
+            Guideline::Readable => "3_1",
+            Guideline::Predictable => "3_2",
         }
     }
 }

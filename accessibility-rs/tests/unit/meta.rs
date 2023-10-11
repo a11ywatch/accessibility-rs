@@ -6,12 +6,12 @@ use crate::mocks::mock;
 
 #[test]
 /// missing title element
-fn _audit_missing_headers() {
+fn _audit_missing_title() {
     let audit = accessibility_rs::audit(&AuditConfig::basic(mock::MOCK_WEBSITE_HTML));
     let mut valid = true;
 
     for x in &audit {
-        if x.code == "WCAGAAA.Principle3.Guideline3_2.H25" {
+        if x.code == "WCAGAAA.Principle2.Guideline2_4.H25" {
             valid = false;
             break;
         }

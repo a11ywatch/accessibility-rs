@@ -1,6 +1,6 @@
 use crate::engine::issue::Issue;
 use crate::engine::rules::wcag_rule_map::RULES_A;
-use crate::i18n::locales::{get_message, Langs};
+use crate::i18n::locales::{get_message_i18n, Langs};
 use crate::Auditor;
 
 /// baseline for all rules
@@ -32,9 +32,9 @@ impl WCAG3AA {
                             if !valid {
                                 // get locales prior or from document
                                 let message = if !message.is_empty() {
-                                    message
+                                    message.into()
                                 } else {
-                                    get_message(&rule.rule_id, &section, &Langs::En.as_str())
+                                    get_message_i18n(&rule, &section, &Langs::En.as_str())
                                 };
 
                                 let issue = Issue::new(
@@ -52,11 +52,6 @@ impl WCAG3AA {
                                 );
                                 issues.push(issue);
                             }
-
-                            println!(
-                                "RULE {:?} {:?} {:?} Valid: {:?}",
-                                rule.rule_id, rule.criteria, section, valid
-                            );
                         }
                     }
                     _ => (),

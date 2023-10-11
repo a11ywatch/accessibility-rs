@@ -43,6 +43,7 @@ impl Validation {
 }
 
 /// the rule validation method that should be performed.
+#[derive(Debug)]
 pub struct Rule {
     /// the message id of the rule to point to the locale
     pub rule_id: Techniques,

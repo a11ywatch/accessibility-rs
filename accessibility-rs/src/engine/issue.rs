@@ -38,7 +38,7 @@ pub struct Issue {
     /// the typecode of the issue 0,1,2
     pub type_code: u8,
     /// the message of the issue
-    pub message: &'static str,
+    pub message: String,
     /// the type of runner
     pub runner: &'static str,
     /// extra details for the runner
@@ -52,7 +52,7 @@ pub struct Issue {
 impl Issue {
     /// create a new issue
     pub fn new(
-        message: &'static str,
+        message: String,
         context: &str,
         code: &str,
         issue_type: &'static str,
