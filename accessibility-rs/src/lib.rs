@@ -1,3 +1,37 @@
+#![warn(missing_docs)]
+
+//! Audit html to see how it complies with WCAG
+//! standards.
+//!
+//! Accessibility-RS is a powerful web accessibility
+//! engine that can replicate websites without
+//! a browser to get complex accessibility reports.
+//!
+//! # How to use Accessibility-RS
+//!
+//! There are a couple of ways to use Accessibility-RS:
+//!
+//! - **Audit** perform an audit against an html page.
+//!   - [`audit`] is used to audit a web page for issues.
+//!
+//! [`audit`]: fn.audit.html#method.audit
+//!
+//! # Examples
+//!
+//! A basic WCAG audit for a website:
+//!
+//! ```no_run
+//! use accessibility_rs::{audit, AuditConfig};
+//!
+//! fn main() {
+//!     // pass in the html, and css if the page came from a headless browser
+//!     let config = AuditConfig::basic("<html>...</html>");
+//!     let audit = audit(&config);
+//!     println!("{:?}", audit);
+//! }
+//! ```
+//!
+
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]

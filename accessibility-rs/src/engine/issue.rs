@@ -13,7 +13,7 @@ pub struct Clip {
     pub width: u32,
 }
 
-/// issue details
+/// Extra help information for the issue
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct RunnerExtras {
     /// the url to get more information on the issue
@@ -24,7 +24,7 @@ pub struct RunnerExtras {
     pub impact: &'static str,
 }
 
-/// issue details
+/// Details of the problem
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Issue {
     /// the context of the issue or raw html

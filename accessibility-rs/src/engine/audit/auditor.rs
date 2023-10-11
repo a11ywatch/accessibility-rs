@@ -7,7 +7,7 @@ use markup5ever::local_name;
 use slotmap::DefaultKey;
 use taffy::Taffy;
 
-/// the intro to an audit
+/// The configuration for auditing
 pub struct Auditor<'a> {
     /// the html document
     pub document: &'a Html,
@@ -23,6 +23,7 @@ pub struct Auditor<'a> {
 }
 
 impl<'a> Auditor<'a> {
+    /// Create a new auditor that can be used to validate accessibility
     pub fn new(
         document: &'a Html,
         css_rules: &str,
