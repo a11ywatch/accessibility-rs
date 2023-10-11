@@ -1,5 +1,5 @@
-use crate::engine::rules::ids::Techniques;
 use crate::engine::rules::rule::{Rule, Validation};
+use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::wcag_base::{Criteria, Guideline, Principle};
 use accessibility_scraper::Selector;
 use std::collections::BTreeMap;
@@ -122,6 +122,30 @@ lazy_static! {
                     }
 
                     Validation::new_issue(valid, "2")
+                }),
+            ])),
+            ("img", Vec::from([
+                Rule::new(Techniques::H37, Criteria::Error, Principle::Perceivable, Guideline::TextAlternatives, |_rule, nodes| {
+                    let mut valid = true;
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        match ele.attr("role") {
+                            Some(role) => {
+                                if role == "presentation" {
+                                    continue;
+                                }
+                            }
+                            _ => ()
+                        };
+                        match ele.attr("alt") {
+                            Some(_) => (),
+                            _ => valid = false
+                        }
+
+                    }
+
+                    Validation::new_issue(valid, Techniques::H37.pairs()[0])
                 }),
             ]))
         ]

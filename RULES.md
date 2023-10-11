@@ -9,8 +9,9 @@ List of techniques we want to have and whether we have it handled or not for WCA
 | Technique                                          | Description                          | Type  | Complete |
 | -------------------------------------------------- | ------------------------------------ | ----- | -------- |
 | [H25](https://www.w3.org/TR/WCAG20-TECHS/H25.html) | empty titles                         | error | ✅       |
-| [H32](https://www.w3.org/TR/WCAG20-TECHS/H32.html) | missing form submit button           | error | ✅       |
 | [H30](https://www.w3.org/TR/WCAG20-TECHS/H30.html) | text alternative img                 | error | ✅       |
+| [H32](https://www.w3.org/TR/WCAG20-TECHS/H32.html) | missing form submit button           | error | ✅       |
+| [H37](https://www.w3.org/TR/WCAG20-TECHS/H37.html) | missing img alt                      | error | ✅       |
 | [H57](https://www.w3.org/TR/WCAG20-TECHS/H57.html) | html contains valid lang             | error | ✅       |
 | [H64](https://www.w3.org/TR/WCAG20-TECHS/H64.html) | iframe missing title                 | error | ✅       |
 | [F40](https://www.w3.org/TR/WCAG20-TECHS/F40.html) | meta redirect used with a time limit | error | ✅       |

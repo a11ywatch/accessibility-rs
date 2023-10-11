@@ -1,6 +1,6 @@
 use slotmap::DefaultKey;
 
-use crate::engine::rules::ids::Techniques;
+use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::wcag_base::{Criteria, Guideline, Principle};
 use crate::ElementRef;
 
