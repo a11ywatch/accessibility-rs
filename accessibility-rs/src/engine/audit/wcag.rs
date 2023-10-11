@@ -24,17 +24,14 @@ impl WCAG3AA {
                     Some(rules) => {
                         for rule in rules {
                             let validation = (rule.validate)(&node.0, &node.1);
-                            let valid = validation.valid;
-                            let section = validation.id;
-                            let selector = validation.elements;
                             let message = validation.message;
 
-                            if !valid {
+                            if !validation.valid {
                                 // get locales prior or from document
                                 let message = if !message.is_empty() {
                                     message.into()
                                 } else {
-                                    get_message_i18n(&rule, &section, &Langs::En.as_str())
+                                    get_message_i18n(&rule, &validation.id, &Langs::En.as_str())
                                 };
 
                                 let issue = Issue::new(
@@ -48,7 +45,7 @@ impl WCAG3AA {
                                     ]
                                     .join("."),
                                     rule.criteria.as_str(),
-                                    selector,
+                                    validation.elements,
                                 );
                                 issues.push(issue);
                             }

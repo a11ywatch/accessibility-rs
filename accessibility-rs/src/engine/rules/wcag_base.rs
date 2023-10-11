@@ -57,6 +57,8 @@ impl Principle {
 /// wcag principle to follow
 #[derive(Debug)]
 pub enum Guideline {
+    /// Provide text alternatives for any non-text content so that it can be changed into other forms people need.
+    TextAlternatives,
     /// Provide ways to help users navigate, find content, and determine where they are.
     Navigable,
     /// Make text content readable and understandable.
@@ -71,6 +73,7 @@ impl Guideline {
     /// the guideline to string code
     pub fn as_str(&self) -> &'static str {
         match self {
+            Guideline::TextAlternatives => "Guideline1_1",
             Guideline::EnoughTime => "Guideline2_2",
             Guideline::Navigable => "Guideline2_4",
             Guideline::Readable => "Guideline3_1",
@@ -80,6 +83,7 @@ impl Guideline {
     /// the principle index
     pub fn as_index(&self) -> &'static str {
         match self {
+            Guideline::TextAlternatives => "1_1",
             Guideline::EnoughTime => "2_2",
             Guideline::Navigable => "2_4",
             Guideline::Readable => "3_1",

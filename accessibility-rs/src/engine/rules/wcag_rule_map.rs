@@ -92,6 +92,37 @@ lazy_static! {
 
                     Validation::new_issue(valid, "2")
                 }),
+            ])),
+            ("a", Vec::from([
+                Rule::new(Techniques::H30, Criteria::Error, Principle::Perceivable, Guideline::TextAlternatives, |_rule, nodes| {
+                    // todo: use tree to see if img exist to skip
+                    let mut valid = true;
+                    let selector = unsafe { Selector::parse("img").unwrap_unchecked() };
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        let mut elements = ele.select(&selector);
+
+                        while let Some(el) = elements.next() {
+                            // allow checking for role presentation not supported as wide as empty alt
+                            match el.attr("role") {
+                                Some(role) => {
+                                    if role == "presentation" {
+                                        continue;
+                                    }
+                                }
+                                _ => ()
+                            };
+                            match el.attr("alt") {
+                                Some(_) => (),
+                                _ => valid = false
+                            }
+                        }
+
+                    }
+
+                    Validation::new_issue(valid, "2")
+                }),
             ]))
         ]
         .into_iter()

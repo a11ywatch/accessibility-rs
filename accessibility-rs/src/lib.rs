@@ -65,12 +65,7 @@ pub struct AuditConfig<'a> {
 
 impl<'a> AuditConfig<'a> {
     /// a new audit configuration
-    pub fn new(
-        html: &'a str,
-        css: &'a str,
-        bounding_box: bool,
-        locale: &'a str,
-    ) -> Self {
+    pub fn new(html: &'a str, css: &'a str, bounding_box: bool, locale: &'a str) -> Self {
         AuditConfig {
             html,
             css,

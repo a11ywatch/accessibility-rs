@@ -18,6 +18,8 @@ pub enum Techniques {
     F47,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H64>
     H64,
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H30>
+    H30,
 }
 
 impl Techniques {
@@ -35,6 +37,7 @@ impl Techniques {
             Techniques::F41 => vec!["F41.2"],
             Techniques::F47 => vec!["F47"],
             Techniques::H64 => vec!["H64.1", "H64.2"],
+            Techniques::H30 => vec!["H30.2"],
         }
     }
 }
