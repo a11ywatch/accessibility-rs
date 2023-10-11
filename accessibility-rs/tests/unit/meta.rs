@@ -7,7 +7,7 @@ use crate::mocks::mock;
 #[test]
 /// missing title element
 fn _audit_missing_title() {
-    let audit = accessibility_rs::audit(&AuditConfig::basic(mock::MOCK_WEBSITE_HTML));
+    let audit = accessibility_rs::audit(AuditConfig::basic(mock::MOCK_WEBSITE_HTML));
     let mut valid = true;
 
     for x in &audit {
@@ -23,7 +23,7 @@ fn _audit_missing_title() {
 #[test]
 /// meta refresh redirect
 fn _audit_meta_refresh() {
-    let audit = accessibility_rs::audit(&AuditConfig::basic(
+    let audit = accessibility_rs::audit(AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
        <head>     
           <title>Do not use this!</title>     
@@ -51,7 +51,7 @@ fn _audit_meta_refresh() {
 
     assert_eq!(valid, false);
 
-    let audit = accessibility_rs::audit(&AuditConfig::basic(
+    let audit = accessibility_rs::audit(AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>     
   <title>HTML Techniques for WCAG 2.0</title>     
@@ -76,7 +76,7 @@ fn _audit_meta_refresh() {
 #[test]
 /// no blink elements
 fn _audit_blink_found() {
-    let audit = accessibility_rs::audit(&AuditConfig::basic(
+    let audit = accessibility_rs::audit(AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>     
    <title>Do not use this!</title>      
@@ -101,7 +101,7 @@ fn _audit_blink_found() {
 #[test]
 /// iframe missing title
 fn _iframe_missing_title() {
-    let audit = accessibility_rs::audit(&AuditConfig {
+    let audit = accessibility_rs::audit(AuditConfig {
         html: r###"<html xmlns="http://www.w3.org/1999/xhtml">
         <head>
           <title>A simple frameset document</title>
@@ -149,7 +149,7 @@ fn _iframe_missing_title() {
         false,
         "en",
     );
-    let audit = accessibility_rs::audit(&config);
+    let audit = accessibility_rs::audit(config);
     let mut valid = true;
 
     for x in &audit {
@@ -175,7 +175,7 @@ fn _iframe_missing_title() {
         "en",
     );
 
-    let audit = accessibility_rs::audit(&config);
+    let audit = accessibility_rs::audit(config);
     let mut valid = true;
 
     for x in &audit {

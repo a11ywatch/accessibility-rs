@@ -26,7 +26,7 @@
 //! fn main() {
 //!     // pass in the html, and css if the page came from a headless browser
 //!     let config = AuditConfig::basic("<html>...</html>");
-//!     let audit = audit(&config);
+//!     let audit = audit(config);
 //!     println!("{:?}", audit);
 //! }
 //! ```
@@ -48,28 +48,28 @@ pub use crate::engine::audit::auditor::Auditor;
 pub use crate::engine::issue::Issue;
 pub use accessibility_scraper::ElementRef;
 
-i18n!();
+i18n!("locales");
 
 /// configs for the audit
 #[derive(Default)]
-pub struct AuditConfig {
+pub struct AuditConfig<'a> {
     /// the html source code
-    pub html: &'static str,
+    pub html: &'a str,
     /// the css rules to apply
-    pub css: &'static str,
+    pub css: &'a str,
     /// extract bounding box of elements
     pub bounding_box: bool,
     /// the locale of the audit translations
-    pub locale: &'static str,
+    pub locale: &'a str,
 }
 
-impl AuditConfig {
+impl<'a> AuditConfig<'a> {
     /// a new audit configuration
     pub fn new(
-        html: &'static str,
-        css: &'static str,
+        html: &'a str,
+        css: &'a str,
         bounding_box: bool,
-        locale: &'static str,
+        locale: &'a str,
     ) -> Self {
         AuditConfig {
             html,
@@ -89,7 +89,7 @@ impl AuditConfig {
 }
 
 /// audit a web page passing the html and css rules.
-pub fn audit(config: &AuditConfig) -> Vec<Issue> {
+pub fn audit(config: AuditConfig) -> Vec<Issue> {
     let document = accessibility_scraper::Html::parse_document(config.html);
     let mut nth_index_cache = selectors::NthIndexCache::from(Default::default());
     let auditor = Auditor::new(
