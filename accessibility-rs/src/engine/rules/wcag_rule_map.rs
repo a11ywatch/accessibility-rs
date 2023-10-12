@@ -3,6 +3,7 @@ use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::wcag_base::{Criteria, Guideline, Principle};
 use crate::ElementRef;
 use accessibility_scraper::Selector;
+use slotmap::DefaultKey;
 use std::collections::BTreeMap;
 
 /// a valid alt attribute for image
@@ -21,6 +22,16 @@ fn has_alt(ele: ElementRef<'_>) -> bool {
         _ => valid = false,
     }
     valid
+}
+
+/// elements empty
+fn is_empty(nodes: &Vec<(ElementRef<'_>, Option<DefaultKey>)>) -> bool {
+    let mut empty = false;
+    for ele in nodes {
+        let ele = ele.0;
+        empty = ele.inner_html().trim().is_empty();
+    }
+    empty
 }
 
 // todo: validate each element and add a shape that can prevent repitiion
@@ -129,30 +140,17 @@ lazy_static! {
             ])),
             ("a", Vec::from([
                 Rule::new(Techniques::H30, Criteria::Error, Principle::Perceivable, Guideline::TextAlternatives, |_rule, nodes| {
-                    // todo: use tree to see if img exist to skip
                     let mut valid = true;
                     let selector = unsafe { Selector::parse("img").unwrap_unchecked() };
+                    // todo: use tree to see if img exist to skip
 
                     for ele in nodes {
                         let ele = ele.0;
                         let mut elements = ele.select(&selector);
 
                         while let Some(el) = elements.next() {
-                            // allow checking for role presentation not supported as wide as empty alt
-                            match el.attr("role") {
-                                Some(role) => {
-                                    if role == "presentation" {
-                                        continue;
-                                    }
-                                }
-                                _ => ()
-                            };
-                            match el.attr("alt") {
-                                Some(_) => (),
-                                _ => valid = false
-                            }
+                            valid = has_alt(el);
                         }
-
                     }
 
                     Validation::new_issue(valid, "2")
@@ -164,21 +162,40 @@ lazy_static! {
 
                     for ele in nodes {
                         let ele = ele.0;
-                        match ele.attr("role") {
-                            Some(role) => {
-                                if role == "presentation" {
-                                    continue;
-                                }
-                            }
-                            _ => ()
-                        };
-                        match ele.attr("alt") {
-                            Some(_) => (),
-                            _ => valid = false
-                        }
+                        valid = has_alt(ele);
                     }
 
                     Validation::new_issue(valid, Techniques::H37.pairs()[0])
+                }),
+            ])),
+            ("h1", Vec::from([
+                Rule::new(Techniques::H42, Criteria::Error, Principle::Perceivable, Guideline::Adaptable, |_rule, nodes| {
+                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                }),
+            ])),
+            ("h2", Vec::from([
+                Rule::new(Techniques::H42, Criteria::Error, Principle::Perceivable, Guideline::Adaptable, |_rule, nodes| {
+                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                }),
+            ])),
+            ("h3", Vec::from([
+                Rule::new(Techniques::H42, Criteria::Error, Principle::Perceivable, Guideline::Adaptable, |_rule, nodes| {
+                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                }),
+            ])),
+            ("h4", Vec::from([
+                Rule::new(Techniques::H42, Criteria::Error, Principle::Perceivable, Guideline::Adaptable, |_rule, nodes| {
+                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                }),
+            ])),
+            ("h5", Vec::from([
+                Rule::new(Techniques::H42, Criteria::Error, Principle::Perceivable, Guideline::Adaptable, |_rule, nodes| {
+                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                }),
+            ])),
+            ("h6", Vec::from([
+                Rule::new(Techniques::H42, Criteria::Error, Principle::Perceivable, Guideline::Adaptable, |_rule, nodes| {
+                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
                 }),
             ]))
         ]

@@ -14,6 +14,8 @@ pub enum Techniques {
     H36,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H37>
     H37,
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H42>
+    H42,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H57>
     H57,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H64>
@@ -39,6 +41,7 @@ impl Techniques {
             Techniques::H32 => vec!["H32.2"],
             Techniques::H36 => vec!["H36"],
             Techniques::H37 => vec!["H37"],
+            Techniques::H42 => vec!["H42.2"],
             Techniques::H57 => vec!["H57.2", "H57.3.Lang", "H57.3.XmlLang"],
             Techniques::H64 => vec!["H64.1", "H64.2"],
             Techniques::F40 => vec!["F40.2"],

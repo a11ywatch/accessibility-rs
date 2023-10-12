@@ -12,18 +12,11 @@ let audit = accessibility_rs::audit(&AuditConfig::new(&html, &css, false, "en"))
 
 ### Features
 
-1. Accurate web accessibility WCAG audits without a headless browser.
-2. Re-creating layout trees to get element positions.
+1. Accurate web accessibility WCAG audits.
+2. Re-creating layout trees to get element positions without the DOM.
 3. Ideal shapes for audits that scale.
-4. Amazingly fast audits.
-5. Internationalization support for translations.
-
-### Roadmap
-
-1. All WCAGA-AAA Audits with rules mapped.
-2. Next level performance.
-3. Clean architecure maybe the code gets merged into a browser one day.
-4. Improve Layout bounding accuracy to re-create leafs.
+4. Incredibly fast audits.
+5. Internationalization support.
 
 ### Contributing
 

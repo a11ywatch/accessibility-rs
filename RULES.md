@@ -13,6 +13,7 @@ List of techniques we want to have and whether we have it handled or not for WCA
 | [H32](https://www.w3.org/TR/WCAG20-TECHS/H32.html) | missing form submit button           | error | ✅       |
 | [H36](https://www.w3.org/TR/WCAG20-TECHS/H36.html) | missing form img alt                 | error | ✅       |
 | [H37](https://www.w3.org/TR/WCAG20-TECHS/H37.html) | missing img alt                      | error | ✅       |
+| [H42](https://www.w3.org/TR/WCAG20-TECHS/H42.html) | heading found with no content        | error | ✅       |
 | [H57](https://www.w3.org/TR/WCAG20-TECHS/H57.html) | html contains valid lang             | error | ✅       |
 | [H64](https://www.w3.org/TR/WCAG20-TECHS/H64.html) | iframe missing title                 | error | ✅       |
 | [F40](https://www.w3.org/TR/WCAG20-TECHS/F40.html) | meta redirect used with a time limit | error | ✅       |

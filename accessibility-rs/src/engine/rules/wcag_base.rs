@@ -67,6 +67,8 @@ pub enum Guideline {
     Predictable,
     /// Provide users enough time to read and use content.
     EnoughTime,
+    /// Create content that can be presented in different ways (for example simpler layout) without losing information or structure.
+    Adaptable,
 }
 
 impl Guideline {
@@ -74,6 +76,7 @@ impl Guideline {
     pub fn as_str(&self) -> &'static str {
         match self {
             Guideline::TextAlternatives => "Guideline1_1",
+            Guideline::Adaptable => "Guideline1_3",
             Guideline::EnoughTime => "Guideline2_2",
             Guideline::Navigable => "Guideline2_4",
             Guideline::Readable => "Guideline3_1",
@@ -84,6 +87,7 @@ impl Guideline {
     pub fn as_index(&self) -> &'static str {
         match self {
             Guideline::TextAlternatives => "1_1",
+            Guideline::Adaptable => "1_3",
             Guideline::EnoughTime => "2_2",
             Guideline::Navigable => "2_4",
             Guideline::Readable => "3_1",
