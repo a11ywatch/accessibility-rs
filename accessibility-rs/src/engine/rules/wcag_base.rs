@@ -59,16 +59,20 @@ impl Principle {
 pub enum Guideline {
     /// Provide text alternatives for any non-text content so that it can be changed into other forms people need.
     TextAlternatives,
+    /// Create content that can be presented in different ways (for example simpler layout) without losing information or structure.
+    Adaptable,
+    /// Make it easier for users to see and hear content including separating foreground from background.
+    Distinguishable,
+    /// Provide users enough time to read and use content.
+    EnoughTime,
+    /// Do not design content in a way that is known to cause seizures.
+    Seizures,
     /// Provide ways to help users navigate, find content, and determine where they are.
     Navigable,
     /// Make text content readable and understandable.
     Readable,
     /// Make Web pages appear and operate in predictable ways.
     Predictable,
-    /// Provide users enough time to read and use content.
-    EnoughTime,
-    /// Create content that can be presented in different ways (for example simpler layout) without losing information or structure.
-    Adaptable,
 }
 
 impl Guideline {
@@ -77,7 +81,9 @@ impl Guideline {
         match self {
             Guideline::TextAlternatives => "Guideline1_1",
             Guideline::Adaptable => "Guideline1_3",
+            Guideline::Distinguishable => "Guideline1_4",
             Guideline::EnoughTime => "Guideline2_2",
+            Guideline::Seizures => "Guideline2_3",
             Guideline::Navigable => "Guideline2_4",
             Guideline::Readable => "Guideline3_1",
             Guideline::Predictable => "Guideline3_2",
@@ -85,13 +91,7 @@ impl Guideline {
     }
     /// the principle index
     pub fn as_index(&self) -> &'static str {
-        match self {
-            Guideline::TextAlternatives => "1_1",
-            Guideline::Adaptable => "1_3",
-            Guideline::EnoughTime => "2_2",
-            Guideline::Navigable => "2_4",
-            Guideline::Readable => "3_1",
-            Guideline::Predictable => "3_2",
-        }
+        let s = self.as_str();
+        &s[9..s.len()]
     }
 }

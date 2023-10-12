@@ -2,7 +2,16 @@
 
 The Rust web accessibility engine.
 
+## Usage
+
+```toml
+[dependencies]
+accessibility-rs = "^0.0.16"
+```
+
 ```rs
+use accessibility_rs::{audit, AuditConfig};
+// pass in raw html and css if coming from a headless browser
 let audit = accessibility_rs::audit(&AuditConfig::new(&html, &css, false, "en"));
 ```
 
@@ -25,6 +34,11 @@ To help improve the rules the following needs to be done:
 1. Add the [rule](./RULES.md) to the tracking list.
 1. Add the logic of handling the rule to [wcag_rule_map](./accessibility-rs/src/engine/rules/wcag_rule_map.rs) and the [techniques](./accessibility-rs/src/engine/rules/techniques.rs).
 1. Add a unit test.
+
+## Examples
+
+1. [Wasm](https://webassembly.org/) example checkout [kayle_innate](https://github.com/a11ywatch/kayle/blob/main/kayle_innate/kayle_innate/src/lib.rs#L35).
+1. Example integrating with a [headless browser](https://github.com/a11ywatch/kayle/blob/main/kayle/tests/innate.ts#L14).
 
 ### License
 
