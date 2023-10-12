@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-rs"
-version = "0.0.17"
+version = "0.0.18"
 authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -14,7 +14,6 @@ include = ["/src", "../LICENSE_MIT", "../LICENSE_APACHE", "README.md", "locales"
 default = []
 
 [dependencies]
-url = "2.4.0"
 lazy_static = { workspace = true }
 accessibility-scraper = { version = "0.0.1", features = ["main"], default-features = false, path = "../accessibility-scraper" }
 getrandom = { version = "0.2", features = ["js"] }

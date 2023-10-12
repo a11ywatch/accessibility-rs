@@ -41,12 +41,10 @@ extern crate rust_i18n;
 mod engine;
 /// locales for translations.
 mod i18n;
-/// app utilities.
-mod utils;
 
-pub use crate::engine::audit::auditor::Auditor;
-pub use crate::engine::issue::Issue;
-pub use accessibility_scraper::ElementRef;
+use crate::engine::audit::auditor::Auditor;
+use crate::engine::issue::Issue;
+use accessibility_scraper::ElementRef;
 
 i18n!("locales");
 
