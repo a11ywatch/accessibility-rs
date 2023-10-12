@@ -73,6 +73,8 @@ pub enum Guideline {
     Readable,
     /// Make Web pages appear and operate in predictable ways.
     Predictable,
+    /// Maximize compatibility with current and future user agents, including assistive technologies.
+    Compatible
 }
 
 impl Guideline {
@@ -87,6 +89,7 @@ impl Guideline {
             Guideline::Navigable => "Guideline2_4",
             Guideline::Readable => "Guideline3_1",
             Guideline::Predictable => "Guideline3_2",
+            Guideline::Compatible => "Guideline4_1",
         }
     }
     /// the principle index

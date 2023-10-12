@@ -155,6 +155,22 @@ lazy_static! {
 
                     Validation::new_issue(valid, "2")
                 }),
+                Rule::new(Techniques::H91, Criteria::Error, Principle::Robust, Guideline::Compatible, |_rule, nodes| {
+                    let mut valid = true;
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        
+                        match ele.attr("href") {
+                            Some(_) => {
+                                valid = !ele.inner_html().trim().is_empty()
+                            }
+                            _ => ()
+                        }
+                    }
+
+                    Validation::new_issue(valid, "A.NoContent")
+                }),
             ])),
             ("img", Vec::from([
                 Rule::new(Techniques::H37, Criteria::Error, Principle::Perceivable, Guideline::TextAlternatives, |_rule, nodes| {

@@ -20,6 +20,8 @@ pub enum Techniques {
     H57,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H64>
     H64,
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H91>
+    H91,
     /// <https://www.w3.org/TR/WCAG20-TECHS/F40>
     F40,
     /// <https://www.w3.org/TR/WCAG20-TECHS/F41>
@@ -44,6 +46,7 @@ impl Techniques {
             Techniques::H42 => vec!["H42.2"],
             Techniques::H57 => vec!["H57.2", "H57.3.Lang", "H57.3.XmlLang"],
             Techniques::H64 => vec!["H64.1", "H64.2"],
+            Techniques::H91 => vec!["H91.A.NoContent", "H91.[NodeName].Name", "H91.[NodeName].Value"],
             Techniques::F40 => vec!["F40.2"],
             Techniques::F41 => vec!["F41.2"],
             Techniques::F47 => vec!["F47"],
