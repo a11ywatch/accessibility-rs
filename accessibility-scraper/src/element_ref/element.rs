@@ -144,7 +144,6 @@ impl<'a> Element for ElementRef<'a> {
         self.parent()
             .map_or(false, |parent| parent.value().is_document())
     }
-
     // fn apply_selector_flags(&self, _flags: matching::ElementSelectorFlags) {}
 }
 

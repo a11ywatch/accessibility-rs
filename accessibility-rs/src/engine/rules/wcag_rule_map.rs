@@ -3,6 +3,7 @@ use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::wcag_base::{Criteria, Guideline, Principle};
 use crate::ElementRef;
 use accessibility_scraper::Selector;
+use selectors::Element;
 use slotmap::DefaultKey;
 use std::collections::BTreeMap;
 
@@ -157,10 +158,8 @@ lazy_static! {
                 }),
                 Rule::new(Techniques::H91, Criteria::Error, Principle::Robust, Guideline::Compatible, |_rule, nodes| {
                     let mut valid = true;
-
                     for ele in nodes {
                         let ele = ele.0;
-                        
                         match ele.attr("href") {
                             Some(_) => {
                                 valid = !ele.inner_html().trim().is_empty()
@@ -168,8 +167,15 @@ lazy_static! {
                             _ => ()
                         }
                     }
-
                     Validation::new_issue(valid, "A.NoContent")
+                }),
+                Rule::new(Techniques::H91, Criteria::Error, Principle::Robust, Guideline::Compatible, |_rule, nodes| {
+                    let mut valid = true;
+                    for ele in nodes {
+                        let ele = ele.0;
+                        valid = !ele.is_empty() || ele.has_attribute("id") || ele.has_attribute("href");
+                    }
+                    Validation::new_issue(valid, "A.EmptyNoId")
                 }),
             ])),
             ("img", Vec::from([

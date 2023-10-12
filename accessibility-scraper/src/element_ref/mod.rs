@@ -81,6 +81,14 @@ impl<'a> ElementRef<'a> {
             inner: self.traverse(),
         }
     }
+    
+    /// Returns if the element has the attibute and not empty
+    pub fn has_attribute(&self, attr: &str) -> bool {
+        match self.attr(attr) {
+            Some(val) => !val.trim().is_empty(),
+            None => false,
+        }
+    }
 }
 
 impl<'a> Deref for ElementRef<'a> {

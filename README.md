@@ -24,20 +24,20 @@ let audit = accessibility_rs::audit(&AuditConfig::new(&html, &css, false, "en"))
 1. Accurate web accessibility WCAG audits.
 2. Re-creating layout trees to get element positions without the DOM.
 3. Ideal shapes for audits that scale.
-4. Incredibly fast audits.
+4. Incredibly fast nanosecond audits.
 5. Internationalization support.
 
 ### Contributing
 
 To help improve the rules the following needs to be done:
 
-1. Add the [rule](./RULES.md) to the tracking list.
+1. Add the [rule](./RULES.md) to the tracking list - you can use the [standards list and mappings here](https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/) for help.
 1. Add the logic of handling the rule to [wcag_rule_map](./accessibility-rs/src/engine/rules/wcag_rule_map.rs) and the [techniques](./accessibility-rs/src/engine/rules/techniques.rs).
 1. Add a unit test.
 
 ## Examples
 
-1. [Wasm](https://webassembly.org/) example checkout [kayle_innate](https://github.com/a11ywatch/kayle/blob/main/kayle_innate/kayle_innate/src/lib.rs#L35).
+1. [Wasm](https://webassembly.org/) example view [kayle_innate](https://github.com/a11ywatch/kayle/blob/main/kayle_innate/kayle_innate/src/lib.rs#L35).
 1. Example integrating with a [headless browser](https://github.com/a11ywatch/kayle/blob/main/kayle/tests/innate.ts#L14).
 
 ### License
