@@ -3,7 +3,7 @@
 //! Audit html to see how it complies with WCAG
 //! standards.
 //!
-//! Accessibility-RS is a powerful web accessibility
+//! Accessibility-RS is a web accessibility
 //! engine that can replicate websites without
 //! a browser to get complex accessibility reports.
 //!

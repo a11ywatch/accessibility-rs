@@ -1,8 +1,27 @@
 use crate::engine::rules::rule::{Rule, Validation};
 use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::wcag_base::{Criteria, Guideline, Principle};
+use crate::ElementRef;
 use accessibility_scraper::Selector;
 use std::collections::BTreeMap;
+
+/// a valid alt attribute for image
+fn has_alt(ele: ElementRef<'_>) -> bool {
+    let mut valid = true;
+    match ele.attr("role") {
+        Some(role) => {
+            if role == "presentation" {
+                return valid;
+            }
+        }
+        _ => (),
+    };
+    match ele.attr("alt") {
+        Some(_) => (),
+        _ => valid = false,
+    }
+    valid
+}
 
 // todo: validate each element and add a shape that can prevent repitiion
 lazy_static! {
@@ -19,7 +38,7 @@ lazy_static! {
                     Validation::new_issue(lang.chars().all(|x| x.is_alphanumeric()) && !lang.contains("_") && lang.len() < 12, "3.Lang")
                 }),
             ])),
-           ("meta", Vec::from([
+            ("meta", Vec::from([
                 Rule::new(Techniques::F40, Criteria::Error, Principle::Operable, Guideline::EnoughTime, |_rule, nodes| {
                     let mut valid = true;
 
@@ -92,6 +111,21 @@ lazy_static! {
 
                     Validation::new_issue(valid, "2")
                 }),
+                Rule::new(Techniques::H36, Criteria::Error, Principle::Perceivable, Guideline::TextAlternatives, |_rule, nodes| {
+                    let mut valid = false;
+                    let selector = unsafe { Selector::parse("input[type=image][name=submit]").unwrap_unchecked() };
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        let mut elements = ele.select(&selector);
+
+                        while let Some(el) = elements.next() {
+                            valid = has_alt(el);
+                        }
+                    }
+
+                    Validation::new_issue(valid, "")
+                }),
             ])),
             ("a", Vec::from([
                 Rule::new(Techniques::H30, Criteria::Error, Principle::Perceivable, Guideline::TextAlternatives, |_rule, nodes| {
@@ -142,7 +176,6 @@ lazy_static! {
                             Some(_) => (),
                             _ => valid = false
                         }
-
                     }
 
                     Validation::new_issue(valid, Techniques::H37.pairs()[0])

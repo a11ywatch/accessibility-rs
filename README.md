@@ -29,10 +29,9 @@ let audit = accessibility_rs::audit(&AuditConfig::new(&html, &css, false, "en"))
 
 To help improve the rules the following needs to be done:
 
-1. Add the rule to the [Rules List](./RULES.md).
+1. Add the [rule](./RULES.md) to the tracking list.
 1. Add the logic of handling the rule to [wcag_rule_map](./accessibility-rs/src/engine/rules/wcag_rule_map.rs) and the [techniques](./accessibility-rs/src/engine/rules/techniques.rs).
 1. Add a unit test.
-
 
 ### License
 
