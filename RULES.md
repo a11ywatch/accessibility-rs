@@ -1,6 +1,6 @@
 # web-accessibility-rules
 
-List of techniques we want to have and whether we have it handled or not for [WCAG2.1](https://www.w3.org/TR/WCAG21/).
+List of [WCAG2.1 techniques](https://www.w3.org/TR/WCAG21/) and whether or not we have it handled.
 
 ## WCAG 2.1
 
@@ -13,10 +13,11 @@ List of techniques we want to have and whether we have it handled or not for [WC
 | [H37](https://www.w3.org/TR/WCAG20-TECHS/H37.html) | missing img alt                                  | A-AAA | error |             | ✅       |
 | [H42](https://www.w3.org/TR/WCAG20-TECHS/H42.html) | heading found with no content                    | A-AAA | error |             | ✅       |
 | [H57](https://www.w3.org/TR/WCAG20-TECHS/H57.html) | html contains valid lang                         | A-AAA | error |             | ✅       |
+| [H64](https://www.w3.org/TR/WCAG20-TECHS/H64.html) | iframe missing title attribute                   | A-AAA | error | 1           | ✅       |
 | [H91](https://www.w3.org/TR/WCAG20-TECHS/H91.html) | anchor valid href attribute, but no link content | A-AAA | error | A.NoContent | ✅       |
 | [H91](https://www.w3.org/TR/WCAG20-TECHS/H91.html) | anchor found but no link content                 | A-AAA | error | A.EmptyNoId | ✅       |
-| [F40](https://www.w3.org/TR/WCAG20-TECHS/F40.html) | meta redirect used with a time limit             | A-AAA | error |             | ✅       |
-| [F40](https://www.w3.org/TR/WCAG20-TECHS/F41.html) | meta refresh used to reload the page             | A-AAA | error |             | ✅       |
+| [F40](https://www.w3.org/TR/WCAG20-TECHS/F40.html) | meta redirect used with a time limit             | A-AAA | error | 2           | ✅       |
+| [F41](https://www.w3.org/TR/WCAG20-TECHS/F41.html) | meta refresh used to reload the page             | A-AAA | error | 2           | ✅       |
 | [F47](https://www.w3.org/TR/WCAG20-TECHS/F47.html) | blink element used for attention                 | A-AAA | error |             | ✅       |
 
-Errors that can be to be tested with automation `12/70`.
+Errors that can be to be tested with automation `13/70`.
