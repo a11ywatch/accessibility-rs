@@ -189,10 +189,10 @@ fn _iframe_missing_title() {
 }
 
 #[test]
-/// no blink elements
+/// incorrect xml:lang
 fn _xml_lang_incorrect_format() {
     let audit = accessibility_rs::audit(AuditConfig::basic(
-        r###"<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-fwdf">
+        r###"<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_3">
 <head>     
    <title>Do not use this!</title>      
 </head>   

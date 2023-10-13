@@ -44,7 +44,7 @@ impl WCAG3AA {
                                         rule.rule_id.as_str(),
                                     ]
                                     .join("."),
-                                    rule.criteria.as_str(),
+                                    rule.issue_type.as_str(),
                                     validation.elements,
                                 );
                                 issues.push(issue);

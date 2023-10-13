@@ -1,7 +1,7 @@
 use slotmap::DefaultKey;
 
 use crate::engine::rules::techniques::Techniques;
-use crate::engine::rules::wcag_base::{Criteria, Guideline, Principle};
+use crate::engine::rules::wcag_base::{IssueType, Guideline, Principle};
 use crate::ElementRef;
 
 /// the validation response
@@ -48,30 +48,33 @@ pub struct Rule {
     /// the message id of the rule to point to the locale
     pub rule_id: Techniques,
     /// the type of rule
-    pub criteria: Criteria,
+    pub issue_type: IssueType,
     /// validate a test returns (valid, rule, selectors)
     pub validate: fn(&str, &Vec<(ElementRef<'_>, Option<DefaultKey>)>) -> Validation,
     /// the principle type
     pub principle: Principle,
     /// the guideline to follow
     pub guideline: Guideline,
+    /// the success criteria
+    pub success_criteria: u8,
 }
 
 impl Rule {
     /// a new rule type
     pub fn new(
         rule_id: Techniques,
-        criteria: Criteria,
+        issue_type: IssueType,
         principle: Principle,
         guideline: Guideline,
         validate: fn(&str, &Vec<(ElementRef<'_>, Option<DefaultKey>)>) -> Validation,
     ) -> Rule {
         Rule {
             rule_id,
-            criteria,
+            issue_type,
             guideline,
             principle,
             validate,
+            success_criteria: 0
         }
     }
 }

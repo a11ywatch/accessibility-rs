@@ -1,6 +1,6 @@
 /// the success criteria to use
 #[derive(Debug)]
-pub enum Criteria {
+pub enum IssueType {
     /// a hard error that should be fixed
     Error,
     /// a warning that may be an issue
@@ -9,13 +9,13 @@ pub enum Criteria {
     Notice,
 }
 
-impl Criteria {
+impl IssueType {
     /// get rule id to string
     pub fn as_str(&self) -> &'static str {
         match self {
-            Criteria::Error => "error",
-            Criteria::Warning => "warning",
-            Criteria::Notice => "notice",
+            IssueType::Error => "error",
+            IssueType::Warning => "warning",
+            IssueType::Notice => "notice",
         }
     }
 }
