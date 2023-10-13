@@ -46,8 +46,27 @@ lazy_static! {
                 }),
                 Rule::new(Techniques::H57, Criteria::Error, Principle::Understandable, Guideline::Readable, |_rule, nodes| {
                     let lang = nodes[0].0.attr("lang").unwrap_or_default();
+                    let alphabetic = lang.chars().all(|x| x.is_alphabetic());
                     // <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>
-                    Validation::new_issue(lang.chars().all(|x| x.is_alphanumeric()) && !lang.contains("_") && lang.len() < 12, "3.Lang")
+                    Validation::new_issue(if lang.len() > 3 {
+                        let mut c = lang.chars();
+                        let has_underscore = c.nth(3).unwrap_or_default() == '_' || lang.len() >= 4 && c.nth(1).unwrap_or_default() == '_';
+                        alphabetic && has_underscore && lang.len() < 12
+                    } else {
+                        alphabetic && lang.len() < 12
+                    }, "3.Lang")
+                }),
+                Rule::new(Techniques::H57, Criteria::Error, Principle::Understandable, Guideline::Readable, |_rule, nodes| {
+                    let lang = nodes[0].0.attr("xml:lang").unwrap_or_default();
+                    let alphabetic = lang.chars().all(|x| x.is_alphabetic());
+                   // <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>
+                   Validation::new_issue(if lang.len() > 3 {
+                    let mut c = lang.chars();
+                    let has_underscore = c.nth(3).unwrap_or_default() == '_' || lang.len() >= 4 && c.nth(1).unwrap_or_default() == '_';
+                    alphabetic && has_underscore && lang.len() < 12
+                    } else {
+                        alphabetic && lang.len() < 12
+                    }, "3.XmlLang")
                 }),
             ])),
             ("meta", Vec::from([

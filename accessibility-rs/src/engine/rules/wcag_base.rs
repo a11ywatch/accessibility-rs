@@ -74,7 +74,7 @@ pub enum Guideline {
     /// Make Web pages appear and operate in predictable ways.
     Predictable,
     /// Maximize compatibility with current and future user agents, including assistive technologies.
-    Compatible
+    Compatible,
 }
 
 impl Guideline {

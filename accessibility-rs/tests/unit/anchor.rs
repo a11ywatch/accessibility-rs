@@ -29,7 +29,6 @@ fn _audit_missing_alt_anchor_img() {
     assert_eq!(valid, false)
 }
 
-
 #[test]
 /// anchor contains valid href with no content
 fn _audit_missing_anchor_content_valid_href() {
@@ -79,4 +78,3 @@ fn _audit_missing_anchor_content() {
 
     assert_eq!(valid, false)
 }
-

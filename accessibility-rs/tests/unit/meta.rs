@@ -187,3 +187,27 @@ fn _iframe_missing_title() {
 
     assert_eq!(valid, true);
 }
+
+#[test]
+/// no blink elements
+fn _xml_lang_incorrect_format() {
+    let audit = accessibility_rs::audit(AuditConfig::basic(
+        r###"<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-fwdf">
+<head>     
+   <title>Do not use this!</title>      
+</head>   
+<body>     
+</body> 
+</html>"###,
+    ));
+    let mut valid = true;
+
+    for x in &audit {
+        if x.code == "WCAGAAA.Principle3.Guideline3_1.H57" {
+            valid = false;
+            break;
+        }
+    }
+
+    assert_eq!(valid, false);
+}
