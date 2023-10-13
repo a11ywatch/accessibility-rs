@@ -1,7 +1,7 @@
 use slotmap::DefaultKey;
 
 use crate::engine::rules::techniques::Techniques;
-use crate::engine::rules::wcag_base::{IssueType, Guideline, Principle};
+use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
 use crate::ElementRef;
 
 /// the validation response
@@ -56,7 +56,7 @@ pub struct Rule {
     /// the guideline to follow
     pub guideline: Guideline,
     /// the success criteria
-    pub success_criteria: u8,
+    pub success_criteria: &'static str,
 }
 
 impl Rule {
@@ -66,6 +66,7 @@ impl Rule {
         issue_type: IssueType,
         principle: Principle,
         guideline: Guideline,
+        success_criteria: &'static str,
         validate: fn(&str, &Vec<(ElementRef<'_>, Option<DefaultKey>)>) -> Validation,
     ) -> Rule {
         Rule {
@@ -73,8 +74,8 @@ impl Rule {
             issue_type,
             guideline,
             principle,
+            success_criteria,
             validate,
-            success_criteria: 0
         }
     }
 }

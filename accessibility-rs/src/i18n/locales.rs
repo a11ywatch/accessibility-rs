@@ -66,7 +66,7 @@ impl Langs {
 /// get message config type
 pub fn get_message_i18n(rule: &Rule, section: &str, lang: &str) -> String {
     // todo: add criteria handling fix
-    let base = [rule.guideline.as_index(), rule.principle.as_index()].join("_") + "_";
+    let base = [rule.guideline.as_index(), rule.success_criteria].join("_") + "_";
     let message = if section.is_empty() {
         [rule.rule_id.as_str()].join(".").to_string()
     } else {

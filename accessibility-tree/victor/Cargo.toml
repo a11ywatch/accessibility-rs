@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-tree"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Simon Sapin <simon.sapin@exyr.org>"]
 license = "MIT OR Apache-2.0"
 description = "Victor makes vectors"
@@ -22,7 +22,7 @@ lock_api = "0.1"
 num-traits = "0.2"
 rayon = "1"
 rayon_croissant = "0.1.1"
-accessibility-scraper = { version = "0.0.1", features = ["main"], default-features = false, path = "../../accessibility-scraper" }
+accessibility-scraper = { version = "0.0.2", features = ["main"], default-features = false, path = "../../accessibility-scraper" }
 selectors = { workspace = true }
 smallbitvec = "2.4"
 smallvec = { workspace = true }

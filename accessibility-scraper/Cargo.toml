@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-scraper"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 
 description = "HTML parsing and querying with CSS selectors"
@@ -8,10 +8,11 @@ keywords = ["html", "css", "selector", "scraping"]
 
 authors = [
     "June McEnroe <june@causal.agency>",
+    "Jeff Mendez <jeff@a11ywatch.com>",
 ]
 license = "ISC"
 
-repository = "https://github.com/causal-agent/scraper"
+repository = "https://github.com/accessibility-rs"
 readme = "README.md"
 
 [dependencies]
