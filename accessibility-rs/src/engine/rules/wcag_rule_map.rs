@@ -3,6 +3,7 @@ use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
 use crate::ElementRef;
 use accessibility_scraper::Selector;
+use ego_tree::NodeRef;
 use selectors::Element;
 use slotmap::DefaultKey;
 use std::collections::BTreeMap;
@@ -39,22 +40,47 @@ fn is_empty(nodes: &ElementNodes) -> bool {
 
 /// get the unique selector for an element
 fn get_unique_selector(ele: &ElementRef<'_>) -> String {
-    let mut selector = String::new();
-
     if ele.has_attribute("id") {
-        selector = ele.attr("id").unwrap_or_default().to_string()
-    }
-    // TODO: if id is not found recursively get all elements until complete if class does not match
-    if selector.is_empty() && ele.has_attribute("class") {
-        // TODO: check to see if class is a unique selector before setting by using the root tree
-        selector = ele.value().name().to_string() + &ele.local_name().to_string();
-    }
+        "#".to_string() + ele.attr("id").unwrap_or_default()
+    } else {
+        let mut selector = String::new();
+        let node_name = ele.value().name().to_string();
 
-    if selector.is_empty() {
-        selector = ele.value().name().to_string();
-    }
+        if node_name == "BODY" {
+            selector = node_name;
+        }
 
-    selector
+        if selector.is_empty() && ele.has_attribute("class") {
+            let node_selector = ele.value().name().to_string() + &ele.local_name().to_string();
+            let only_selector = match ele.tree().root().first_child() {
+                Some(child) => {
+                    match ElementRef::wrap(child) {
+                        Some(element) => {
+                            match Selector::parse(node_selector.as_str()) {
+                                Ok(s) => {
+                                    let e = element.select(&s);
+                                    e.count() == 1
+                                }
+                                _ => false
+                            }
+                        }
+                        _ => false
+                    }
+                }
+                _ => false
+            };
+            if only_selector {
+                selector = node_selector;
+            }        
+        }
+    
+        // TODO: if id is not found recursively get all elements until complete if class does not match
+        if selector.is_empty() {
+            selector = ele.value().name().to_string();
+        }
+    
+        selector
+    }
 }
 
 /// validate missing title
