@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-rs"
-version = "0.0.19"
+version = "0.0.20"
 authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"

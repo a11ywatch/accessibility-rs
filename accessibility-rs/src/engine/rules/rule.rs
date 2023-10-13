@@ -12,7 +12,7 @@ pub struct Validation {
     /// the sub-technique
     pub id: &'static str,
     /// elements that match the issue
-    pub elements: Vec<&'static str>,
+    pub elements: Vec<String>,
     /// the message of the error
     pub message: &'static str,
 }
@@ -22,7 +22,7 @@ impl Validation {
     pub fn new(
         valid: bool,
         id: &'static str,
-        elements: Vec<&'static str>,
+        elements: Vec<String>,
         message: &'static str,
     ) -> Self {
         Self {

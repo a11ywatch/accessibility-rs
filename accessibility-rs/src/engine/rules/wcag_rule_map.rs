@@ -1,11 +1,13 @@
 use crate::engine::rules::rule::{Rule, Validation};
 use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
+use crate::ElementRef;
 use accessibility_scraper::Selector;
 use selectors::Element;
 use slotmap::DefaultKey;
 use std::collections::BTreeMap;
-use crate::ElementRef;
+
+type ElementNodes<'a> = Vec<(ElementRef<'a>, Option<DefaultKey>)>;
 
 /// a valid alt attribute for image
 fn has_alt(ele: ElementRef<'_>) -> bool {
@@ -26,13 +28,48 @@ fn has_alt(ele: ElementRef<'_>) -> bool {
 }
 
 /// elements empty
-fn is_empty(nodes: &Vec<(ElementRef<'_>, Option<DefaultKey>)>) -> bool {
+fn is_empty(nodes: &ElementNodes) -> bool {
     let mut empty = false;
     for ele in nodes {
         let ele = ele.0;
         empty = ele.inner_html().trim().is_empty();
     }
     empty
+}
+
+/// get the unique selector for an element
+fn get_unique_selector(ele: &ElementRef<'_>) -> String {
+    let mut selector = String::new();
+
+    if ele.has_attribute("id") {
+        selector = ele.attr("id").unwrap_or_default().to_string()
+    }
+    // TODO: if id is not found recursively get all elements until complete if class does not match
+    if selector.is_empty() && ele.has_attribute("class") {
+        // TODO: check to see if class is a unique selector before setting by using the root tree
+        selector = ele.value().name().to_string() + &ele.local_name().to_string();
+    }
+
+    if selector.is_empty() {
+        selector = ele.value().name().to_string();
+    }
+
+    selector
+}
+
+/// validate missing title
+fn validate_missing_title(nodes: &ElementNodes, id: &'static str) -> Validation {
+    let mut elements = Vec::new();
+    let mut valid = true;
+
+    nodes.iter().for_each(|e| {
+        if e.0.attr("title").unwrap_or_default().is_empty() {
+            valid = false;
+            elements.push(get_unique_selector(&e.0))
+        }
+    });
+
+    Validation::new(valid, id, elements, "")
 }
 
 // todo: validate each element and add a shape that can prevent repitiion
@@ -119,12 +156,12 @@ lazy_static! {
             ])),
             ("iframe", Vec::from([
                 Rule::new(Techniques::H64, IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |_rule, nodes| {
-                   Validation::new_issue(nodes.iter().all(|e| !e.0.attr("title").unwrap_or_default().is_empty()), "")
+                    validate_missing_title(nodes, "1")
                 }),
             ])),
             ("frame", Vec::from([
                 Rule::new(Techniques::H64, IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |_rule, nodes| {
-                    Validation::new_issue(nodes.iter().all(|e| !e.0.attr("title").unwrap_or_default().is_empty()), "")
+                    validate_missing_title(nodes, "1")
                 }),
             ])),
             ("form", Vec::from([

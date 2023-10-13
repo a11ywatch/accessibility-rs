@@ -128,7 +128,9 @@ fn _iframe_missing_title() {
         }
     }
 
+    // this should be valid
     assert_eq!(valid, true);
+
     let config = AuditConfig::new(
         r###"<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -136,7 +138,7 @@ fn _iframe_missing_title() {
     </head>
     <frameset cols="10%, 90%">
       <frame src="nav.html" />
-      <frame src="doc.html" />
+      <frame src="doc.html" id="doc" />
       <noframes>
         <body>
           <a href="lib.html" title="Library link">Select to
