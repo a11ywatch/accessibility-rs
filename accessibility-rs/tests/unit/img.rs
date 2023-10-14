@@ -36,15 +36,17 @@ fn _audit_form_submit_img_missing_alt() {
        <title>Missing Alt: Do not Use.</title>
     </head>   
     <body>     
-    <form action="http://example.com/prog/text-read" method="post">
-    <input type="image" name="submit" src="button.gif" />
-  </form>    
+        <form action="http://example.com/prog/text-read" method="post">
+            <input type="image" name="submit" src="button.gif" />
+        </form> 
+        <form></form>   
     </body> 
  </html>"###,
     ));
     let mut valid = true;
 
     for x in &audit {
+        println!("{:?}", x);
         if x.code == "WCAGAAA.Principle1.Guideline1_1.H36" {
             valid = false;
             break;

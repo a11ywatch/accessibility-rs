@@ -1,10 +1,10 @@
 [package]
 name = "accessibility-rs"
-version = "0.0.20"
+version = "0.0.22"
 authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
-description = "Incredibly fast and precise universal web accessibility engine for Rust."
+description = "Web accessibility engine for Rust."
 repository = "https://github.com/a11ywatch/accessibility-rs"
 categories = ["accessibility"]
 documentation = "https://docs.rs/accessibility-rs"

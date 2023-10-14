@@ -1,102 +1,12 @@
 use crate::engine::rules::rule::{Rule, Validation};
 use crate::engine::rules::techniques::Techniques;
+use crate::engine::rules::utils::nodes::{
+    get_unique_selector, has_alt, is_empty, validate_missing_attr,
+};
 use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
-use crate::ElementRef;
 use accessibility_scraper::Selector;
-use ego_tree::NodeRef;
 use selectors::Element;
-use slotmap::DefaultKey;
 use std::collections::BTreeMap;
-
-type ElementNodes<'a> = Vec<(ElementRef<'a>, Option<DefaultKey>)>;
-
-/// a valid alt attribute for image
-fn has_alt(ele: ElementRef<'_>) -> bool {
-    let mut valid = true;
-    match ele.attr("role") {
-        Some(role) => {
-            if role == "presentation" {
-                return valid;
-            }
-        }
-        _ => (),
-    };
-    match ele.attr("alt") {
-        Some(_) => (),
-        _ => valid = false,
-    }
-    valid
-}
-
-/// elements empty
-fn is_empty(nodes: &ElementNodes) -> bool {
-    let mut empty = false;
-    for ele in nodes {
-        let ele = ele.0;
-        empty = ele.inner_html().trim().is_empty();
-    }
-    empty
-}
-
-/// get the unique selector for an element
-fn get_unique_selector(ele: &ElementRef<'_>) -> String {
-    if ele.has_attribute("id") {
-        "#".to_string() + ele.attr("id").unwrap_or_default()
-    } else {
-        let mut selector = String::new();
-        let node_name = ele.value().name().to_string();
-
-        if node_name == "BODY" {
-            selector = node_name;
-        }
-
-        if selector.is_empty() && ele.has_attribute("class") {
-            let node_selector = ele.value().name().to_string() + &ele.local_name().to_string();
-            let only_selector = match ele.tree().root().first_child() {
-                Some(child) => {
-                    match ElementRef::wrap(child) {
-                        Some(element) => {
-                            match Selector::parse(node_selector.as_str()) {
-                                Ok(s) => {
-                                    let e = element.select(&s);
-                                    e.count() == 1
-                                }
-                                _ => false
-                            }
-                        }
-                        _ => false
-                    }
-                }
-                _ => false
-            };
-            if only_selector {
-                selector = node_selector;
-            }        
-        }
-    
-        // TODO: if id is not found recursively get all elements until complete if class does not match
-        if selector.is_empty() {
-            selector = ele.value().name().to_string();
-        }
-    
-        selector
-    }
-}
-
-/// validate missing title
-fn validate_missing_title(nodes: &ElementNodes, id: &'static str) -> Validation {
-    let mut elements = Vec::new();
-    let mut valid = true;
-
-    nodes.iter().for_each(|e| {
-        if e.0.attr("title").unwrap_or_default().is_empty() {
-            valid = false;
-            elements.push(get_unique_selector(&e.0))
-        }
-    });
-
-    Validation::new(valid, id, elements, "")
-}
 
 // todo: validate each element and add a shape that can prevent repitiion
 lazy_static! {
@@ -182,95 +92,125 @@ lazy_static! {
             ])),
             ("iframe", Vec::from([
                 Rule::new(Techniques::H64, IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |_rule, nodes| {
-                    validate_missing_title(nodes, "1")
+                    validate_missing_attr(nodes, "title", "1")
                 }),
             ])),
             ("frame", Vec::from([
                 Rule::new(Techniques::H64, IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |_rule, nodes| {
-                    validate_missing_title(nodes, "1")
+                    validate_missing_attr(nodes, "title", "1")
                 }),
             ])),
             ("form", Vec::from([
                 Rule::new(Techniques::H32, IssueType::Error, Principle::Operable, Guideline::Predictable, "2", |_rule, nodes| {
-                    // check the first element for now
                     let mut valid = false;
+                    let mut elements = Vec::new();
                     let selector = unsafe { Selector::parse("button[type=submit]").unwrap_unchecked() };
 
                     for ele in nodes {
                         let ele = ele.0;
-                        valid = match ele.select(&selector).next() {
-                            Some(_) => true,
-                            _ => false
-                        };
+                        let e = ele.select(&selector);
+                        let c = e.count();
+
+                       if c == 1 {
+                            valid = true;
+                       } else {
+                            valid = false;
+                            elements.push(get_unique_selector(&ele))
+                        }
                     }
 
-                    Validation::new_issue(valid, "2")
+                    Validation::new(valid, "2", elements, "")
                 }),
                 Rule::new(Techniques::H36, IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |_rule, nodes| {
                     let mut valid = false;
+                    let mut elements = Vec::new();
                     let selector = unsafe { Selector::parse("input[type=image][name=submit]").unwrap_unchecked() };
 
                     for ele in nodes {
                         let ele = ele.0;
-                        let mut elements = ele.select(&selector);
+                        let mut e = ele.select(&selector);
 
-                        while let Some(el) = elements.next() {
-                            valid = has_alt(el);
+                        while let Some(el) = e.next() {
+                            let alt = has_alt(el);
+                            if !alt {
+                                elements.push(get_unique_selector(&ele))
+                            }
+                            valid = alt;
                         }
                     }
 
-                    Validation::new_issue(valid, "")
+                    Validation::new(valid, "", elements, "")
                 }),
             ])),
             ("a", Vec::from([
                 Rule::new(Techniques::H30, IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |_rule, nodes| {
                     let mut valid = true;
                     let selector = unsafe { Selector::parse("img").unwrap_unchecked() };
-                    // todo: use tree to see if img exist to skip
+                    let mut elements = Vec::new();
 
                     for ele in nodes {
                         let ele = ele.0;
-                        let mut elements = ele.select(&selector);
+                        let mut e = ele.select(&selector);
 
-                        while let Some(el) = elements.next() {
-                            valid = has_alt(el);
+                        while let Some(el) = e.next() {
+                            let alt = has_alt(el);
+                            if !alt {
+                                elements.push(get_unique_selector(&ele))
+                            }
+                            valid = alt;
                         }
                     }
 
-                    Validation::new_issue(valid, "2")
+                    Validation::new(valid, "2", elements, "")
                 }),
                 Rule::new(Techniques::H91, IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |_rule, nodes| {
                     let mut valid = true;
+                    let mut elements = Vec::new();
+
                     for ele in nodes {
                         let ele = ele.0;
                         match ele.attr("href") {
                             Some(_) => {
-                                valid = !ele.inner_html().trim().is_empty()
+                                let empty = ele.inner_html().trim().is_empty();
+                                if empty {
+                                    elements.push(get_unique_selector(&ele))
+                                }
+                                valid = !empty
                             }
                             _ => ()
                         }
                     }
-                    Validation::new_issue(valid, "A.NoContent")
+                    Validation::new(valid, "A.NoContent", elements, "")
                 }),
                 Rule::new(Techniques::H91, IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |_rule, nodes| {
                     let mut valid = true;
+                    let mut elements = Vec::new();
                     for ele in nodes {
                         let ele = ele.0;
-                        valid = !ele.is_empty() || ele.has_attribute("id") || ele.has_attribute("href");
+                        let v = !ele.is_empty() || ele.has_attribute("id") || ele.has_attribute("href");
+                        if !v {
+                            elements.push(get_unique_selector(&ele))
+                        }
+                        valid = v;
                     }
-                    Validation::new_issue(valid, "A.EmptyNoId")
+                    Validation::new(valid, "A.EmptyNoId", elements, "")
                 }),
             ])),
             ("img", Vec::from([
                 Rule::new(Techniques::H37, IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |_rule, nodes| {
                     let mut valid = true;
+                    let mut elements = Vec::new();
 
                     for ele in nodes {
                         let ele = ele.0;
-                        valid = has_alt(ele);
+                        let alt = has_alt(ele);
+                        if !alt {
+                            elements.push(get_unique_selector(&ele))
+                        }
+                        valid = alt;
                     }
 
-                    Validation::new_issue(valid, Techniques::H37.pairs()[0])
+                    Validation::new(valid, Techniques::H37.pairs()[0], elements, "")
                 }),
             ])),
             ("h1", Vec::from([
