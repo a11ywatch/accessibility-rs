@@ -46,7 +46,7 @@ use crate::engine::audit::auditor::Auditor;
 use crate::engine::issue::Issue;
 use accessibility_scraper::ElementRef;
 
-i18n!("locales");
+i18n!("locales", fallback = "en");
 
 /// configs for the audit
 #[derive(Default)]
@@ -90,6 +90,7 @@ pub fn audit(config: AuditConfig) -> Vec<Issue> {
         &config.css,
         engine::styles::css_cache::build_matching_context(&mut nth_index_cache),
         config.bounding_box,
+        config.locale
     );
     engine::audit::wcag::WCAG3AA::audit(&auditor)
 }
