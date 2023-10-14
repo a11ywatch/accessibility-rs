@@ -4,9 +4,11 @@ use crate::engine::rules::utils::nodes::{
     get_unique_selector, has_alt, validate_empty_nodes, validate_missing_attr,
 };
 use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
-use accessibility_scraper::Selector;
+use accessibility_scraper::{ElementRef, Selector};
 use selectors::Element;
 use std::collections::BTreeMap;
+use std::collections::HashMap;
+use std::ops::Add;
 
 // todo: validate each element and add a shape that can prevent repitiion
 lazy_static! {
@@ -41,6 +43,45 @@ lazy_static! {
                     } else {
                         alphabetic && lang.len() < 12
                     }, "3.XmlLang")
+                }),
+                Rule::new(Techniques::F77, IssueType::Error, Principle::Robust, Guideline::Compatible, "1", |_rule, nodes| {
+                   let mut id_map: HashMap<&str, u8> = HashMap::new();
+                   let mut valid = true;
+
+                   for item in nodes {
+                        let ele = item.0;
+                        let tree = ele.tree();
+                        for e in tree.nodes() {
+                            match ElementRef::wrap(e) {
+                                Some(element) => {
+                                    match element.value().id() {
+                                        Some(s) => {
+                                            if id_map.contains_key(s) {
+                                                let u = id_map.get(s);
+                                                match u {
+                                                    Some(u) => {
+                                                        valid = false;
+                                                        id_map.insert(s, u.add(1));
+                                                    }
+                                                    _ => ()
+                                                }
+                                            } else {
+                                                id_map.insert(s, 1);
+                                            }
+                                        }
+                                        _ => ()
+                                    }
+                                }
+                                _ => (),
+                            }
+                        }
+                   }
+
+                   let duplicate_ids = id_map.into_iter().filter_map(|(id, size)| if size >= 1 { Some(id.to_string()) } else { None }).collect();
+
+                //    let message = t!(&crate::i18n::locales::get_message_i18n_str(_rule, ""));
+
+                   Validation::new(valid, "", duplicate_ids, "")
                 }),
             ])),
             ("meta", Vec::from([

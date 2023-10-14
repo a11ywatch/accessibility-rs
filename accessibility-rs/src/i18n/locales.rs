@@ -64,7 +64,7 @@ impl Langs {
 }
 
 /// get message config type
-pub fn get_message_i18n(rule: &Rule, section: &str, lang: &str) -> String {
+pub fn get_message_i18n_str(rule: &Rule, section: &str) -> String {
     // todo: add criteria handling fix
     let base = [rule.guideline.as_index(), rule.success_criteria].join("_") + "_";
     let message = if section.is_empty() {
@@ -74,5 +74,12 @@ pub fn get_message_i18n(rule: &Rule, section: &str, lang: &str) -> String {
     };
     let message = [base.as_str(), message.as_str()].join("").to_string();
 
-    t!(&message, lang = lang)
+    message
+}
+
+/// get message config type
+pub fn get_message_i18n(rule: &Rule, section: &str, lang: &str) -> String {
+    let message = get_message_i18n_str(rule, section);
+
+    t!(&message, locale = lang)
 }
