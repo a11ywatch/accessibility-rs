@@ -1,7 +1,7 @@
 use crate::engine::rules::rule::{Rule, Validation};
 use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::utils::nodes::{
-    get_unique_selector, has_alt, is_empty, validate_missing_attr,
+    get_unique_selector, has_alt, validate_empty_nodes, validate_missing_attr,
 };
 use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
 use accessibility_scraper::Selector;
@@ -10,7 +10,7 @@ use std::collections::BTreeMap;
 
 // todo: validate each element and add a shape that can prevent repitiion
 lazy_static! {
-    /// a list of rules that should be applied for WCAG1
+    /// a list of rules that should be applied for WCAG1 A-AAA
     pub static ref RULES_A: BTreeMap<&'static str, Vec<Rule>> =
         vec![
             ("html", Vec::from([
@@ -210,39 +210,39 @@ lazy_static! {
                         valid = alt;
                     }
 
-                    Validation::new(valid, Techniques::H37.pairs()[0], elements, "")
+                    Validation::new(valid, "", elements, "")
                 }),
             ])),
             ("h1", Vec::from([
                 Rule::new(Techniques::H42, IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |_rule, nodes| {
-                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                    validate_empty_nodes(nodes, "2")
                 }),
             ])),
             ("h2", Vec::from([
                 Rule::new(Techniques::H42, IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |_rule, nodes| {
-                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                    validate_empty_nodes(nodes, "2")
                 }),
             ])),
             ("h3", Vec::from([
                 Rule::new(Techniques::H42, IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |_rule, nodes| {
-                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                    validate_empty_nodes(nodes, "2")
                 }),
             ])),
             ("h4", Vec::from([
                 Rule::new(Techniques::H42, IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |_rule, nodes| {
-                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                    validate_empty_nodes(nodes, "2")
                 }),
             ])),
             ("h5", Vec::from([
                 Rule::new(Techniques::H42, IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |_rule, nodes| {
-                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                    validate_empty_nodes(nodes, "2")
                 }),
             ])),
             ("h6", Vec::from([
                 Rule::new(Techniques::H42, IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |_rule, nodes| {
-                    Validation::new_issue(!is_empty(nodes), Techniques::H42.pairs()[0])
+                    validate_empty_nodes(nodes, "2")
                 }),
-            ]))
+            ])),
         ]
         .into_iter()
         .collect();

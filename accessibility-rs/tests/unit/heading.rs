@@ -64,7 +64,7 @@ fn _audit_headings_empty() {
         <p>The orange is a hybrid of ancient cultivated origin...</p>
         <h3>   </h3>
         <p>Banana is the common name for herbaceous plants ...</p>
-        <h2>   </h2>
+        <h2 id="empty-h2">   </h2>
         <p>A vegetable is an edible plant or part of a plant other than a
         sweet fruit ...</p>
         <h3>    </h3>

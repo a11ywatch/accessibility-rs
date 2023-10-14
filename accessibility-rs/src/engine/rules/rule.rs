@@ -5,7 +5,7 @@ use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
 use crate::ElementRef;
 
 /// the validation response
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Validation {
     /// is valid
     pub valid: bool,

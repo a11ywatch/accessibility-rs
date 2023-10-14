@@ -1,6 +1,6 @@
 use crate::engine::rules::rule::Validation;
 use crate::ElementRef;
-use accessibility_scraper::Selector;
+use accessibility_scraper::{node, Selector};
 use selectors::Element;
 use slotmap::DefaultKey;
 
@@ -25,13 +25,26 @@ pub fn has_alt(ele: ElementRef<'_>) -> bool {
 }
 
 /// elements empty
-pub fn is_empty(nodes: &ElementNodes) -> bool {
-    let mut empty = false;
+pub fn is_empty(nodes: &ElementNodes) -> (bool, Vec<String>) {
+    let mut valid = true;
+    let mut elements = Vec::new();
+
     for ele in nodes {
         let ele = ele.0;
-        empty = ele.inner_html().trim().is_empty();
+        let empty = ele.inner_html().trim().is_empty();
+        if empty {
+            valid = false;
+            elements.push(get_unique_selector(&ele))
+        }
     }
-    empty
+
+    (valid, elements)
+}
+
+/// elements empty with validation
+pub fn validate_empty_nodes(nodes: &ElementNodes, id: &'static str) -> Validation {
+    let (valid, elements) = is_empty(&nodes);
+    Validation::new(valid, id, elements, "")
 }
 
 /// check if the selector only exist for one element

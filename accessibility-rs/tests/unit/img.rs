@@ -1,5 +1,4 @@
-//! Test for anchors.
-
+//! Test for img elements.
 use accessibility_rs::AuditConfig;
 
 #[test]
@@ -46,7 +45,6 @@ fn _audit_form_submit_img_missing_alt() {
     let mut valid = true;
 
     for x in &audit {
-        println!("{:?}", x);
         if x.code == "WCAGAAA.Principle1.Guideline1_1.H36" {
             valid = false;
             break;

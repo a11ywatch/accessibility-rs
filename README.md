@@ -11,7 +11,7 @@ accessibility-rs = "^0.0.16"
 
 ```rs
 use accessibility_rs::{audit, AuditConfig};
-// pass in raw html and css if coming from a headless browser
+// pass in raw html and optional css
 let audit = accessibility_rs::audit(&AuditConfig::new(&html, &css, false, "en"));
 ```
 

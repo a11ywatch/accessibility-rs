@@ -15,6 +15,7 @@ impl WCAG3AA {
         auditor: &Auditor<'_>,
     ) -> Vec<Issue> {
         let mut issues: Vec<Issue> = Vec::new();
+        // TODO: push rules found to MAP that are different across nodes to combine the selectors
 
         // go through nodes and map to validation rules
         for node in &auditor.tree {
