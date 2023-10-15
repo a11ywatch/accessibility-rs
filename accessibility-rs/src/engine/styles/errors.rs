@@ -8,7 +8,9 @@ use selectors::parser::SelectorParseErrorKind;
 //     UnknownUnit(CowRcStr<'i>),
 // }
 
+/// rule parsing errors
 pub enum RuleParseErrorKind<'i> {
+    /// selector parse error
     Selector(SelectorParseErrorKind<'i>),
 }
 

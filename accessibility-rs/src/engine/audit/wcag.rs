@@ -5,11 +5,11 @@ use crate::Auditor;
 
 /// baseline for all rules
 #[derive(Default)]
-pub struct WCAG3AA;
+pub struct WCAGAAA;
 
 /// wcag rules to test for
-impl WCAG3AA {
-    /// init the rules
+impl WCAGAAA {
+    /// audit html against WCAGAAA standards
     pub fn audit(auditor: &Auditor<'_>) -> Vec<Issue> {
         // TODO: push rules found to MAP that are different across nodes to combine the selectors
         let mut issues: Vec<Issue> = Vec::new();

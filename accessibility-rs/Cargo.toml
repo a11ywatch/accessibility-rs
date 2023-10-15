@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-rs"
-version = "0.0.26"
+version = "0.0.30"
 authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -8,7 +8,7 @@ description = "Web accessibility engine for Rust."
 repository = "https://github.com/a11ywatch/accessibility-rs"
 categories = ["accessibility"]
 documentation = "https://docs.rs/accessibility-rs"
-include = ["/src", "../LICENSE_MIT", "../LICENSE_APACHE", "README.md", "locales"]
+include = ["/src", "../LICENSE_MIT", "../LICENSE_APACHE", "../README.md", "locales"]
 
 [features]
 default = []

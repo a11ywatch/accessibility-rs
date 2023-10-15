@@ -4,13 +4,18 @@ use cssparser::{AtRuleParser, ParseError, QualifiedRuleParser};
 use std::sync::Arc;
 
 #[derive(Debug)]
+/// Css rules to match selectors
 pub enum CssRule {
+    /// the style rules for css
     StyleRule {
+        /// css selectors list with selector trait
         selectors: selectors::SelectorList<Simple>,
+        /// a css block parsed
         block: Arc<String>,
     },
 }
 
+/// css parser
 pub struct Parser;
 
 impl<'i> selectors::parser::Parser<'i> for Parser {
@@ -18,9 +23,11 @@ impl<'i> selectors::parser::Parser<'i> for Parser {
     type Error = RuleParseErrorKind<'i>;
 }
 
+/// css selector list
 pub type SelectorList = selectors::SelectorList<Simple>;
 // pub type Selector = selectors::parser::Selector<Simple>;
 
+/// css rules parser
 pub struct RulesParser;
 
 impl<'i> QualifiedRuleParser<'i> for RulesParser {
@@ -51,7 +58,6 @@ impl<'i> QualifiedRuleParser<'i> for RulesParser {
 impl<'i> AtRuleParser<'i> for RulesParser {
     type PreludeBlock = ();
     type PreludeNoBlock = ();
-
     type AtRule = CssRule;
     type Error = RuleParseErrorKind<'i>;
 }

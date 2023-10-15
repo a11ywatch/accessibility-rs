@@ -25,6 +25,7 @@ pub struct Messages {
     hi: M,
 }
 
+/// the languages for auditing results
 pub enum Langs {
     /// english
     En,

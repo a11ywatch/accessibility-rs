@@ -11,9 +11,8 @@ use std::collections::BTreeMap;
 use std::collections::HashMap;
 use std::ops::Add;
 
-// todo: validate each element and add a shape that can prevent repitiion
 lazy_static! {
-    /// a list of rules that should be applied for WCAG1 A-AAA
+    /// a list of rules that should be applied for WCAG2.0 A-AAA
     pub static ref RULES_A: BTreeMap<&'static str, Vec<Rule>> =
         vec![
             ("html", Vec::from([

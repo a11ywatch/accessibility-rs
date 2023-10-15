@@ -37,10 +37,10 @@ extern crate lazy_static;
 #[macro_use]
 extern crate rust_i18n;
 
-/// the main engine for audits.
-mod engine;
+/// the main engine for accessibility auditing.
+pub mod engine;
 /// locales for translations.
-mod i18n;
+pub mod i18n;
 
 use crate::engine::audit::auditor::Auditor;
 use crate::engine::issue::Issue;
@@ -92,5 +92,5 @@ pub fn audit(config: AuditConfig) -> Vec<Issue> {
         config.bounding_box,
         config.locale,
     );
-    engine::audit::wcag::WCAG3AA::audit(&auditor)
+    engine::audit::wcag::WCAGAAA::audit(&auditor)
 }
