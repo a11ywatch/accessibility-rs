@@ -1,3 +1,4 @@
+#![deny(missing_docs)]
 /// audits
 pub mod audit;
 /// issue handling and formats
