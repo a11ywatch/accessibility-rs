@@ -22,7 +22,7 @@ impl WCAG3AA {
                 match rules {
                     Some(rules) => {
                         for rule in rules {
-                            let validation = (rule.validate)(&node.0, &node.1);
+                            let validation = (rule.validate)(&node.1, &auditor.locale);
                             let message = validation.message;
 
                             if !validation.valid {

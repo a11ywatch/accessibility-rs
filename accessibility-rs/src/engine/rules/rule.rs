@@ -14,7 +14,7 @@ pub struct Validation {
     /// elements that match the issue
     pub elements: Vec<String>,
     /// the message of the error
-    pub message: &'static str,
+    pub message: String,
 }
 
 impl Validation {
@@ -23,7 +23,7 @@ impl Validation {
         valid: bool,
         id: &'static str,
         elements: Vec<String>,
-        message: &'static str,
+        message: String,
     ) -> Self {
         Self {
             valid,
@@ -50,7 +50,7 @@ pub struct Rule {
     /// the type of rule
     pub issue_type: IssueType,
     /// validate a test returns (valid, rule, selectors)
-    pub validate: fn(&str, &Vec<(ElementRef<'_>, Option<DefaultKey>)>) -> Validation,
+    pub validate: fn(&Vec<(ElementRef<'_>, Option<DefaultKey>)>, &str) -> Validation,
     /// the principle type
     pub principle: Principle,
     /// the guideline to follow
@@ -67,7 +67,7 @@ impl Rule {
         principle: Principle,
         guideline: Guideline,
         success_criteria: &'static str,
-        validate: fn(&str, &Vec<(ElementRef<'_>, Option<DefaultKey>)>) -> Validation,
+        validate: fn(&Vec<(ElementRef<'_>, Option<DefaultKey>)>, &str) -> Validation,
     ) -> Rule {
         Rule {
             rule_id,

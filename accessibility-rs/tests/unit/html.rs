@@ -18,6 +18,7 @@ fn _audit_duplicate_element_id() {
     let mut valid = true;
 
     for x in &audit {
+        println!("{:?}", x);
         if x.code == "WCAGAAA.Principle4.Guideline4_1.F77" {
             valid = false;
             break;

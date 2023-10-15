@@ -1,6 +1,6 @@
 use crate::engine::rules::rule::Validation;
 use crate::ElementRef;
-use accessibility_scraper::{node, Selector};
+use accessibility_scraper::Selector;
 use selectors::Element;
 use slotmap::DefaultKey;
 
@@ -44,7 +44,7 @@ pub fn is_empty(nodes: &ElementNodes) -> (bool, Vec<String>) {
 /// elements empty with validation
 pub fn validate_empty_nodes(nodes: &ElementNodes, id: &'static str) -> Validation {
     let (valid, elements) = is_empty(&nodes);
-    Validation::new(valid, id, elements, "")
+    Validation::new(valid, id, elements, Default::default())
 }
 
 /// check if the selector only exist for one element
@@ -143,5 +143,5 @@ pub fn validate_missing_attr(
         }
     });
 
-    Validation::new(valid, id, elements, "")
+    Validation::new(valid, id, elements, Default::default())
 }
