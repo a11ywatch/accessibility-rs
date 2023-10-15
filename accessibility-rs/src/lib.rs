@@ -90,7 +90,7 @@ pub fn audit(config: AuditConfig) -> Vec<Issue> {
         &config.css,
         engine::styles::css_cache::build_matching_context(&mut nth_index_cache),
         config.bounding_box,
-        config.locale
+        config.locale,
     );
     engine::audit::wcag::WCAG3AA::audit(&auditor)
 }

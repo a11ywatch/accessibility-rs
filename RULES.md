@@ -21,8 +21,8 @@ List of [WCAG2.1 techniques](https://www.w3.org/TR/WCAG21/) and whether or not w
 | [F40](https://www.w3.org/TR/WCAG20-TECHS/F40.html) | meta redirect used with a time limit                                          | A-AAA | error | 2           | ✅       |
 | [F41](https://www.w3.org/TR/WCAG20-TECHS/F41.html) | meta refresh used to reload the page                                          | A-AAA | error | 2           | ✅       |
 | [F47](https://www.w3.org/TR/WCAG20-TECHS/F47.html) | blink element used for attention                                              | A-AAA | error |             | ✅       |
-| [F77](https://www.w3.org/TR/WCAG20-TECHS/F77.html) | duplicate ID found                                                            | A-AAA | error |             | ✔️        |
+| [F77](https://www.w3.org/TR/WCAG20-TECHS/F77.html) | duplicate ID found                                                            | A-AAA | error |             | ✅       |
 
-Errors that can be to be tested with automation `14/70`.
+Errors that can be to be tested with automation `16/70`.
 
 Key: ✅ = Complete, ✔️ = Complete with a bit of missing details.

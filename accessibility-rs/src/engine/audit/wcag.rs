@@ -10,9 +10,7 @@ pub struct WCAG3AA;
 /// wcag rules to test for
 impl WCAG3AA {
     /// init the rules
-    pub fn audit(
-        auditor: &Auditor<'_>,
-    ) -> Vec<Issue> {
+    pub fn audit(auditor: &Auditor<'_>) -> Vec<Issue> {
         // TODO: push rules found to MAP that are different across nodes to combine the selectors
         let mut issues: Vec<Issue> = Vec::new();
 

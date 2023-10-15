@@ -78,10 +78,8 @@ lazy_static! {
                         }
                    }
 
-                   let duplicate_ids: Vec<_> = id_map.into_iter().filter_map(|(id, size)| if size >= 1 { Some(id.to_string()) } else { None }).collect();
+                   let duplicate_ids: Vec<_> = id_map.into_iter().filter_map(|(id, size)| if size >= 1 { Some("#".to_owned() + &id) } else { None }).collect();
                    let message = t!(&get_message_i18n_str_raw( &Guideline::Compatible, Techniques::F77.as_str(), "1", ""), locale = lang, id = duplicate_ids.join(","));
-
-                   println!("{:?}", message);
 
                    Validation::new(valid, "", duplicate_ids, message)
                 }),

@@ -19,12 +19,7 @@ pub struct Validation {
 
 impl Validation {
     /// helper to create validation
-    pub fn new(
-        valid: bool,
-        id: &'static str,
-        elements: Vec<String>,
-        message: String,
-    ) -> Self {
+    pub fn new(valid: bool, id: &'static str, elements: Vec<String>, message: String) -> Self {
         Self {
             valid,
             id,

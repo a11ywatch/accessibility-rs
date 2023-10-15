@@ -18,7 +18,36 @@ fn _audit_duplicate_element_id() {
     let mut valid = true;
 
     for x in &audit {
-        println!("{:?}", x);
+        if x.code == "WCAGAAA.Principle4.Guideline4_1.F77" {
+            valid = false;
+            break;
+        }
+    }
+
+    assert_eq!(valid, false)
+}
+
+
+#[test]
+/// duplicate html elements with locale "ja"
+fn _audit_duplicate_element_id_ja() {
+    let audit = accessibility_rs::audit(AuditConfig::new(
+        r###"<html lang="en">
+    <head>     
+       <title>Duplicate ID: Do not Use.</title>
+    </head>   
+    <body>     
+        <div id="dog"></div>
+        <div id="dog"></div>
+    </body> 
+ </html>"###,
+ "",
+      false,
+      "ja"
+    ));
+    let mut valid = true;
+
+    for x in &audit {
         if x.code == "WCAGAAA.Principle4.Guideline4_1.F77" {
             valid = false;
             break;

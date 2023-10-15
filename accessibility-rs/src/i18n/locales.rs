@@ -64,7 +64,12 @@ impl Langs {
 }
 
 /// get message config type raw
-pub fn get_message_i18n_str_raw(guideline: &Guideline, rule_id: &str, success_criteria: &str, section: &str) -> String {
+pub fn get_message_i18n_str_raw(
+    guideline: &Guideline,
+    rule_id: &str,
+    success_criteria: &str,
+    section: &str,
+) -> String {
     let base = [guideline.as_index(), success_criteria].join("_") + "_";
     let message = if section.is_empty() {
         [rule_id].join(".").to_string()
@@ -76,7 +81,12 @@ pub fn get_message_i18n_str_raw(guideline: &Guideline, rule_id: &str, success_cr
 
 /// get message config type
 pub fn get_message_i18n_str(rule: &Rule, section: &str) -> String {
-    get_message_i18n_str_raw(&rule.guideline, rule.rule_id.as_str(), rule.success_criteria, section)
+    get_message_i18n_str_raw(
+        &rule.guideline,
+        rule.rule_id.as_str(),
+        rule.success_criteria,
+        section,
+    )
 }
 
 /// get message

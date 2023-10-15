@@ -21,7 +21,7 @@ pub struct Auditor<'a> {
     /// layout handling
     pub taffy: Option<Taffy>,
     /// language to get results in
-    pub locale: &'a str
+    pub locale: &'a str,
 }
 
 impl<'a> Auditor<'a> {
@@ -34,7 +34,7 @@ impl<'a> Auditor<'a> {
             accessibility_scraper::selector::Simple,
         >,
         bounds: bool,
-        locale: &'a str
+        locale: &'a str,
     ) -> Auditor<'a> {
         // TODO: make stylesheet building optional and only on first requirement
         let author = {
@@ -70,7 +70,7 @@ impl<'a> Auditor<'a> {
             author,
             match_context,
             taffy,
-            locale
+            locale,
         }
     }
 }
