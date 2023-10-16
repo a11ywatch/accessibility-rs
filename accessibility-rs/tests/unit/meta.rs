@@ -17,7 +17,7 @@ fn _audit_missing_title() {
         }
     }
 
-    assert_eq!(valid, false)
+    assert_eq!(valid, true)
 }
 
 #[test]

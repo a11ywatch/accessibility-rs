@@ -82,6 +82,11 @@ lazy_static! {
 
                    Validation::new(valid, "", duplicate_ids, message)
                 }),
+                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _lang| {
+                    let selector = unsafe { Selector::parse("head > title").unwrap_unchecked() };
+
+                    Validation::new_issue(nodes[0].0.select(&selector).count() >= 1, "1.NoTitleEl")
+                }),
             ])),
             ("meta", Vec::from([
                 Rule::new(Techniques::F40.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "1", |nodes, _lang| {
@@ -118,11 +123,8 @@ lazy_static! {
                 }),
             ])),
             ("title", Vec::from([
-                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _lang| {
-                    Validation::new_issue(!nodes.is_empty(), "1.NoTitleEl")
-                }),
-                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _lang| {
-                    Validation::new_issue(nodes.is_empty() || nodes[0].0.html().is_empty(), "1.EmptyTitle")
+                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _lang| {
+                    Validation::new_issue(!nodes.is_empty() || !nodes[0].0.inner_html().is_empty(), "1.EmptyTitle")
                 }),
             ])),
             ("blink", Vec::from([
