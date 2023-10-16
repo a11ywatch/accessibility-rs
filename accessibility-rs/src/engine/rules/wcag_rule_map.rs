@@ -349,6 +349,23 @@ lazy_static! {
                     Validation::new_issue(nodes.is_empty(), "").into()
                 }),
             ])),
+            ("object", Vec::from([
+                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        let empty = ele.text();
+                        if empty.count() >= 1 {
+                            valid = false;
+                            elements.push(get_unique_selector(&ele))
+                        }
+                    }
+
+                    Validation::new(valid, "", elements, Default::default()).into()
+                }),
+            ])),
             ("applet", Vec::from([
                 Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
                     let mut valid = true;
