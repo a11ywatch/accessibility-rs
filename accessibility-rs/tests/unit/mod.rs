@@ -3,3 +3,4 @@ pub mod heading;
 pub mod html;
 pub mod img;
 pub mod meta;
+pub mod applet;

@@ -8,20 +8,23 @@ type ElementNodes<'a> = Vec<(ElementRef<'a>, Option<DefaultKey>)>;
 
 /// a valid alt attribute for image
 pub fn has_alt(ele: ElementRef<'_>) -> bool {
-    let mut valid = true;
     match ele.attr("role") {
         Some(role) => {
             if role == "presentation" {
-                return valid;
+                return true;
             }
         }
         _ => (),
     };
+    has_alt_prop(ele)
+}
+
+/// a valid alt attribute for image
+pub fn has_alt_prop(ele: ElementRef<'_>) -> bool {
     match ele.attr("alt") {
-        Some(_) => (),
-        _ => valid = false,
+        Some(_) => true,
+        _ => false,
     }
-    valid
 }
 
 /// elements empty

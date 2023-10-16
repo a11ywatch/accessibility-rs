@@ -9,6 +9,8 @@ pub enum Techniques {
     H32,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H30>
     H30,
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H35>
+    H35,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H36>
     H36,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H37>

@@ -9,6 +9,8 @@ List of [WCAG2.1 techniques](https://www.w3.org/TR/WCAG21/) and whether or not w
 | [H25](https://www.w3.org/TR/WCAG20-TECHS/H25.html) | empty titles                                                                  | A-AAA | error |             | ✅       |
 | [H30](https://www.w3.org/TR/WCAG20-TECHS/H30.html) | text alternative img                                                          | A-AAA | error |             | ✅       |
 | [H32](https://www.w3.org/TR/WCAG20-TECHS/H32.html) | missing form submit button                                                    | A-AAA | error |             | ✅       |
+| [H35](https://www.w3.org/TR/WCAG20-TECHS/H35.html) | applet without body                                                           | A-AAA | error |             | ✅       |
+| [H35](https://www.w3.org/TR/WCAG20-TECHS/H35.html) | applet without alt text                                                       | A-AAA | error |             | ✅       |
 | [H36](https://www.w3.org/TR/WCAG20-TECHS/H36.html) | missing form img alt                                                          | A-AAA | error |             | ✅       |
 | [H37](https://www.w3.org/TR/WCAG20-TECHS/H37.html) | missing img alt                                                               | A-AAA | error |             | ✅       |
 | [H42](https://www.w3.org/TR/WCAG20-TECHS/H42.html) | heading found with no content                                                 | A-AAA | error |             | ✅       |
@@ -23,6 +25,6 @@ List of [WCAG2.1 techniques](https://www.w3.org/TR/WCAG21/) and whether or not w
 | [F47](https://www.w3.org/TR/WCAG20-TECHS/F47.html) | blink element used for attention                                              | A-AAA | error |             | ✅       |
 | [F77](https://www.w3.org/TR/WCAG20-TECHS/F77.html) | duplicate ID found                                                            | A-AAA | error |             | ✅       |
 
-Errors that can be to be tested with automation `16/70`.
+Errors that can be to be tested with automation `18/70`.
 
 Key: ✅ = Complete, ✔️ = Complete with a bit of missing details.

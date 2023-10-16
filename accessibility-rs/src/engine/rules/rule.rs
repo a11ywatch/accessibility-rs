@@ -73,6 +73,28 @@ impl From<Vec<Techniques>> for Technique {
     }
 }
 
+/// validation rule(s) that should be handled
+pub enum RuleValidation {
+    /// a single rule for validation
+    Single(Validation),
+    /// multiple validation rules applied
+    Multi(Vec<Validation>),
+}
+
+impl From<Validation> for RuleValidation {
+    fn from(t: Validation) -> Self {
+        RuleValidation::Single(t)
+    }
+}
+
+impl From<Vec<Validation>> for RuleValidation {
+    fn from(t: Vec<Validation>) -> Self {
+        RuleValidation::Multi(t)
+    }
+}
+
+type ValidateFn = fn(&Vec<(ElementRef<'_>, Option<DefaultKey>)>, &str) -> RuleValidation;
+
 /// the rule validation method that should be performed.
 #[derive(Debug)]
 pub struct Rule {
@@ -81,7 +103,7 @@ pub struct Rule {
     /// the type of rule
     pub issue_type: IssueType,
     /// validate a test returns (valid, rule, selectors)
-    pub validate: fn(&Vec<(ElementRef<'_>, Option<DefaultKey>)>, &str) -> Validation,
+    pub validate: ValidateFn,
     /// the principle type
     pub principle: Principle,
     /// the guideline to follow
@@ -98,7 +120,7 @@ impl Rule {
         principle: Principle,
         guideline: Guideline,
         success_criteria: &'static str,
-        validate: fn(&Vec<(ElementRef<'_>, Option<DefaultKey>)>, &str) -> Validation,
+        validate: ValidateFn,
     ) -> Rule {
         Rule {
             rule_id,

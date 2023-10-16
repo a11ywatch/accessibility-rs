@@ -1,7 +1,7 @@
 use crate::engine::rules::rule::{Rule, Validation};
 use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::utils::nodes::{
-    get_unique_selector, has_alt, validate_empty_nodes, validate_missing_attr,
+    get_unique_selector, has_alt, has_alt_prop, validate_empty_nodes, validate_missing_attr,
 };
 use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
 use crate::i18n::locales::get_message_i18n_str_raw;
@@ -18,7 +18,7 @@ lazy_static! {
             ("html", Vec::from([
                 Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _lang| {
                     let n = nodes[0].0;
-                    Validation::new_issue(!n.attr("lang").unwrap_or_default().is_empty() || !n.attr("xml:lang").unwrap_or_default().is_empty(), "2")
+                    Validation::new_issue(!n.attr("lang").unwrap_or_default().is_empty() || !n.attr("xml:lang").unwrap_or_default().is_empty(), "2").into()
                 }),
                 Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _lang| {
                     let lang = nodes[0].0.attr("lang").unwrap_or_default();
@@ -30,7 +30,7 @@ lazy_static! {
                         alphabetic && has_underscore && lang.len() < 12
                     } else {
                         alphabetic && lang.len() < 12
-                    }, "3.Lang")
+                    }, "3.Lang").into()
                 }),
                 Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _lang| {
                     let lang = nodes[0].0.attr("xml:lang").unwrap_or_default();
@@ -42,7 +42,7 @@ lazy_static! {
                         alphabetic && has_underscore && lang.len() < 12
                     } else {
                         alphabetic && lang.len() < 12
-                    }, "3.XmlLang")
+                    }, "3.XmlLang").into()
                 }),
                 Rule::new(Techniques::F77.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "1", |nodes, lang| {
                    let mut id_map: HashMap<&str, u8> = HashMap::new();
@@ -80,12 +80,12 @@ lazy_static! {
                    let duplicate_ids: Vec<_> = id_map.into_iter().filter_map(|(id, size)| if size >= 1 { Some("#".to_owned() + &id) } else { None }).collect();
                    let message = t!(&get_message_i18n_str_raw( &Guideline::Compatible, Techniques::F77.as_str(), "1", ""), locale = lang, id = duplicate_ids.join(","));
 
-                   Validation::new(valid, "", duplicate_ids, message)
+                   Validation::new(valid, "", duplicate_ids, message).into()
                 }),
                 Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _lang| {
                     let selector = unsafe { Selector::parse("head > title").unwrap_unchecked() };
 
-                    Validation::new_issue(nodes[0].0.select(&selector).count() >= 1, "1.NoTitleEl")
+                    Validation::new_issue(nodes[0].0.select(&selector).count() >= 1, "1.NoTitleEl").into()
                 }),
             ])),
             ("meta", Vec::from([
@@ -103,7 +103,7 @@ lazy_static! {
                         }
                     }
 
-                    Validation::new_issue(valid, "2")
+                    Validation::new_issue(valid, "2").into()
                 }),
                 Rule::new(Techniques::F41.into(), IssueType::Error, Principle::Understandable, Guideline::EnoughTime, "1", |nodes, _lang| {
                     let mut valid = true;
@@ -119,27 +119,22 @@ lazy_static! {
                         }
                     }
 
-                    Validation::new_issue(valid, "2")
+                    Validation::new_issue(valid, "2").into()
                 }),
             ])),
             ("title", Vec::from([
                 Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _lang| {
-                    Validation::new_issue(!nodes.is_empty() || !nodes[0].0.inner_html().is_empty(), "1.EmptyTitle")
-                }),
-            ])),
-            ("blink", Vec::from([
-                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "2", |nodes, _lang| {
-                    Validation::new_issue(nodes.is_empty(), "")
+                    Validation::new_issue(!nodes.is_empty() || !nodes[0].0.inner_html().is_empty(), "1.EmptyTitle").into()
                 }),
             ])),
             ("iframe", Vec::from([
                 Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _lang| {
-                    validate_missing_attr(nodes, "title", "1")
+                    validate_missing_attr(nodes, "title", "1").into()
                 }),
             ])),
             ("frame", Vec::from([
                 Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _lang| {
-                    validate_missing_attr(nodes, "title", "1")
+                    validate_missing_attr(nodes, "title", "1").into()
                 }),
             ])),
             ("form", Vec::from([
@@ -161,7 +156,7 @@ lazy_static! {
                         }
                     }
 
-                    Validation::new(valid, "2", elements, Default::default())
+                    Validation::new(valid, "2", elements, Default::default()).into()
                 }),
                 Rule::new(Techniques::H36.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
                     let mut valid = false;
@@ -181,7 +176,7 @@ lazy_static! {
                         }
                     }
 
-                    Validation::new(valid, "", elements, Default::default())
+                    Validation::new(valid, "", elements, Default::default()).into()
                 }),
             ])),
             ("a", Vec::from([
@@ -203,7 +198,7 @@ lazy_static! {
                         }
                     }
 
-                    Validation::new(valid, "2", elements, Default::default())
+                    Validation::new(valid, "2", elements, Default::default()).into()
                 }),
                 Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _lang| {
                     let mut valid = true;
@@ -222,7 +217,7 @@ lazy_static! {
                             _ => ()
                         }
                     }
-                    Validation::new(valid, "A.NoContent", elements, Default::default())
+                    Validation::new(valid, "A.NoContent", elements, Default::default()).into()
                 }),
                 Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _lang| {
                     let mut valid = true;
@@ -235,7 +230,7 @@ lazy_static! {
                         }
                         valid = v;
                     }
-                    Validation::new(valid, "A.EmptyNoId", elements, Default::default())
+                    Validation::new(valid, "A.EmptyNoId", elements, Default::default()).into()
                 }),
             ])),
             ("img", Vec::from([
@@ -252,37 +247,73 @@ lazy_static! {
                         valid = alt;
                     }
 
-                    Validation::new(valid, "", elements, Default::default())
+                    Validation::new(valid, "", elements, Default::default()).into()
                 }),
             ])),
             ("h1", Vec::from([
                 Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
-                    validate_empty_nodes(nodes, "2")
+                    validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h2", Vec::from([
                 Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
-                    validate_empty_nodes(nodes, "2")
+                    validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h3", Vec::from([
                 Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
-                    validate_empty_nodes(nodes, "2")
+                    validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h4", Vec::from([
                 Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
-                    validate_empty_nodes(nodes, "2")
+                    validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h5", Vec::from([
                 Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
-                    validate_empty_nodes(nodes, "2")
+                    validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h6", Vec::from([
                 Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
-                    validate_empty_nodes(nodes, "2")
+                    validate_empty_nodes(nodes, "2").into()
+                }),
+            ])),
+            ("blink", Vec::from([
+                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "2", |nodes, _lang| {
+                    Validation::new_issue(nodes.is_empty(), "").into()
+                }),
+            ])),
+            ("applet", Vec::from([
+                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        let ele = ele.0;        
+                        if !has_alt_prop(ele) {
+                            valid = false;
+                            elements.push(get_unique_selector(&ele))
+                        }
+                    }
+
+                    Validation::new(valid, "2", elements, Default::default()).into()
+                }),
+                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        let empty = ele.has_children() || !ele.inner_html().trim().is_empty();
+                        if !empty {
+                            valid = false;
+                            elements.push(get_unique_selector(&ele))
+                        }
+                    }
+
+                    Validation::new(valid, "3", elements, Default::default()).into()
                 }),
             ])),
         ]
