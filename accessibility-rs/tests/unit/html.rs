@@ -27,7 +27,6 @@ fn _audit_duplicate_element_id() {
     assert_eq!(valid, false)
 }
 
-
 #[test]
 /// duplicate html elements with locale "ja"
 fn _audit_duplicate_element_id_ja() {
@@ -41,9 +40,9 @@ fn _audit_duplicate_element_id_ja() {
         <div id="dog"></div>
     </body> 
  </html>"###,
- "",
-      false,
-      "ja"
+        "",
+        false,
+        "ja",
     ));
     let mut valid = true;
 

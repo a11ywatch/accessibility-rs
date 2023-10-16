@@ -84,7 +84,7 @@ pub fn get_message_i18n_str_raw(
 pub fn get_message_i18n_str(rule: &Rule, section: &str) -> String {
     get_message_i18n_str_raw(
         &rule.guideline,
-        rule.rule_id.as_str(),
+        &rule.rule_id.into_str(),
         rule.success_criteria,
         section,
     )

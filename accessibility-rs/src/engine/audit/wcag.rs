@@ -36,7 +36,7 @@ impl WCAGAAA {
                                         "WCAGAAA",
                                         rule.principle.as_str(),
                                         rule.guideline.as_str(),
-                                        rule.rule_id.as_str(),
+                                        &rule.rule_id.into_str(),
                                     ]
                                     .join("."),
                                     rule.issue_type.as_str(),
