@@ -46,6 +46,7 @@ impl WCAGAAA {
     pub fn audit(auditor: &Auditor<'_>) -> Vec<Issue> {
         // TODO: push rules found to MAP that are different across nodes to combine the selectors Ex: <a> and <link> both have the href attribute.
         let mut issues: Vec<Issue> = Vec::new();
+
         for node in &auditor.tree {
             if RULES_A.contains_key(&*node.0) {
                 let rules = RULES_A.get(&*node.0);

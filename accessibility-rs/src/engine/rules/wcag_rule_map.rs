@@ -280,6 +280,70 @@ lazy_static! {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
+            ("input", Vec::from([
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, lang| {
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        match ele.attr("type") {
+                            Some(t) => {
+                                if t == "submit" || t == "reset" || t == "button" {
+                                    let is_valid = match ele.attr("value") {
+                                        Some(_) => true,
+                                        _ => false
+                                    };
+
+                                    if !is_valid {
+                                        valid = false;
+                                        elements.push(get_unique_selector(&ele))
+                                    }
+                                }
+                            }
+                            _ => ()
+                        }
+                    }
+
+                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern", ""), locale = lang, msgNodeType = r#""input""#, builtAttrs = r#""value""#) } else { Default::default() };
+
+                    Validation::new(valid, "", elements, message).into()
+                }),
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, lang| {
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        match ele.attr("type") {
+                            Some(t) => {
+                                if t == "submit" || t == "reset" || t == "button" {
+                                    let is_valid = match ele.attr("value") {
+                                        Some(v) => {
+                                          if v.trim().is_empty() {
+                                            false
+                                          } else {
+                                            true
+                                          }
+                                        }
+                                        _ => false
+                                    };
+
+                                    if !is_valid {
+                                        valid = false;
+                                        elements.push(get_unique_selector(&ele))
+                                    }
+                                }
+                            }
+                            _ => ()
+                        }
+                    }
+
+                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern2", ""), locale = lang, msgNodeType = r#""input""#, builtAttrs = r#""value="something" ""#) } else { Default::default() };
+
+                    Validation::new(valid, "", elements, message).into()
+                }),
+            ])),
             ("blink", Vec::from([
                 Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "2", |nodes, _lang| {
                     Validation::new_issue(nodes.is_empty(), "").into()
@@ -291,7 +355,7 @@ lazy_static! {
                     let mut elements = Vec::new();
 
                     for ele in nodes {
-                        let ele = ele.0;        
+                        let ele = ele.0;
                         if !has_alt_prop(ele) {
                             valid = false;
                             elements.push(get_unique_selector(&ele))

@@ -48,6 +48,14 @@ use accessibility_scraper::ElementRef;
 
 i18n!("locales", fallback = "en");
 
+/// support guidelines for auditing
+#[derive(Default)]
+pub enum Conformance {
+    /// Level AAA includes all Level A, AA, and AAA requirements
+    #[default]
+    WCAGAAA
+}
+
 /// configs for the audit
 #[derive(Default)]
 pub struct AuditConfig<'a> {
@@ -59,6 +67,8 @@ pub struct AuditConfig<'a> {
     pub bounding_box: bool,
     /// the locale of the audit translations
     pub locale: &'a str,
+    /// the guideline spec
+    pub spec: Conformance
 }
 
 impl<'a> AuditConfig<'a> {
@@ -69,6 +79,7 @@ impl<'a> AuditConfig<'a> {
             css,
             bounding_box,
             locale,
+            ..Default::default()
         }
     }
 

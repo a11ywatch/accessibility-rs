@@ -77,7 +77,14 @@ pub fn get_message_i18n_str_raw(
     } else {
         [rule_id, section].join(".").to_string()
     };
-    [base.as_str(), message.as_str()].join("").to_string()
+    let mut m = [base.as_str(), message.as_str()].join("").to_string();
+
+    if m.ends_with("_") {
+        m.pop();
+        m
+    } else {
+        m
+    }
 }
 
 /// get message config type
