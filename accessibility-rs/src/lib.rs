@@ -53,7 +53,7 @@ i18n!("locales", fallback = "en");
 pub enum Conformance {
     /// Level AAA includes all Level A, AA, and AAA requirements
     #[default]
-    WCAGAAA
+    WCAGAAA,
 }
 
 /// configs for the audit
@@ -68,7 +68,7 @@ pub struct AuditConfig<'a> {
     /// the locale of the audit translations
     pub locale: &'a str,
     /// the guideline spec
-    pub spec: Conformance
+    pub spec: Conformance,
 }
 
 impl<'a> AuditConfig<'a> {
@@ -84,7 +84,7 @@ impl<'a> AuditConfig<'a> {
     }
 
     /// basic audit
-    pub fn basic(html: &'static str) -> Self {
+    pub fn basic(html: &'a str) -> Self {
         AuditConfig {
             html,
             ..Default::default()

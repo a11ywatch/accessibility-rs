@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-rs"
-version = "0.0.35"
+version = "0.0.36"
 authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -29,6 +29,9 @@ slotmap = "1.0.6"
 strum = "0.25"
 strum_macros = "0.25"
 rust-i18n = "2"
+
+[dev-dependencies]
+maud = "0.25.0"
 
 [profile.dev]
 opt-level = 3

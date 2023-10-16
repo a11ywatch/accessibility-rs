@@ -25,8 +25,11 @@ pub fn parse_accessibility_tree<'a, 'b, 'c>(
     MatchingContext<'c, Simple>,
 ) {
     let mut accessibility_tree: BTreeMap<&str, Vec<(ElementRef<'_>, Option<DefaultKey>)>> =
-        BTreeMap::from([("title".into(), Default::default())]);
-
+        BTreeMap::from(if document.root_element().value().name() == "html" {
+            [("title".into(), Default::default())]
+        } else {
+            [(Default::default(), Default::default())]
+        });
     for node in document.tree.nodes() {
         match ElementRef::wrap(node) {
             Some(element) => {
@@ -55,7 +58,11 @@ pub fn parse_accessibility_tree_bounded<'a, 'b, 'c>(
 ) {
     let mut taffy = Taffy::new();
     let mut accessibility_tree: BTreeMap<&str, Vec<(ElementRef<'_>, Option<DefaultKey>)>> =
-        BTreeMap::from([("title".into(), Default::default())]);
+        BTreeMap::from(if document.root_element().value().name() == "html" {
+            [("title".into(), Default::default())]
+        } else {
+            [(Default::default(), Default::default())]
+        });
     let mut matching_context = match_context;
     let mut layout_leafs: Vec<Node> = vec![];
 

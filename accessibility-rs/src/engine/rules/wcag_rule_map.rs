@@ -124,7 +124,14 @@ lazy_static! {
             ])),
             ("title", Vec::from([
                 Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _lang| {
-                    Validation::new_issue(!nodes.is_empty() || !nodes[0].0.inner_html().is_empty(), "1.EmptyTitle").into()
+                    let mut valid = true;
+                    for node in nodes {
+                        let e = node.0.inner_html().is_empty();
+                        if e {
+                            valid = false;
+                        }
+                    }
+                    Validation::new_issue(!nodes.is_empty() || valid, "1.EmptyTitle").into()
                 }),
             ])),
             ("iframe", Vec::from([
