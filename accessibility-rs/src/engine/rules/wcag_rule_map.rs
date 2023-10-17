@@ -373,6 +373,32 @@ lazy_static! {
                     Validation::new(valid, "", elements, Default::default()).into()
                 }),
             ])),
+            ("fieldset", Vec::from([
+                Rule::new(Techniques::H71.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                    let mut valid = true;
+                    let selector = unsafe { Selector::parse("legend").unwrap_unchecked() };
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        let mut e = ele.select(&selector);
+                        let mut has_legend = false;
+
+                        while let Some(el) = e.next() {
+                            has_legend = true;
+                            if el.text().count() == 0 {
+                                valid = false;
+                                elements.push(get_unique_selector(&ele))
+                            }
+                        }
+                        if valid && !has_legend {
+                            valid = false;
+                        }
+                    }
+
+                    Validation::new(valid, "NoLegend", elements, Default::default()).into()
+                }),
+            ])),
             ("applet", Vec::from([
                 Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
                     let mut valid = true;

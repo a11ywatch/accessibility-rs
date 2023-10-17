@@ -18,7 +18,9 @@ fn _audit_missing_alt_anchor_img() {
     </body> 
  </html>"###,
     ));
-    let valid = !audit.iter().any(|x| x.code == "WCAGAAA.Principle1.Guideline1_1.H30");
+    let valid = !audit
+        .iter()
+        .any(|x| x.code == "WCAGAAA.Principle1.Guideline1_1.H30");
 
     assert_eq!(valid, false)
 }
@@ -30,7 +32,9 @@ fn _audit_missing_anchor_content_valid_href() {
         a href="www.example.com";
     };
     let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
-    let valid = !audit.iter().any(|x| x.code == "WCAGAAA.Principle4.Guideline4_1.H91");
+    let valid = !audit
+        .iter()
+        .any(|x| x.code == "WCAGAAA.Principle4.Guideline4_1.H91");
 
     assert_eq!(valid, false)
 }
@@ -42,7 +46,9 @@ fn _audit_missing_anchor_content() {
         a { "" }
     };
     let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
-    let valid = !audit.iter().any(|x| x.code == "WCAGAAA.Principle4.Guideline4_1.H91");
+    let valid = !audit
+        .iter()
+        .any(|x| x.code == "WCAGAAA.Principle4.Guideline4_1.H91");
 
     assert_eq!(valid, false)
 }
