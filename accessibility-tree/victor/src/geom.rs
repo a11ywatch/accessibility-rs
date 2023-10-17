@@ -25,21 +25,21 @@ pub mod physical {
     }
 
     impl Sides<LengthOrPercentage> {
-        pub fn inner_px(&self) -> f32 {
-            let b = Self::get_px::<LengthOrPercentage>(self.bottom);
-            let t = Self::get_px::<LengthOrPercentage>(self.top);
-            let l = Self::get_px::<LengthOrPercentage>(self.left);
-            let r = Self::get_px::<LengthOrPercentage>(self.left);
+        // pub fn inner_px(&self) -> f32 {
+        //     let b = Self::get_px::<LengthOrPercentage>(self.bottom);
+        //     let t = Self::get_px::<LengthOrPercentage>(self.top);
+        //     let l = Self::get_px::<LengthOrPercentage>(self.left);
+        //     let r = Self::get_px::<LengthOrPercentage>(self.left);
 
-            b + t + l + r
-        }
+        //     b + t + l + r
+        // }
 
-        pub fn get_px<T>(v: LengthOrPercentage) -> f32 {
-            match v {
-                LengthOrPercentage::Length(l) => l.px,
-                LengthOrPercentage::Percentage(l) => l.unit_value,
-            }
-        }
+        // pub fn get_px<T>(v: LengthOrPercentage) -> f32 {
+        //     match v {
+        //         LengthOrPercentage::Length(l) => l.px,
+        //         LengthOrPercentage::Percentage(l) => l.unit_value,
+        //     }
+        // }
     }
 }
 

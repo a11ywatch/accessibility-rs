@@ -68,7 +68,7 @@ pub struct AuditConfig<'a> {
     /// the locale of the audit translations
     pub locale: &'a str,
     /// the guideline spec
-    pub spec: Conformance,
+    pub conformance: Conformance,
 }
 
 impl<'a> AuditConfig<'a> {

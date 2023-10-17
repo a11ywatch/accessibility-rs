@@ -3,7 +3,9 @@ resolver = "2"
 members = [
   "accessibility-rs",
   "accessibility-tree/victor",
-  "accessibility-scraper"
+  "accessibility-scraper",
+  # internal
+  "benches"
 ]
 
 [workspace.dependencies]
