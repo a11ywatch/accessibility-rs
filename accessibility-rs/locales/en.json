@@ -61,6 +61,7 @@
   "1_3_1_H39.3.NoCaption": "If this table is a data table, consider using a caption element to the table element to identify this table.",
   "1_3_1_H71.NoLegend": "Fieldset does not contain a legend element. All fieldsets should contain a legend element that describes a description of the field group.",
   "1_3_1_H85.2": "If this selection list contains groups of related options, they should be grouped with optgroup.",
+  "1_3_1_H93.1": "Multiple labels exist with the same \"for\" attribute. If these labels refer to different form controls, the controls should have unique \"id\" attributes.",
   "1_3_1_H71.SameName": "If these radio buttons or check boxes require a further group-level description, they should be contained within a fieldset element.",
   "1_3_1_H48.1": "This content looks like it is simulating an unordered list using plain text. If so, marking up this content with a ul element would add proper structure information to the document.",
   "1_3_1_H48.2": "This content looks like it is simulating an ordered list using plain text. If so, marking up this content with an ol element would add proper structure information to the document.",

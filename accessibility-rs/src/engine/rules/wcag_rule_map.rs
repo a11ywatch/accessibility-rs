@@ -287,6 +287,36 @@ lazy_static! {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
+            ("label", Vec::from([
+                Rule::new(Techniques::H93.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+                    let mut id_map: HashMap<&str, u8> = HashMap::new();
+
+                    for ele in nodes {
+                        match ele.0.attr("for") {
+                            Some(s) => {
+                                if id_map.contains_key(s) {
+                                    let u = id_map.get(s);
+                                    match u {
+                                        Some(u) => {
+                                            valid = false;
+                                            id_map.insert(s, u.add(1));
+                                            elements.push(get_unique_selector(&ele.0))
+                                        }
+                                        _ => ()
+                                    }
+                                } else {
+                                    id_map.insert(s, 1);
+                                }
+                            }
+                            _ => ()
+                        }
+                    }
+
+                    Validation::new(valid, "1", elements, Default::default()).into()
+                })
+            ])),
             ("input", Vec::from([
                 Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, lang| {
                     let mut valid = true;

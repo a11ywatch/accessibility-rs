@@ -27,6 +27,8 @@ pub enum Techniques {
     H71,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H91>
     H91,
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H93>
+    H93,
     /// <https://www.w3.org/TR/WCAG20-TECHS/F40>
     F40,
     /// <https://www.w3.org/TR/WCAG20-TECHS/F41>

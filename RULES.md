@@ -23,11 +23,12 @@ List of [WCAG2.1 techniques](https://www.w3.org/TR/WCAG21/) and whether or not w
 | [H91](https://www.w3.org/TR/WCAG20-TECHS/H91.html) | anchor valid href attribute, but no link content                              | A-AAA | error | A.NoContent     | ✅       |
 | [H91](https://www.w3.org/TR/WCAG20-TECHS/H91.html) | anchor found but no link content                                              | A-AAA | error | A.EmptyNoId     | ✅       |
 | [H91](https://www.w3.org/TR/WCAG20-TECHS/H91.html) | form control needs name                                                       | A-AAA | error | [NodeName].Name | ✔️        |
+| [H93](https://www.w3.org/TR/WCAG20-TECHS/H93.html) | label has multiple for ids                                                    | A-AAA | error |                 | ✅        |
 | [F40](https://www.w3.org/TR/WCAG20-TECHS/F40.html) | meta redirect used with a time limit                                          | A-AAA | error | 2               | ✅       |
 | [F41](https://www.w3.org/TR/WCAG20-TECHS/F41.html) | meta refresh used to reload the page                                          | A-AAA | error | 2               | ✅       |
 | [F47](https://www.w3.org/TR/WCAG20-TECHS/F47.html) | blink element used for attention                                              | A-AAA | error |                 | ✅       |
 | [F77](https://www.w3.org/TR/WCAG20-TECHS/F77.html) | duplicate ID found                                                            | A-AAA | error |                 | ✅       |
 
-Errors that can be to be tested with automation `21/70`.
+Errors that can be to be tested with automation `22/70`.
 
 Key: ✅ = Complete, ✔️ = Complete with a bit of missing details.

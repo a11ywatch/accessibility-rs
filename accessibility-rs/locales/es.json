@@ -61,6 +61,7 @@
   "1_3_1_H39.3.NoCaption": "Si esta tabla es una tabla de datos, considera agregar un elemento de subtítulo (caption) al elemento table para identificar esta tabla.",
   "1_3_1_H71.NoLegend": "El fieldset no contiene un elemento de leyenda (legend). Todos los fieldsets deben contener un elemento de leyenda que describa una descripción del grupo de campos.",
   "1_3_1_H85.2": "Si esta lista de selección contiene grupos de opciones relacionadas, deberían agruparse con el elemento optgroup.",
+  "1_3_1_H93.1": "Existen varias etiquetas con el mismo atributo \"for\". Si estas etiquetas se refieren a controles de formulario diferentes, los controles deben tener atributos \"id\" únicos.",
   "1_3_1_H71.SameName": "Si estos botones de radio o casillas de verificación requieren una descripción a nivel de grupo adicional, deberían estar contenidos dentro de un elemento fieldset.",
   "1_3_1_H48.1": "Este contenido parece estar simulando una lista desordenada usando texto plano. Si es así, marcar este contenido con un elemento ul agregaría información de estructura adecuada al documento.",
   "1_3_1_H48.2": "Este contenido parece estar simulando una lista ordenada usando texto plano. Si es así, marcar este contenido con un elemento ol agregaría información de estructura adecuada al documento.",
