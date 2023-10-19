@@ -19,7 +19,8 @@ pub struct ElementRef<'a> {
 }
 
 impl<'a> ElementRef<'a> {
-    fn new(node: NodeRef<'a, Node>) -> Self {
+    /// Create a new element reference
+    pub fn new(node: NodeRef<'a, Node>) -> Self {
         ElementRef { node }
     }
 

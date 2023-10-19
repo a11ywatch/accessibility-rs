@@ -315,6 +315,33 @@ lazy_static! {
                     }
 
                     Validation::new(valid, "1", elements, Default::default()).into()
+                }),
+                Rule::new(Techniques::H44.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        match ele.0.attr("for") {
+                            Some(s) => {
+                                let selector = unsafe { Selector::parse(&("#".to_string() + &s)).unwrap_unchecked() };
+                                let root_tree = ele.0.tree().root();
+
+                                match ElementRef::new(root_tree) {
+                                    t => {
+                                        let e = t.select(&selector);
+
+                                        if e.count() == 0 {
+                                            valid = false;
+                                            elements.push(get_unique_selector(&ele.0))
+                                        }
+                                    }
+                                }
+                            }
+                            _ => ()
+                        }
+                    }
+
+                    Validation::new(valid, "NonExistent", elements, Default::default()).into()
                 })
             ])),
             ("input", Vec::from([

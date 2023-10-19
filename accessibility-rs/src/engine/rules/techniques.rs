@@ -17,10 +17,14 @@ pub enum Techniques {
     H37,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H42>
     H42,
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H44>
+    H44,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H53>
     H53,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H57>
     H57,
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H63>
+    H63,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H64>
     H64,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H71>

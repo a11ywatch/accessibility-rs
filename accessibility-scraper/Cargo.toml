@@ -1,9 +1,9 @@
 [package]
 name = "accessibility-scraper"
-version = "0.0.2"
+version = "0.0.4"
 edition = "2021"
 
-description = "HTML parsing and querying with CSS selectors"
+description = "HTML parsing and querying with CSS selectors with CSS binding styles to elements."
 keywords = ["html", "css", "selector", "scraping"]
 
 authors = [
@@ -12,7 +12,7 @@ authors = [
 ]
 license = "ISC"
 
-repository = "https://github.com/accessibility-rs"
+repository = "https://github.com/a11ywatch/accessibility-rs"
 readme = "README.md"
 
 [dependencies]
