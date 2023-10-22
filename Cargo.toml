@@ -10,8 +10,8 @@ members = [
 
 [workspace.dependencies]
 smallvec = "1"
-selectors = "0.21.0"
-cssparser = "0.25.0"
+selectors = "0.22.0"
+cssparser = "0.27.0"
 html5ever = "0.26"
 ego-tree = "0.6.2"
 lazy_static = "1.4"

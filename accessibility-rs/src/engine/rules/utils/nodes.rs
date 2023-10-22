@@ -97,7 +97,7 @@ pub fn get_unique_selector(ele: &ElementRef<'_>) -> String {
             let node_name = ele.value().name();
 
             if selector.is_empty() && ele.has_attribute("class") {
-                let node_selector = node_name.to_string() + &ele.local_name().to_string();
+                let node_selector = node_name.to_string() + &ele.value().local_name.to_string();
                 let only_selector = single_selector(ele, &node_selector);
                 if only_selector {
                     selector = node_selector;

@@ -1,22 +1,48 @@
-use html5ever::Namespace;
+use super::ElementRef;
+use crate::selector::{CssLocalName, CssString, NonTSPseudoClass, PseudoElement, Simple};
+use html5ever::{LocalName, Namespace};
 use selectors::{
     attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint},
     matching, Element, OpaqueElement,
 };
 
-use super::ElementRef;
-use crate::selector::{CssLocalName, CssString, NonTSPseudoClass, PseudoElement, Simple};
-
 /// Note: will never match against non-tree-structure pseudo-classes.
 impl<'a> Element for ElementRef<'a> {
     type Impl = Simple;
 
-    fn local_name(&self) -> &<Self::Impl as selectors::SelectorImpl>::BorrowedLocalName {
-        &self.value().local_name
+    #[inline]
+    fn is_part(&self, _name: &LocalName) -> bool {
+        false
     }
 
-    fn namespace(&self) -> &Namespace {
-        &self.value().name.ns
+    #[inline]
+    fn imported_part(&self, _: &LocalName) -> Option<LocalName> {
+        None
+    }
+
+    #[inline]
+    fn exported_part(&self, _: &LocalName) -> Option<LocalName> {
+        None
+    }
+
+    #[inline]
+    fn is_same_type(&self, other: &Self) -> bool {
+        self.value().name == other.value().name
+    }
+
+    #[inline]
+    fn is_pseudo_element(&self) -> bool {
+        false
+    }
+
+    #[inline]
+    fn has_local_name(&self, name: &CssLocalName) -> bool {
+        self.value().name.local == *name.0
+    }
+
+    #[inline]
+    fn has_namespace(&self, namespace: &Namespace) -> bool {
+        &self.value().name.ns == *&namespace
     }
 
     fn opaque(&self) -> OpaqueElement {
@@ -35,22 +61,6 @@ impl<'a> Element for ElementRef<'a> {
         None
     }
 
-    // fn is_pseudo_element(&self) -> bool {
-    //     false
-    // }
-
-    // fn is_part(&self, _name: &CssLocalName) -> bool {
-    //     false
-    // }
-
-    // fn is_same_type(&self, other: &Self) -> bool {
-    //     self.value().name == other.value().name
-    // }
-
-    // fn imported_part(&self, _: &CssLocalName) -> Option<CssLocalName> {
-    //     None
-    // }
-
     fn prev_sibling_element(&self) -> Option<Self> {
         self.prev_siblings()
             .find(|sibling| sibling.value().is_element())
@@ -63,24 +73,10 @@ impl<'a> Element for ElementRef<'a> {
             .map(ElementRef::new)
     }
 
-    // fn first_element_child(&self) -> Option<Self> {
-    //     self.children()
-    //         .find(|child| child.value().is_element())
-    //         .map(ElementRef::new)
-    // }
-
     fn is_html_element_in_html_document(&self) -> bool {
         // FIXME: Is there more to this?
         self.value().name.ns == ns!(html)
     }
-
-    // fn has_local_name(&self, name: &CssLocalName) -> bool {
-    //     self.value().name.local == name.0
-    // }
-
-    // fn has_namespace(&self, namespace: &Namespace) -> bool {
-    //     &self.value().name.ns == namespace
-    // }
 
     fn attr_matches(
         &self,
@@ -104,7 +100,21 @@ impl<'a> Element for ElementRef<'a> {
     where
         F: FnMut(&Self, selectors::matching::ElementSelectorFlags),
     {
-        match *pseudo_class {}
+        use self::NonTSPseudoClass::*;
+
+        match *pseudo_class {
+            Active | Focus | Hover | Enabled | Disabled | Checked | Indeterminate | Visited => {
+                false
+            }
+            AnyLink | Link => {
+                self.value().name.ns == ns!(html)
+                    && matches!(
+                        self.value().name.local,
+                        local_name!("a") | local_name!("area") | local_name!("link")
+                    )
+                    && self.has_attribute("href")
+            }
+        }
     }
 
     fn match_pseudo_element(

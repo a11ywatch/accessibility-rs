@@ -3,7 +3,7 @@ use crate::style::errors::RuleParseErrorKind;
 use accessibility_scraper::selector::CssLocalName;
 use accessibility_scraper::selector::Simple;
 use cssparser::ToCss;
-use html5ever::Namespace;
+use html5ever::{LocalName, Namespace};
 use selectors::attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint};
 use selectors::context::{MatchingContext, MatchingMode, QuirksMode};
 use selectors::matching::{matches_selector, ElementSelectorFlags};
@@ -38,6 +38,12 @@ impl selectors::parser::NonTSPseudoClass for PseudoClass {
     type Impl = Simple;
     fn is_active_or_hover(&self) -> bool {
         match *self {}
+    }
+    fn is_user_action_state(&self) -> bool {
+        false
+    }
+    fn has_zero_specificity(&self) -> bool {
+        false
     }
 }
 
@@ -84,6 +90,21 @@ impl<'a> NodeRef<'a> {
     fn node(self) -> &'a Node {
         &self.document[self.node]
     }
+    /// Returns the `Element` referenced by `self`.
+    pub fn value(&self) -> &crate::dom::ElementData {
+        self.node().as_element().unwrap()
+    }
+    /// Returns the value of an attribute.
+    pub fn attr(&self, attr: &str) -> Option<&str> {
+        self.value().get_attr(&LocalName::from(attr))
+    }
+    /// Returns if the element has the attibute and not empty
+    pub fn has_attribute(&self, attr: &str) -> bool {
+        match self.attr(attr) {
+            Some(val) => !val.trim().is_empty(),
+            None => false,
+        }
+    }
 }
 
 fn find_element<'a, F>(
@@ -105,6 +126,11 @@ where
 
 impl<'a> selectors::Element for NodeRef<'a> {
     type Impl = Simple;
+
+    #[inline]
+    fn is_part(&self, _name: &LocalName) -> bool {
+        false
+    }
 
     fn opaque(&self) -> selectors::OpaqueElement {
         selectors::OpaqueElement::new::<Node>(self.node())
@@ -135,12 +161,34 @@ impl<'a> selectors::Element for NodeRef<'a> {
         self.node().as_element().unwrap().name.ns == ns!(html) && self.node().in_html_document()
     }
 
-    fn local_name(&self) -> &accessibility_scraper::selector::CssLocalName {
-        &self.node().as_element().unwrap().css_local_name
+    #[inline]
+    fn imported_part(&self, _: &LocalName) -> Option<LocalName> {
+        None
     }
 
-    fn namespace(&self) -> &Namespace {
-        &self.node().as_element().unwrap().name.ns
+    #[inline]
+    fn exported_part(&self, _: &LocalName) -> Option<LocalName> {
+        None
+    }
+
+    #[inline]
+    fn is_same_type(&self, other: &Self) -> bool {
+        self.value().name == other.value().name
+    }
+
+    #[inline]
+    fn is_pseudo_element(&self) -> bool {
+        false
+    }
+
+    #[inline]
+    fn has_local_name(&self, name: &CssLocalName) -> bool {
+        self.value().name.local == *name.0
+    }
+
+    #[inline]
+    fn has_namespace(&self, namespace: &Namespace) -> bool {
+        &self.value().name.ns == *&namespace
     }
 
     fn is_html_slot_element(&self) -> bool {
@@ -180,7 +228,21 @@ impl<'a> selectors::Element for NodeRef<'a> {
     where
         F: FnMut(&Self, ElementSelectorFlags),
     {
-        match *pseudo_class {}
+        use accessibility_scraper::selector::NonTSPseudoClass::*;
+
+        match *pseudo_class {
+            Active | Focus | Hover | Enabled | Disabled | Checked | Indeterminate | Visited => {
+                false
+            }
+            AnyLink | Link => {
+                self.value().name.ns == ns!(html)
+                    && matches!(
+                        self.value().name.local,
+                        local_name!("a") | local_name!("area") | local_name!("link")
+                    )
+                    && self.has_attribute("href")
+            }
+        }
     }
 
     fn match_pseudo_element(
