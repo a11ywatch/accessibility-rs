@@ -188,6 +188,33 @@ lazy_static! {
                 }),
             ])),
             ("a", Vec::from([
+                Rule::new(Techniques::H2.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                    let mut valid = true;
+                    let selector = unsafe { Selector::parse("img").unwrap_unchecked() };
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        let mut e = ele.select(&selector);
+
+                        while let Some(el) = e.next() {
+                            let alt  = match el.attr("alt") {
+                                Some(s) => s,
+                                _ => "",
+                            };
+
+                            let text = ele.text().collect::<Vec<_>>().join("");
+                            let text = text.trim();
+
+                            if alt == text {
+                                valid = false;
+                                elements.push(get_unique_selector(&ele))
+                            }
+                        }
+                    }
+
+                    Validation::new(valid, "EG5", elements, Default::default()).into()
+                }),
                 Rule::new(Techniques::H30.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
                     let mut valid = true;
                     let selector = unsafe { Selector::parse("img").unwrap_unchecked() };

@@ -6,6 +6,7 @@ List of [WCAG2.1 techniques](https://www.w3.org/TR/WCAG21/) and whether or not w
 
 | Technique                                          | Description                                                                   | WCAG  | Type  | Name            | Complete |
 | -------------------------------------------------- | ----------------------------------------------------------------------------- | ----- | ----- | --------------- | -------- |
+| [H2](https://www.w3.org/TR/WCAG20-TECHS/H2.html)   | img element in link has alt text that duplicates the text content of link     | A-AAA | error | EG              | ✅       |
 | [H25](https://www.w3.org/TR/WCAG20-TECHS/H25.html) | empty titles                                                                  | A-AAA | error |                 | ✅       |
 | [H30](https://www.w3.org/TR/WCAG20-TECHS/H30.html) | text alternative img                                                          | A-AAA | error |                 | ✅       |
 | [H32](https://www.w3.org/TR/WCAG20-TECHS/H32.html) | missing form submit button                                                    | A-AAA | error |                 | ✅       |
@@ -31,6 +32,6 @@ List of [WCAG2.1 techniques](https://www.w3.org/TR/WCAG21/) and whether or not w
 | [F47](https://www.w3.org/TR/WCAG20-TECHS/F47.html) | blink element used for attention                                              | A-AAA | error |                 | ✅       |
 | [F77](https://www.w3.org/TR/WCAG20-TECHS/F77.html) | duplicate ID found                                                            | A-AAA | error |                 | ✅       |
 
-Errors that can be to be tested with automation `24/70`.
+Errors that can be to be tested with automation `25/70`.
 
 Key: ✅ = Complete, ✔️ = Complete with a bit of missing details.

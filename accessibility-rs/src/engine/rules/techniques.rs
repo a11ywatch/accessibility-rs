@@ -3,6 +3,8 @@ use strum_macros::IntoStaticStr;
 #[derive(PartialOrd, Ord, std::cmp::Eq, PartialEq, Hash, Debug, IntoStaticStr, Clone)]
 /// techniques for WCAG <https://www.w3.org/TR/WCAG20-TECHS/>
 pub enum Techniques {
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H2>
+    H2,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H25>
     H25,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H32.html>

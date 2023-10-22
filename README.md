@@ -6,7 +6,7 @@ The Rust web accessibility engine.
 
 ```toml
 [dependencies]
-accessibility-rs = "^0.0.30"
+accessibility-rs = "^0.0.43"
 ```
 
 ```rs
@@ -28,7 +28,7 @@ let audit = accessibility_rs::audit(&AuditConfig::new(&html, &css, false, "en"))
 1. i18n support for multiple languages.
 1. Re-creating layout tree to get element position coordinates.
 
-## Benchmarks
+## [Benchmarks](./benches/)
 
 ```sh
 audit-speed/core/audit: small html (4k iterations)

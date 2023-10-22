@@ -13,7 +13,7 @@ fn _audit_missing_alt_anchor_img() {
     </head>   
     <body>     
         <a href="routes.html">
-            <img src="topo.gif" /> 
+            <img src="topo.gif"> 
         </a> 
     </body> 
  </html>"###,
@@ -49,6 +49,29 @@ fn _audit_missing_anchor_content() {
     let valid = !audit
         .iter()
         .any(|x| x.code == "WCAGAAA.Principle4.Guideline4_1.H91");
+
+    assert_eq!(valid, false)
+}
+
+#[test]
+/// anchor text matches img alt
+fn _audit_img_alt_matches_text_anchor() {
+    let audit = accessibility_rs::audit(AuditConfig::basic(
+        r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head>     
+       <title>Decrative Img: Do not use!</title>
+    </head>   
+    <body>     
+        <a href="routes.html">
+            <img src="topo.gif" alt="Golf">
+            Golf
+        </a> 
+    </body> 
+ </html>"###,
+    ));
+    let valid = !audit
+        .iter()
+        .any(|x| x.code == "WCAGAAA.Principle1.Guideline1_1.H2");
 
     assert_eq!(valid, false)
 }
