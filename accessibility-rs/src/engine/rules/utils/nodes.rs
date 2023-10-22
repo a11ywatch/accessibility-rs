@@ -19,10 +19,26 @@ pub fn has_alt(ele: ElementRef<'_>) -> bool {
     has_alt_prop(ele)
 }
 
-/// a valid alt attribute for image
+/// a valid attribute for element
 pub fn has_alt_prop(ele: ElementRef<'_>) -> bool {
     match ele.attr("alt") {
         Some(_) => true,
+        _ => false,
+    }
+}
+
+/// property found for element
+pub fn has_prop(ele: ElementRef<'_>, prop: &str) -> bool {
+    match ele.attr(prop) {
+        Some(_) => true,
+        _ => false,
+    }
+}
+
+/// property found for element and is not empty
+pub fn has_prop_value(ele: ElementRef<'_>, prop: &str) -> bool {
+    match ele.attr(prop) {
+        Some(p) => !p.is_empty(),
         _ => false,
     }
 }

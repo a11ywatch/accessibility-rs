@@ -61,7 +61,7 @@ impl Issue {
         Issue {
             message,
             context: context.into(),
-            runner: "kayle",
+            runner: "accessibility-rs",
             code: code.into(),
             issue_type,
             type_code: match issue_type {

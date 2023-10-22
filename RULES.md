@@ -20,16 +20,17 @@ List of [WCAG2.1 techniques](https://www.w3.org/TR/WCAG21/) and whether or not w
 | [H57](https://www.w3.org/TR/WCAG20-TECHS/H57.html) | lang attribute of the document element does not appear to be well-formed      | A-AAA | error | 3.Lang          | ✅       |
 | [H57](https://www.w3.org/TR/WCAG20-TECHS/H57.html) | xml:lang attribute of the document element does not appear to be well-formed  | A-AAA | error | 3.XmlLang       | ✅       |
 | [H64](https://www.w3.org/TR/WCAG20-TECHS/H64.html) | iframe missing title attribute                                                | A-AAA | error | 1               | ✅       |
+| [H67](https://www.w3.org/TR/WCAG20-TECHS/H67.html) | Img element with empty alt text must have absent or empty title attribute     | A-AAA | error | 1               | ✅       |
 | [H71](https://www.w3.org/TR/WCAG20-TECHS/H71.html) | fieldset missing legend element                                               | A-AAA | error | 2               | ✅       |
 | [H91](https://www.w3.org/TR/WCAG20-TECHS/H91.html) | anchor valid href attribute, but no link content                              | A-AAA | error | A.NoContent     | ✅       |
 | [H91](https://www.w3.org/TR/WCAG20-TECHS/H91.html) | anchor found but no link content                                              | A-AAA | error | A.EmptyNoId     | ✅       |
 | [H91](https://www.w3.org/TR/WCAG20-TECHS/H91.html) | form control needs name                                                       | A-AAA | error | [NodeName].Name | ✔️        |
-| [H93](https://www.w3.org/TR/WCAG20-TECHS/H93.html) | label has multiple for ids                                                    | A-AAA | error |                 | ✅        |
+| [H93](https://www.w3.org/TR/WCAG20-TECHS/H93.html) | label has multiple for ids                                                    | A-AAA | error |                 | ✅       |
 | [F40](https://www.w3.org/TR/WCAG20-TECHS/F40.html) | meta redirect used with a time limit                                          | A-AAA | error | 2               | ✅       |
 | [F41](https://www.w3.org/TR/WCAG20-TECHS/F41.html) | meta refresh used to reload the page                                          | A-AAA | error | 2               | ✅       |
 | [F47](https://www.w3.org/TR/WCAG20-TECHS/F47.html) | blink element used for attention                                              | A-AAA | error |                 | ✅       |
 | [F77](https://www.w3.org/TR/WCAG20-TECHS/F77.html) | duplicate ID found                                                            | A-AAA | error |                 | ✅       |
 
-Errors that can be to be tested with automation `23/70`.
+Errors that can be to be tested with automation `24/70`.
 
 Key: ✅ = Complete, ✔️ = Complete with a bit of missing details.

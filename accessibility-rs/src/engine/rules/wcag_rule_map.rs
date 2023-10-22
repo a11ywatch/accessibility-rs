@@ -1,7 +1,8 @@
 use crate::engine::rules::rule::{Rule, Validation};
 use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::utils::nodes::{
-    get_unique_selector, has_alt, has_alt_prop, validate_empty_nodes, validate_missing_attr,
+    get_unique_selector, has_alt, has_alt_prop, has_prop, has_prop_value, validate_empty_nodes,
+    validate_missing_attr,
 };
 use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
 use crate::i18n::locales::get_message_i18n_str_raw;
@@ -255,6 +256,20 @@ lazy_static! {
                     }
 
                     Validation::new(valid, "", elements, Default::default()).into()
+                }),
+                Rule::new(Techniques::H67.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        if has_prop(ele, "alt") && has_prop_value(ele, "title") {
+                            valid = false;
+                            elements.push(get_unique_selector(&ele))
+                        }
+                    }
+
+                    Validation::new(valid, "1", elements, Default::default()).into()
                 }),
             ])),
             ("h1", Vec::from([

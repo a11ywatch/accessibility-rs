@@ -22,11 +22,11 @@ let audit = accessibility_rs::audit(&AuditConfig::new(&html, &css, false, "en"))
 ### Features
 
 1. Accurate web accessibility WCAG audits.
-1. Re-creating layout trees to get element positions without the DOM.
-1. Ideal shapes for audits that scale.
-1. Shortest path css selectors for elements.
 1. Incredibly fast nanosecond audits.
-1. i18n support.
+1. Ideal shapes for audits that scale.
+1. Shortest path CSS selectors for elements.
+1. i18n support for multiple languages.
+1. Re-creating layout tree to get element position coordinates.
 
 ## Benchmarks
 

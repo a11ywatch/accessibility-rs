@@ -29,7 +29,7 @@ fn _audit_label_id_noexist() {
     };
 
     let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
-    
+
     let valid = !audit
         .iter()
         .any(|x| x.code == "WCAGAAA.Principle1.Guideline1_3.H44");

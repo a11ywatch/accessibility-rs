@@ -24,8 +24,7 @@
 //! use accessibility_rs::{audit, AuditConfig};
 //!
 //! fn main() {
-//!     // pass in the html, and css if the page came from a headless browser
-//!     let config = AuditConfig::basic("<html>...</html>");
+//!     let config = AuditConfig::basic(r###"<html><body><h1>My Title</h1><input type="text" placeholder="Type me"></input><img src="tabby_cat.png"></img></body></html>"###);
 //!     let audit = audit(config);
 //!     println!("{:?}", audit);
 //! }
