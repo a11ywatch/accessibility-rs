@@ -6,10 +6,11 @@ use mocks::mock;
 
 #[test]
 fn _audit() {
-    let _ = accessibility_rs::audit(AuditConfig::new(
+    let report = accessibility_rs::audit(AuditConfig::new(
         mock::MOCK_WEBSITE_HTML,
         &mock::MOCK_CSS_RULES,
         false,
         "en",
     ));
+    println!("{:?}", report)
 }

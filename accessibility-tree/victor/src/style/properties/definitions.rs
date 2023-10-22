@@ -1,6 +1,12 @@
 use crate::style::values::*;
 use cssparser::{Color, RGBA};
 
+type FourSidesAuto = FourSides<SpecifiedLengthOrPercentageOrAuto>;
+type FourSidesAutoPercentage = FourSides<SpecifiedLengthOrPercentage>;
+type FourSidesLineStyle = FourSides<LineStyle>;
+type FourSidesColor = FourSides<Color>;
+type FourSidesLineWidth = FourSides<SpecifiedLineWidth>;
+
 properties! {
     type Discriminant = u8;
 
@@ -61,31 +67,31 @@ properties! {
     }
 
     @shorthands {
-        "margin" => FourSides<SpecifiedLengthOrPercentageOrAuto> {
+        "margin" => FourSidesAuto {
             top: margin_top,
             left: margin_left,
             bottom: margin_bottom,
             right: margin_right,
         }
-        "padding" => FourSides<SpecifiedLengthOrPercentage> {
+        "padding" => FourSidesAutoPercentage {
             top: padding_top,
             left: padding_left,
             bottom: padding_bottom,
             right: padding_right,
         }
-        "border-style" => FourSides<LineStyle> {
+        "border-style" => FourSidesLineStyle {
             top: border_top_style,
             left: border_left_style,
             bottom: border_bottom_style,
             right: border_right_style,
         }
-        "border-color" => FourSides<Color> {
+        "border-color" => FourSidesColor {
             top: border_top_color,
             left: border_left_color,
             bottom: border_bottom_color,
             right: border_right_color,
         }
-        "border-width" => FourSides<SpecifiedLineWidth> {
+        "border-width" => FourSidesLineWidth {
             top: border_top_width,
             left: border_left_width,
             bottom: border_bottom_width,

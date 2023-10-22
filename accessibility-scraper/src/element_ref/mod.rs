@@ -20,11 +20,13 @@ pub struct ElementRef<'a> {
 
 impl<'a> ElementRef<'a> {
     /// Create a new element reference
+    #[inline]
     pub fn new(node: NodeRef<'a, Node>) -> Self {
         ElementRef { node }
     }
 
     /// Wraps a `NodeRef` only if it references a `Node::Element`.
+    #[inline]
     pub fn wrap(node: NodeRef<'a, Node>) -> Option<Self> {
         if node.value().is_element() {
             Some(ElementRef::new(node))
@@ -34,11 +36,13 @@ impl<'a> ElementRef<'a> {
     }
 
     /// Returns the `Element` referenced by `self`.
+    #[inline]
     pub fn value(&self) -> &'a Element {
         self.node.value().as_element().unwrap()
     }
 
     /// Returns an iterator over descendent elements matching a selector.
+    #[inline]
     pub fn select<'b>(&self, selector: &'b Selector) -> Select<'a, 'b> {
         let mut inner = self.traverse();
         inner.next(); // Skip Edge::Open(self).
@@ -72,6 +76,7 @@ impl<'a> ElementRef<'a> {
     }
 
     /// Returns the value of an attribute.
+    #[inline]
     pub fn attr(&self, attr: &str) -> Option<&str> {
         self.value().attr(attr)
     }
@@ -84,6 +89,7 @@ impl<'a> ElementRef<'a> {
     }
 
     /// Returns if the element has the attibute and not empty
+    #[inline]
     pub fn has_attribute(&self, attr: &str) -> bool {
         match self.attr(attr) {
             Some(val) => !val.trim().is_empty(),

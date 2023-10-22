@@ -76,6 +76,7 @@ impl parser::SelectorImpl for Simple {
     type Identifier = CssLocalName;
     type ClassName = CssLocalName;
     type LocalName = CssLocalName;
+    type PartName = LocalName;
     type NamespacePrefix = CssLocalName;
     type NamespaceUrl = Namespace;
     type BorrowedNamespaceUrl = Namespace;
@@ -145,19 +146,41 @@ impl cssparser::ToCss for CssLocalName {
 }
 
 /// Non Tree-Structural Pseudo-Class.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum NonTSPseudoClass {}
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum NonTSPseudoClass {
+    /// any link
+    AnyLink,
+    /// a link
+    Link,
+    /// a visited link
+    Visited,
+    /// a active element
+    Active,
+    /// a focused element
+    Focus,
+    /// a element that is hovered
+    Hover,
+    /// a element that has enabled checked
+    Enabled,
+    /// a element that has disabled prop
+    Disabled,
+    /// a element that has the checked property
+    Checked,
+    /// an indeterminate element
+    Indeterminate,
+}
 
 impl parser::NonTSPseudoClass for NonTSPseudoClass {
     type Impl = Simple;
-
     fn is_active_or_hover(&self) -> bool {
         false
     }
-
-    // fn is_user_action_state(&self) -> bool {
-    //     false
-    // }
+    fn is_user_action_state(&self) -> bool {
+        false
+    }
+    fn has_zero_specificity(&self) -> bool {
+        false
+    }
 }
 
 impl cssparser::ToCss for NonTSPseudoClass {
@@ -165,7 +188,18 @@ impl cssparser::ToCss for NonTSPseudoClass {
     where
         W: fmt::Write,
     {
-        dest.write_str("")
+        dest.write_str(match *self {
+            NonTSPseudoClass::AnyLink => ":any-link",
+            NonTSPseudoClass::Link => ":link",
+            NonTSPseudoClass::Visited => ":visited",
+            NonTSPseudoClass::Active => ":active",
+            NonTSPseudoClass::Focus => ":focus",
+            NonTSPseudoClass::Hover => ":hover",
+            NonTSPseudoClass::Enabled => ":enabled",
+            NonTSPseudoClass::Disabled => ":disabled",
+            NonTSPseudoClass::Checked => ":checked",
+            NonTSPseudoClass::Indeterminate => ":indeterminate",
+        })
     }
 }
 
