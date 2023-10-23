@@ -132,16 +132,14 @@ pub fn parse_accessibility_tree_bounded<'a, 'b, 'c>(
         )
         .unwrap();
 
-    println!("Layout leafs {:?}", layout_leafs.len());
+    // println!("Layout leafs {:?}", layout_leafs.len());
 
     // TODO: set the root node to html, body in the accessibility_tree
     taffy.compute_layout(root_node, Size::MAX_CONTENT).unwrap();
 
-    for lea in layout_leafs {
-        println!("Leaf Position {:?}", taffy.layout(lea).unwrap());
-    }
-    // console_log!("Getting tree links {:?}", accessibility_tree.get("a"));
-    // console_log!("Tree {:?}", accessibility_tree);
+    // for lea in layout_leafs {
+    //     println!("Leaf Position {:?}", taffy.layout(lea).unwrap());
+    // }
 
     (accessibility_tree, Some(taffy), matching_context)
 }

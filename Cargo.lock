@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "accessibility-rs"
-version = "0.0.43"
+version = "0.0.44"
 dependencies = [
  "accessibility-scraper",
  "accessibility-tree",
@@ -26,7 +26,7 @@ dependencies = [
 
 [[package]]
 name = "accessibility-scraper"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "ahash",
  "cssparser",
@@ -42,7 +42,7 @@ dependencies = [
 
 [[package]]
 name = "accessibility-tree"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "accessibility-scraper",
  "atomic_refcell",

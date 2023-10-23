@@ -32,11 +32,11 @@ let audit = accessibility_rs::audit(&AuditConfig::new(&html, &css, false, "en"))
 
 ```sh
 audit-speed/core/audit: small html (4k iterations)
-time: [66.025 µs 66.151 µs 66.270 µs]
+time: [60.988 µs 61.067 µs 61.157 µs]
 audit-speed/core/audit: medium html (4k iterations)
-time: [928.16 µs 931.17 µs 933.96 µs]
+time: [890.56 µs 905.52 µs 923.23 µs]
 audit-speed/core/audit: large html (4k iterations)                                                                            
-time: [1.1475 ms 1.1507 ms 1.1531 ms]
+time: [1.1316 ms 1.1101 ms 1.1478 ms]
 ```
 
 ## Examples

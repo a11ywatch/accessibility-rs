@@ -2,12 +2,10 @@ use crate::dom::{Document, Node, NodeId};
 use crate::style::errors::RuleParseErrorKind;
 use accessibility_scraper::selector::CssLocalName;
 use accessibility_scraper::selector::Simple;
-use cssparser::ToCss;
 use html5ever::{LocalName, Namespace};
 use selectors::attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint};
 use selectors::context::{MatchingContext, MatchingMode, QuirksMode};
 use selectors::matching::{matches_selector, ElementSelectorFlags};
-use std::fmt;
 
 pub type SelectorList = selectors::SelectorList<Simple>;
 pub type Selector = selectors::parser::Selector<Simple>;
@@ -26,52 +24,12 @@ pub fn matches(selector: &Selector, document: &Document, element: NodeId) -> boo
     )
 }
 
+/// css parser
 pub struct Parser;
-
-#[derive(Clone, PartialEq, Eq)]
-pub enum PseudoElement {}
-
-#[derive(Clone, PartialEq, Eq)]
-pub enum PseudoClass {}
-
-impl selectors::parser::NonTSPseudoClass for PseudoClass {
-    type Impl = Simple;
-    fn is_active_or_hover(&self) -> bool {
-        match *self {}
-    }
-    fn is_user_action_state(&self) -> bool {
-        false
-    }
-    fn has_zero_specificity(&self) -> bool {
-        false
-    }
-}
 
 impl<'i> selectors::parser::Parser<'i> for Parser {
     type Impl = Simple;
     type Error = RuleParseErrorKind<'i>;
-}
-
-impl selectors::parser::PseudoElement for PseudoElement {
-    type Impl = Simple;
-}
-
-impl ToCss for PseudoElement {
-    fn to_css<W>(&self, _dest: &mut W) -> fmt::Result
-    where
-        W: fmt::Write,
-    {
-        match *self {}
-    }
-}
-
-impl ToCss for PseudoClass {
-    fn to_css<W>(&self, _dest: &mut W) -> fmt::Result
-    where
-        W: fmt::Write,
-    {
-        match *self {}
-    }
 }
 
 #[derive(Copy, Clone)]

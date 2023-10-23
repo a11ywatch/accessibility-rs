@@ -9,7 +9,7 @@ fn _audit() {
     let report = accessibility_rs::audit(AuditConfig::new(
         mock::MOCK_WEBSITE_HTML,
         &mock::MOCK_CSS_RULES,
-        false,
+        true,
         "en",
     ));
     println!("{:?}", report)
