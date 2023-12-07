@@ -35,7 +35,7 @@ audit-speed/core/audit: small html (4k iterations)
 time: [60.988 µs 61.067 µs 61.157 µs]
 audit-speed/core/audit: medium html (4k iterations)
 time: [890.56 µs 905.52 µs 923.23 µs]
-audit-speed/core/audit: large html (4k iterations)                                                                            
+audit-speed/core/audit: large html (4k iterations)
 time: [1.1316 ms 1.1101 ms 1.1478 ms]
 ```
 
@@ -56,7 +56,7 @@ To help improve the rules the following needs to be done:
 
 This project is licensed under either of
 
- * Apache License, Version 2.0, ([LICENSE_APACHE](LICENSE_APACHE) or
-   https://www.apache.org/licenses/LICENSE-2.0)
- * MIT license ([LICENSE_MIT](LICENSE_MIT) or
-   https://opensource.org/licenses/MIT)
+- Apache License, Version 2.0, ([LICENSE_APACHE](LICENSE_APACHE) or
+  https://www.apache.org/licenses/LICENSE-2.0)
+- MIT license ([LICENSE_MIT](LICENSE_MIT) or
+  https://opensource.org/licenses/MIT)

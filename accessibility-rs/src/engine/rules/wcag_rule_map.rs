@@ -87,6 +87,27 @@ lazy_static! {
                     let selector = unsafe { Selector::parse("head > title").unwrap_unchecked() };
 
                     Validation::new_issue(nodes[0].0.select(&selector).count() >= 1, "1.NoTitleEl").into()
+                })
+            ])),
+            ("body", Vec::from([
+                Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Operable, Guideline::Distinguishable, "1", |nodes, _lang| {
+                    let mut valid = true;
+                    
+                    for node in nodes {
+                        // validate contrast between all elements
+                        // children matched parents
+                        if node.0.has_children() {
+                            let mut children = node.0.children();
+
+                            while let Some(el) = children.next() {
+                                // background
+                                // text
+                                // contrast
+                                // 4:1
+                            }  
+                        }
+                    }
+                    Validation::new_issue(valid, "").into()
                 }),
             ])),
             ("meta", Vec::from([
