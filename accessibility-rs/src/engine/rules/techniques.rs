@@ -42,9 +42,7 @@ pub enum Techniques {
     /// <https://www.w3.org/TR/WCAG20-TECHS/F41>
     F41,
     /// <https://www.w3.org/TR/WCAG20-TECHS/F47>
-    F47,
-    /// <https://www.w3.org/TR/WCAG20-TECHS/F77>
-    F77,
+    F47
 }
 
 impl Techniques {
