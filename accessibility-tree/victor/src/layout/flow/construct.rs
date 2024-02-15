@@ -470,35 +470,28 @@ impl<'a> BlockContainerBuilder<'a> {
     }
 
     fn end_ongoing_inline_formatting_context(&mut self) {
-        assert!(
-            self.ongoing_inline_boxes_stack.is_empty(),
-            "there should be no ongoing inline level boxes",
-        );
-
-        if self
-            .ongoing_inline_formatting_context
-            .inline_level_boxes
-            .is_empty()
+        if self.ongoing_inline_boxes_stack.is_empty()
+            && !self
+                .ongoing_inline_formatting_context
+                .inline_level_boxes
+                .is_empty()
         {
-            // There should never be an empty inline formatting context.
-            return;
+            let block_container_style = self.block_container_style;
+            let anonymous_style = self.anonymous_style.get_or_insert_with(|| {
+                // If parent_style is None, the parent is the document node,
+                // in which case anonymous inline boxes should inherit their
+                // styles from initial values.
+                ComputedValues::anonymous_inheriting_from(Some(block_container_style))
+            });
+
+            let box_ = IntermediateBlockLevelBox::SameFormattingContextBlock {
+                style: anonymous_style.clone(),
+                contents: IntermediateBlockContainer::InlineFormattingContext(take(
+                    &mut self.ongoing_inline_formatting_context,
+                )),
+            };
+            self.block_level_boxes.push((box_, BoxSlot::dummy()))
         }
-
-        let block_container_style = self.block_container_style;
-        let anonymous_style = self.anonymous_style.get_or_insert_with(|| {
-            // If parent_style is None, the parent is the document node,
-            // in which case anonymous inline boxes should inherit their
-            // styles from initial values.
-            ComputedValues::anonymous_inheriting_from(Some(block_container_style))
-        });
-
-        let box_ = IntermediateBlockLevelBox::SameFormattingContextBlock {
-            style: anonymous_style.clone(),
-            contents: IntermediateBlockContainer::InlineFormattingContext(take(
-                &mut self.ongoing_inline_formatting_context,
-            )),
-        };
-        self.block_level_boxes.push((box_, BoxSlot::dummy()))
     }
 
     fn current_inline_level_boxes(&mut self) -> &mut Vec<Arc<InlineLevelBox>> {
