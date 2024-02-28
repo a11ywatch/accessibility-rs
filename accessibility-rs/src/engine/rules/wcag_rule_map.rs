@@ -52,7 +52,7 @@ lazy_static! {
                 })
             ])),
             ("body", Vec::from([
-                Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Operable, Guideline::Distinguishable, "1", |nodes, auditor| {
+                Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Perceivable, Guideline::Distinguishable, "1", |nodes, auditor| {
                     use rgb::RGB8;
                     let mut valid = true;
                     for node in nodes {
@@ -74,8 +74,12 @@ lazy_static! {
                                             &mut auditor.match_context,
                                         );
 
+                                        let font_size = style.font.font_size.0;
+                                        let text_color = style.color.color;
+
                                         println!("BACKGROUND: {:?}", style.background.background_color);
-                                        println!("FONT-SIZE: {:?}", style.font.font_size.0);
+                                        println!("FONT-SIZE: {:?}", font_size);
+                                        println!("COLOR: {:?}", text_color);
 
                                         match element.parent() {
                                             Some(parent_node) => {
@@ -90,21 +94,18 @@ lazy_static! {
 
                                                         match parent_style.background.background_color {
                                                             cssparser::Color::RGBA(c) => {
-                                                                let parent_element_color = RGB8::from([c.red, c.green, c.blue]);
+                                                                let parent_element_background_color = RGB8::from([c.red, c.green, c.blue]);
+                                                                let current_element_text_color = RGB8::from([text_color.red, text_color.green, text_color.blue]);
 
-                                                                match style.background.background_color {
-                                                                    cssparser::Color::RGBA(c) => {
-                                                                        let current_element_color = RGB8::from([c.red, c.green, c.blue]);
-                                                                        let contrast_ratio = contrast::contrast::<_, f32>(current_element_color, parent_element_color);
+                                                                let contrast_ratio = contrast::contrast::<_, f32>(parent_element_background_color, current_element_text_color);
 
-                                                                        // background
-                                                                        // text
-                                                                        // contrast
-                                                                        // 4:1
-                                                                        println!("CONTRAST RATIO: {:?}", contrast_ratio);
-                                                                    }
-                                                                    _ => ()
+                                                                let min_contrast = if font_size.px <= 16.00 { 4.00 } else { 3.00 };
+
+                                                                if contrast_ratio <= min_contrast {
+                                                                    valid = false;
                                                                 }
+
+                                                                println!("CONTRAST RATIO: {:?}", contrast_ratio);
                                                             }
                                                             _ => ()
                                                         }
@@ -122,6 +123,7 @@ lazy_static! {
                             }
                         }
                     }
+
                     Validation::new_issue(valid, "4").into()
                 }),
             ])),

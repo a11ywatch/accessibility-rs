@@ -12,6 +12,7 @@ fn _audit_contrast_text_anchor() {
         }
     };
     let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
+    
     let valid = !audit
         .iter()
         .any(|x| x.code == "WCAGAAA.Principle1.Guideline1_4.G18");
