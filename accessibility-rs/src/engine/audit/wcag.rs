@@ -41,15 +41,15 @@ pub struct WCAGAAA;
 /// wcag rules to test for
 impl WCAGAAA {
     /// audit html against WCAGAAA standards
-    pub fn audit(auditor: &Auditor<'_>) -> Vec<Issue> {
+    pub fn audit(mut auditor: &mut Auditor<'_>) -> Vec<Issue> {
         let mut issues: Vec<Issue> = Vec::new();
 
-        for node in &auditor.tree {
+        for node in auditor.tree.clone().iter() {
             if RULES_A.contains_key(&*node.0) {
                 match RULES_A.get(&*node.0) {
                     Some(rules) => {
                         for rule in rules {
-                            match (rule.validate)(&node.1, &auditor) {
+                            match (rule.validate)(&node.1, &mut auditor) {
                                 RuleValidation::Single(validation) => push_issue(
                                     validation,
                                     rule,

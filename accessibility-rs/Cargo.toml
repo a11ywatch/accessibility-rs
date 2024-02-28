@@ -30,6 +30,7 @@ strum = "0.25"
 strum_macros = "0.25"
 rust-i18n = "2"
 contrast = "0.1.0"
+rgb = "0.8.37"
 
 [dev-dependencies]
 maud = "0.25.0"

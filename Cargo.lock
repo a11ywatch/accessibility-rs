@@ -15,6 +15,7 @@ dependencies = [
  "lazy_static",
  "markup5ever",
  "maud",
+ "rgb",
  "rust-i18n",
  "selectors",
  "serde",

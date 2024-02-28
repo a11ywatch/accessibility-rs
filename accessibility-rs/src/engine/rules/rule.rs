@@ -93,7 +93,8 @@ impl From<Vec<Validation>> for RuleValidation {
     }
 }
 
-type ValidateFn = fn(&Vec<(ElementRef<'_>, Option<DefaultKey>)>, &crate::Auditor<'_>) -> RuleValidation;
+type ValidateFn =
+    fn(&Vec<(ElementRef<'_>, Option<DefaultKey>)>, &mut crate::Auditor<'_>) -> RuleValidation;
 
 /// the rule validation method that should be performed.
 #[derive(Debug)]

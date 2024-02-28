@@ -52,9 +52,9 @@ lazy_static! {
                 })
             ])),
             ("body", Vec::from([
-                Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Operable, Guideline::Distinguishable, "1", |nodes, _lang| {
+                Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Operable, Guideline::Distinguishable, "1", |nodes, auditor| {
+                    use rgb::RGB8;
                     let mut valid = true;
-
                     for node in nodes {
                         // validate contrast between all elements
                         // children matched parents
@@ -62,33 +62,67 @@ lazy_static! {
                             let mut children = node.0.children();
 
                             while let Some(el) = children.next() {
-
                                 match ElementRef::wrap(el) {
                                     Some(element) => {
-                                        
 
-                                    // let style = accessibility_tree::style::cascade::style_for_element_ref(
-                                    //     &element,
-                                    //     &author,
-                                    //     &document,
-                                    //     &mut matching_context,
-                                    // );
+                                    // test all anchors for now
+                                    if element.value().name() == "a" {
+                                        let style = accessibility_tree::style::cascade::style_for_element_ref(
+                                            &element,
+                                            &auditor.author,
+                                            &auditor.document,
+                                            &mut auditor.match_context,
+                                        );
 
+                                        println!("BACKGROUND: {:?}", style.background.background_color);
+                                        println!("FONT-SIZE: {:?}", style.font.font_size.0);
 
-                                    // let style = crate::engine::styles::layout::node_layout_style(style, &element);
+                                        match element.parent() {
+                                            Some(parent_node) => {
+                                                match ElementRef::wrap(parent_node) {
+                                                    Some(parent_element) => {
+                                                        let parent_style = accessibility_tree::style::cascade::style_for_element_ref(
+                                                            &parent_element,
+                                                            &auditor.author,
+                                                            &auditor.document,
+                                                            &mut auditor.match_context,
+                                                        );
 
+                                                        match parent_style.background.background_color {
+                                                            cssparser::Color::RGBA(c) => {
+                                                                let parent_element_color = RGB8::from([c.red, c.green, c.blue]);
+
+                                                                match style.background.background_color {
+                                                                    cssparser::Color::RGBA(c) => {
+                                                                        let current_element_color = RGB8::from([c.red, c.green, c.blue]);
+                                                                        let contrast_ratio = contrast::contrast::<_, f32>(current_element_color, parent_element_color);
+
+                                                                        // background
+                                                                        // text
+                                                                        // contrast
+                                                                        // 4:1
+                                                                        println!("CONTRAST RATIO: {:?}", contrast_ratio);
+                                                                    }
+                                                                    _ => ()
+                                                                }
+                                                            }
+                                                            _ => ()
+                                                        }
+                                                    }
+                                                    _ => ()
+                                                }
+                                            }
+                                            _ => ()
+                                        }
+                                    }
 
                                     }
                                     _ => ()
                                 }
-                                // background
-                                // text
-                                // contrast
-                                // 4:1
                             }
                         }
                     }
-                    Validation::new_issue(valid, "").into()
+                    Validation::new_issue(valid, "4").into()
                 }),
             ])),
             ("meta", Vec::from([
