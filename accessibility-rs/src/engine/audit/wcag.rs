@@ -49,7 +49,7 @@ impl WCAGAAA {
                 match RULES_A.get(&*node.0) {
                     Some(rules) => {
                         for rule in rules {
-                            match (rule.validate)(&node.1, &auditor.locale) {
+                            match (rule.validate)(&node.1, &auditor) {
                                 RuleValidation::Single(validation) => push_issue(
                                     validation,
                                     rule,

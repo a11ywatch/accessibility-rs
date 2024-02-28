@@ -349,7 +349,7 @@ lazy_static! {
                 })
             ])),
             ("input", Vec::from([
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, lang| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -373,11 +373,11 @@ lazy_static! {
                         }
                     }
 
-                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern", ""), locale = lang, msgNodeType = r#""input""#, builtAttrs = r#""value""#) } else { Default::default() };
+                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern", ""), locale = auditor.locale, msgNodeType = r#""input""#, builtAttrs = r#""value""#) } else { Default::default() };
 
                     Validation::new(valid, "", elements, message).into()
                 }),
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, lang| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -407,7 +407,7 @@ lazy_static! {
                         }
                     }
 
-                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern2", ""), locale = lang, msgNodeType = r#""input""#, builtAttrs = r#""value="something" ""#) } else { Default::default() };
+                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern2", ""), locale = auditor.locale, msgNodeType = r#""input""#, builtAttrs = r#""value="something" ""#) } else { Default::default() };
 
                     Validation::new(valid, "", elements, message).into()
                 }),
