@@ -1,8 +1,7 @@
-//! Test for anchors.
+//! Test for contrast.
 
 use accessibility_rs::AuditConfig;
 use maud::html;
-
 
 #[test]
 /// anchor has valid contrast.
@@ -10,9 +9,7 @@ fn _audit_contrast_text_anchor() {
     let markup = html! {
         a href="www.example.com";
     };
-    let audit = accessibility_rs::audit(AuditConfig::basic(
-        markup
-    ));
+    let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
     let valid = !audit
         .iter()
         .any(|x| x.code == "WCAGAAA.Principle1.Guideline1_4.G18");

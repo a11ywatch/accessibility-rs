@@ -1,5 +1,6 @@
 pub mod anchor;
 pub mod applet;
+pub mod contrast;
 pub mod fieldset;
 pub mod heading;
 pub mod html;
