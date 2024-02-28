@@ -45,44 +45,6 @@ lazy_static! {
                         alphabetic && lang.len() < 12
                     }, "3.XmlLang").into()
                 }),
-                Rule::new(Techniques::F77.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "1", |nodes, lang| {
-                   let mut id_map: HashMap<&str, u8> = HashMap::new();
-                   let mut valid = true;
-
-                   for item in nodes {
-                        let ele = item.0;
-                        let tree = ele.tree();
-                        for e in tree.nodes() {
-                            match ElementRef::wrap(e) {
-                                Some(element) => {
-                                    match element.value().id() {
-                                        Some(s) => {
-                                            if id_map.contains_key(s) {
-                                                let u = id_map.get(s);
-                                                match u {
-                                                    Some(u) => {
-                                                        valid = false;
-                                                        id_map.insert(s, u.add(1));
-                                                    }
-                                                    _ => ()
-                                                }
-                                            } else {
-                                                id_map.insert(s, 1);
-                                            }
-                                        }
-                                        _ => ()
-                                    }
-                                }
-                                _ => (),
-                            }
-                        }
-                   }
-
-                   let duplicate_ids: Vec<_> = id_map.into_iter().filter_map(|(id, size)| if size >= 1 { Some("#".to_owned() + &id) } else { None }).collect();
-                   let message = t!(&get_message_i18n_str_raw( &Guideline::Compatible, Techniques::F77.as_str(), "1", ""), locale = lang, id = duplicate_ids.join(","));
-
-                   Validation::new(valid, "", duplicate_ids, message).into()
-                }),
                 Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _lang| {
                     let selector = unsafe { Selector::parse("head > title").unwrap_unchecked() };
 
@@ -427,7 +389,7 @@ lazy_static! {
                 })
             ])),
             ("input", Vec::from([
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, lang| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -451,11 +413,11 @@ lazy_static! {
                         }
                     }
 
-                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern", ""), locale = lang, msgNodeType = r#""input""#, builtAttrs = r#""value""#) } else { Default::default() };
+                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern", ""), locale = auditor.locale, msgNodeType = r#""input""#, builtAttrs = r#""value""#) } else { Default::default() };
 
                     Validation::new(valid, "", elements, message).into()
                 }),
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, lang| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -485,7 +447,7 @@ lazy_static! {
                         }
                     }
 
-                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern2", ""), locale = lang, msgNodeType = r#""input""#, builtAttrs = r#""value="something" ""#) } else { Default::default() };
+                    let message =  if !valid { t!(&get_message_i18n_str_raw( &Guideline::Compatible, "", "2_msg_pattern2", ""), locale = auditor.locale, msgNodeType = r#""input""#, builtAttrs = r#""value="something" ""#) } else { Default::default() };
 
                     Validation::new(valid, "", elements, message).into()
                 }),

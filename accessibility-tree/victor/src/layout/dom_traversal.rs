@@ -266,7 +266,9 @@ impl<'dom> BoxSlot<'dom> {
 impl Drop for BoxSlot<'_> {
     fn drop(&mut self) {
         if let Some(slot) = &mut self.slot {
-            assert!(slot.is_some(), "failed to set a layout box")
+            if !slot.is_some() {
+                println!("failed to set a layout box");
+            }
         }
     }
 }

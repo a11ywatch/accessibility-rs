@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-rs"
-version = "0.0.44"
+version = "0.0.46"
 authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -15,8 +15,8 @@ default = []
 
 [dependencies]
 lazy_static = { workspace = true }
-accessibility-scraper = { version = "0.0.5", features = ["main"], default-features = false, path = "../accessibility-scraper" }
-accessibility-tree = { version = "0.0.5", path = "../accessibility-tree/victor" }
+accessibility-scraper = { version = "0.0.6", features = ["main"], default-features = false, path = "../accessibility-scraper" }
+accessibility-tree = { version = "0.0.6", path = "../accessibility-tree/victor" }
 getrandom = { version = "0.2", features = ["js"] }
 taffy = { version = "0.3.13" }
 serde = { version = "1.0", features = ["derive"] }

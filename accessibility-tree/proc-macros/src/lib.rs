@@ -57,22 +57,26 @@ pub fn derive_sfnt_table(input: proc_macro::TokenStream) -> proc_macro::TokenStr
                 field.ty.clone().into_token_stream()
             )
         };
-        assert!(ty.qself.is_none());
-        let size = match &*ty.path.segments.last().unwrap().value().ident.to_string() {
-            "u16" | "i16" | "FWord" | "UFWord" | "FontDesignUnitsPerEmFactorU16" => 2,
-            "u32" | "FixedPoint" | "Tag" => 4,
-            "LongDateTime" => 8,
-            _ => panic!("The size of {} is unknown", ty.clone().into_token_stream()),
-        };
-        // The TrueType format seems to be designed so that this never happens:
-        let expected_align = std::cmp::min(size, 4);
-        assert_eq!(offset % expected_align, 0, "Field {} is misaligned", name);
-        methods.extend(quote! {
-            pub(in crate::fonts) fn #name(self) -> crate::fonts::parsing::Position<#ty> {
-                self.offset_bytes(#offset)
+
+        if ty.qself.is_none() {
+            let size = match &*ty.path.segments.last().unwrap().value().ident.to_string() {
+                "u16" | "i16" | "FWord" | "UFWord" | "FontDesignUnitsPerEmFactorU16" => 2,
+                "u32" | "FixedPoint" | "Tag" => 4,
+                "LongDateTime" => 8,
+                _ => panic!("The size of {} is unknown", ty.clone().into_token_stream()),
+            };
+            // The TrueType format seems to be designed so that this never happens:
+            let expected_align = std::cmp::min(size, 4);
+
+            if offset % expected_align == 0 {
+                methods.extend(quote! {
+                    pub(in crate::fonts) fn #name(self) -> crate::fonts::parsing::Position<#ty> {
+                        self.offset_bytes(#offset)
+                    }
+                });
+                offset += size;
             }
-        });
-        offset += size;
+        }
     }
     let size_of = offset as usize;
 

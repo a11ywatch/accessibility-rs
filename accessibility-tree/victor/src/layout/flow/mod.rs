@@ -151,12 +151,12 @@ fn layout_block_level_children<'a>(
             Fragment::Anonymous(fragment) => {
                 // FIXME(nox): Margin collapsing for hypothetical boxes of
                 // abspos elements is probably wrong.
-                assert!(fragment.children.is_empty());
-                assert_eq!(fragment.rect.size.block, Length::zero());
-                fragment.rect.start_corner.block +=
-                    placement_state.current_block_direction_position;
+                if fragment.children.is_empty() && fragment.rect.size.block == Length::zero() {
+                    fragment.rect.start_corner.block +=
+                        placement_state.current_block_direction_position;
+                }
             }
-            _ => unreachable!(),
+            _ => (),
         }
     }
 

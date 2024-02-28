@@ -78,25 +78,30 @@ impl Document {
 
     pub fn root_element(&self) -> NodeId {
         let document_node = &self[Document::document_node_id()];
-        assert!(matches!(document_node.data, NodeData::Document));
-        assert!(document_node.parent.is_none());
-        assert!(document_node.next_sibling.is_none());
-        assert!(document_node.previous_sibling.is_none());
         let mut root = None;
-        for child in self.node_and_following_siblings(document_node.first_child.unwrap()) {
-            match &self[child].data {
-                NodeData::Doctype { .. }
-                | NodeData::Comment { .. }
-                | NodeData::ProcessingInstruction { .. } => {}
-                NodeData::Document | NodeData::Text { .. } => {
-                    panic!("Unexpected node type under document node")
-                }
-                NodeData::Element(_) => {
-                    assert!(root.is_none(), "Found two root elements");
-                    root = Some(child)
+
+        if matches!(document_node.data, NodeData::Document)
+            && document_node.parent.is_none()
+            && document_node.next_sibling.is_none()
+            && document_node.previous_sibling.is_none()
+        {
+            for child in self.node_and_following_siblings(document_node.first_child.unwrap()) {
+                match &self[child].data {
+                    NodeData::Doctype { .. }
+                    | NodeData::Comment { .. }
+                    | NodeData::ProcessingInstruction { .. } => {}
+                    NodeData::Document | NodeData::Text { .. } => {
+                        println!("Unexpected node type under document node")
+                    }
+                    NodeData::Element(_) => {
+                        if root.is_none() {
+                            root = Some(child)
+                        }
+                    }
                 }
             }
         }
+
         root.unwrap()
     }
 

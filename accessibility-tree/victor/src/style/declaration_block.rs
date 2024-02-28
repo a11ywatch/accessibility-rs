@@ -33,8 +33,11 @@ impl DeclarationBlock {
             match result {
                 Ok(()) => {}
                 Err(_) => {
-                    assert!(iter.parser.block.declarations.len() == previous_len);
-                    // FIXME error reporting
+                    // we may not want to break the loop - look into repaairing the parser.
+                    if iter.parser.block.declarations.len() == previous_len {
+                        // println!("Parse error prior block length exceeded.");
+                        break;
+                    }
                 }
             }
             debug_assert_eq!(
@@ -107,16 +110,20 @@ impl<'i> DeclarationParser<'i> for LonghandDeclarationParser {
             }
             let important = parser.r#try(cssparser::parse_important).is_ok();
             let count = self.block.declarations.len() - previous_len;
-            assert!(count > 0);
-            self.block.important.extend(repeat(important).take(count));
-            let any = if important {
-                &mut self.block.any_important
+
+            if count > 0 {
+                self.block.important.extend(repeat(important).take(count));
+                let any = if important {
+                    &mut self.block.any_important
+                } else {
+                    &mut self.block.any_normal
+                };
+                any.early |= parsed.early;
+                any.late |= parsed.late;
+                Ok(())
             } else {
-                &mut self.block.any_normal
-            };
-            any.early |= parsed.early;
-            any.late |= parsed.late;
-            Ok(())
+                Err(parser.new_custom_error(PropertyParseErrorKind::UnknownUnit(name)))
+            }
         } else {
             Err(parser.new_custom_error(PropertyParseErrorKind::UnknownProperty(name)))
         }
