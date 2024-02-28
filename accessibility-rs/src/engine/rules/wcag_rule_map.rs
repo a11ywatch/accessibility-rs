@@ -92,7 +92,7 @@ lazy_static! {
             ("body", Vec::from([
                 Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Operable, Guideline::Distinguishable, "1", |nodes, _lang| {
                     let mut valid = true;
-                    
+
                     for node in nodes {
                         // validate contrast between all elements
                         // children matched parents
@@ -100,11 +100,30 @@ lazy_static! {
                             let mut children = node.0.children();
 
                             while let Some(el) = children.next() {
+
+                                match ElementRef::wrap(el) {
+                                    Some(element) => {
+                                        
+
+                                    // let style = accessibility_tree::style::cascade::style_for_element_ref(
+                                    //     &element,
+                                    //     &author,
+                                    //     &document,
+                                    //     &mut matching_context,
+                                    // );
+
+
+                                    // let style = crate::engine::styles::layout::node_layout_style(style, &element);
+
+
+                                    }
+                                    _ => ()
+                                }
                                 // background
                                 // text
                                 // contrast
                                 // 4:1
-                            }  
+                            }
                         }
                     }
                     Validation::new_issue(valid, "").into()
