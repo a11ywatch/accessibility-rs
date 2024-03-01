@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "accessibility-rs"
-version = "0.0.46"
+version = "0.0.47"
 dependencies = [
  "accessibility-scraper",
  "accessibility-tree",

@@ -17,11 +17,11 @@ lazy_static! {
     pub static ref RULES_A: BTreeMap<&'static str, Vec<Rule>> =
         vec![
             ("html", Vec::from([
-                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _auditor| {
                     let n = nodes[0].0;
                     Validation::new_issue(!n.attr("lang").unwrap_or_default().is_empty() || !n.attr("xml:lang").unwrap_or_default().is_empty(), "2").into()
                 }),
-                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _auditor| {
                     let lang = nodes[0].0.attr("lang").unwrap_or_default();
                     let alphabetic = lang.chars().all(|x| x.is_alphabetic());
                     // <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>
@@ -33,7 +33,7 @@ lazy_static! {
                         alphabetic && lang.len() < 12
                     }, "3.Lang").into()
                 }),
-                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _auditor| {
                     let lang = nodes[0].0.attr("xml:lang").unwrap_or_default();
                     let alphabetic = lang.chars().all(|x| x == '_' || x.is_alphabetic());
                    // <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>
@@ -45,90 +45,14 @@ lazy_static! {
                         alphabetic && lang.len() < 12
                     }, "3.XmlLang").into()
                 }),
-                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _lang| {
+                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _auditor| {
                     let selector = unsafe { Selector::parse("head > title").unwrap_unchecked() };
 
                     Validation::new_issue(nodes[0].0.select(&selector).count() >= 1, "1.NoTitleEl").into()
                 })
             ])),
-            ("body", Vec::from([
-                Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Perceivable, Guideline::Distinguishable, "1", |nodes, auditor| {
-                    use rgb::RGB8;
-                    let mut valid = true;
-                    for node in nodes {
-                        // validate contrast between all elements
-                        // children matched parents
-                        if node.0.has_children() {
-                            let mut children = node.0.children();
-
-                            while let Some(el) = children.next() {
-                                match ElementRef::wrap(el) {
-                                    Some(element) => {
-
-                                    // test all anchors for now
-                                    if element.value().name() == "a" {
-                                        let style = accessibility_tree::style::cascade::style_for_element_ref(
-                                            &element,
-                                            &auditor.author,
-                                            &auditor.document,
-                                            &mut auditor.match_context,
-                                        );
-
-                                        let font_size = style.font.font_size.0;
-                                        let text_color = style.color.color;
-
-                                        println!("BACKGROUND: {:?}", style.background.background_color);
-                                        println!("FONT-SIZE: {:?}", font_size);
-                                        println!("COLOR: {:?}", text_color);
-
-                                        match element.parent() {
-                                            Some(parent_node) => {
-                                                match ElementRef::wrap(parent_node) {
-                                                    Some(parent_element) => {
-                                                        let parent_style = accessibility_tree::style::cascade::style_for_element_ref(
-                                                            &parent_element,
-                                                            &auditor.author,
-                                                            &auditor.document,
-                                                            &mut auditor.match_context,
-                                                        );
-
-                                                        match parent_style.background.background_color {
-                                                            cssparser::Color::RGBA(c) => {
-                                                                let parent_element_background_color = RGB8::from([c.red, c.green, c.blue]);
-                                                                let current_element_text_color = RGB8::from([text_color.red, text_color.green, text_color.blue]);
-
-                                                                let contrast_ratio = contrast::contrast::<_, f32>(parent_element_background_color, current_element_text_color);
-
-                                                                let min_contrast = if font_size.px <= 16.00 { 4.00 } else { 3.00 };
-
-                                                                if contrast_ratio <= min_contrast {
-                                                                    valid = false;
-                                                                }
-
-                                                                println!("CONTRAST RATIO: {:?}", contrast_ratio);
-                                                            }
-                                                            _ => ()
-                                                        }
-                                                    }
-                                                    _ => ()
-                                                }
-                                            }
-                                            _ => ()
-                                        }
-                                    }
-
-                                    }
-                                    _ => ()
-                                }
-                            }
-                        }
-                    }
-
-                    Validation::new_issue(valid, "4").into()
-                }),
-            ])),
             ("meta", Vec::from([
-                Rule::new(Techniques::F40.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "1", |nodes, _lang| {
+                Rule::new(Techniques::F40.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "1", |nodes, _auditor| {
                     let mut valid = true;
 
                     for node in nodes {
@@ -144,7 +68,7 @@ lazy_static! {
 
                     Validation::new_issue(valid, "2").into()
                 }),
-                Rule::new(Techniques::F41.into(), IssueType::Error, Principle::Understandable, Guideline::EnoughTime, "1", |nodes, _lang| {
+                Rule::new(Techniques::F41.into(), IssueType::Error, Principle::Understandable, Guideline::EnoughTime, "1", |nodes, _auditor| {
                     let mut valid = true;
 
                     for node in nodes {
@@ -162,7 +86,7 @@ lazy_static! {
                 }),
             ])),
             ("title", Vec::from([
-                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _lang| {
+                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _auditor| {
                     let mut valid = true;
                     for node in nodes {
                         let e = node.0.inner_html().is_empty();
@@ -173,18 +97,113 @@ lazy_static! {
                     Validation::new_issue(!nodes.is_empty() || valid, "1.EmptyTitle").into()
                 }),
             ])),
+            ("body", Vec::from([
+                Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Perceivable, Guideline::Distinguishable, "1", |nodes, auditor| {
+                    use rgb::RGB8;
+                    let mut validation_errors = Vec::new();
+
+                    // todo: test for multiple contrast rules at once.
+                    for node in nodes {
+                        if node.0.has_children() {
+                            let mut children = node.0.children();
+
+                            while let Some(el) = children.next() {
+                                match ElementRef::wrap(el) {
+                                    Some(element) => {
+                                        if vec![
+                                            "h1",
+                                            "h2",
+                                            "h3",
+                                            "h4", 
+                                            "h5", 
+                                            "h6", 
+                                            "a", 
+                                            "button", 
+                                            "p", 
+                                            "img", 
+                                            "span", 
+                                            "div", 
+                                            "li", 
+                                            "ol", 
+                                            "td", 
+                                            "th", 
+                                            "tr", 
+                                            "textarea", 
+                                            "select", 
+                                            "input"].contains(&element.value().name()) {
+                                            let style = accessibility_tree::style::cascade::style_for_element_ref(
+                                                &element,
+                                                &auditor.author,
+                                                &auditor.document,
+                                                &mut auditor.match_context,
+                                            );
+
+                                            let font_size = style.font.font_size.0;
+                                            let text_color = style.color.color;
+
+                                            match element.parent() {
+                                                Some(parent_node) => {
+                                                    match ElementRef::wrap(parent_node) {
+                                                        Some(parent_element) => {
+                                                            let parent_style = accessibility_tree::style::cascade::style_for_element_ref(
+                                                                &parent_element,
+                                                                &auditor.author,
+                                                                &auditor.document,
+                                                                &mut auditor.match_context,
+                                                            );
+
+                                                            match parent_style.background.background_color {
+                                                                cssparser::Color::RGBA(c) => {
+                                                                    let parent_element_background_color = RGB8::from([c.red, c.green, c.blue]);
+                                                                    let current_element_text_color = RGB8::from([text_color.red, text_color.green, text_color.blue]);
+                                                                    let contrast_ratio = contrast::contrast::<_, f32>(parent_element_background_color, current_element_text_color);
+                                                                    let min_contrast = if font_size.px <= 16.00 { 4.00 } else { 3.00 };
+
+                                                                    if contrast_ratio <= min_contrast {
+                                                                        let message =  t!(
+                                                                            &get_message_i18n_str_raw( 
+                                                                                &Guideline::Distinguishable, 
+                                                                                "", 
+                                                                                "3_G18_or_G145.Fail", 
+                                                                                ""), 
+                                                                            locale = auditor.locale, 
+                                                                            required = min_contrast.to_string(), 
+                                                                            value = contrast_ratio.to_string());
+
+                                                                        validation_errors.push(Validation::new_custom_issue(false, "", message).into())
+                                                                    }
+                                                                }
+                                                                _ => ()
+                                                            }
+                                                        }
+                                                        _ => ()
+                                                    }
+                                                }
+                                                _ => ()
+                                            }
+                                        }
+                                    }
+                                    _ => ()
+                                }
+                            }
+                        }
+                    }
+
+                    crate::engine::rules::rule::RuleValidation::Multi(validation_errors)
+                }),
+            ])),
             ("iframe", Vec::from([
-                Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _auditor| {
                     validate_missing_attr(nodes, "title", "1").into()
                 }),
             ])),
             ("frame", Vec::from([
-                Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _auditor| {
                     validate_missing_attr(nodes, "title", "1").into()
                 }),
             ])),
             ("form", Vec::from([
-                Rule::new(Techniques::H32.into(), IssueType::Error, Principle::Operable, Guideline::Predictable, "2", |nodes, _lang| {
+                Rule::new(Techniques::H32.into(), IssueType::Error, Principle::Operable, Guideline::Predictable, "2", |nodes, _auditor| {
                     let mut valid = false;
                     let mut elements = Vec::new();
                     let selector = unsafe { Selector::parse("button[type=submit]").unwrap_unchecked() };
@@ -204,7 +223,7 @@ lazy_static! {
 
                     Validation::new(valid, "2", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H36.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                Rule::new(Techniques::H36.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
                     let mut valid = false;
                     let mut elements = Vec::new();
                     let selector = unsafe { Selector::parse("input[type=image][name=submit]").unwrap_unchecked() };
@@ -226,7 +245,7 @@ lazy_static! {
                 }),
             ])),
             ("a", Vec::from([
-                Rule::new(Techniques::H2.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                Rule::new(Techniques::H2.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let selector = unsafe { Selector::parse("img").unwrap_unchecked() };
                     let mut elements = Vec::new();
@@ -253,7 +272,7 @@ lazy_static! {
 
                     Validation::new(valid, "EG5", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H30.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                Rule::new(Techniques::H30.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let selector = unsafe { Selector::parse("img").unwrap_unchecked() };
                     let mut elements = Vec::new();
@@ -273,7 +292,7 @@ lazy_static! {
 
                     Validation::new(valid, "2", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _lang| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -292,7 +311,7 @@ lazy_static! {
                     }
                     Validation::new(valid, "A.NoContent", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _lang| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
                     for ele in nodes {
@@ -307,7 +326,7 @@ lazy_static! {
                 }),
             ])),
             ("img", Vec::from([
-                Rule::new(Techniques::H37.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                Rule::new(Techniques::H37.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -322,7 +341,7 @@ lazy_static! {
 
                     Validation::new(valid, "", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H67.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                Rule::new(Techniques::H67.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -338,37 +357,37 @@ lazy_static! {
                 }),
             ])),
             ("h1", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h2", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h3", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h4", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h5", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h6", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("label", Vec::from([
-                Rule::new(Techniques::H93.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H93.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
                     let mut id_map: HashMap<&str, u8> = HashMap::new();
@@ -396,7 +415,7 @@ lazy_static! {
 
                     Validation::new(valid, "1", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H44.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H44.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -489,12 +508,12 @@ lazy_static! {
                 }),
             ])),
             ("blink", Vec::from([
-                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "2", |nodes, _lang| {
+                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "2", |nodes, _auditor| {
                     Validation::new_issue(nodes.is_empty(), "").into()
                 }),
             ])),
             ("object", Vec::from([
-                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -511,7 +530,7 @@ lazy_static! {
                 }),
             ])),
             ("fieldset", Vec::from([
-                Rule::new(Techniques::H71.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _lang| {
+                Rule::new(Techniques::H71.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let selector = unsafe { Selector::parse("legend").unwrap_unchecked() };
                     let mut elements = Vec::new();
@@ -537,7 +556,7 @@ lazy_static! {
                 }),
             ])),
             ("applet", Vec::from([
-                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -551,7 +570,7 @@ lazy_static! {
 
                     Validation::new(valid, "2", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _lang| {
+                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 

@@ -35,6 +35,16 @@ impl Validation {
             ..Default::default()
         }
     }
+
+    /// basic validation with custom message
+    pub fn new_custom_issue(valid: bool, id: &'static str, message: String) -> Self {
+        Self {
+            valid,
+            id,
+            message,
+            ..Default::default()
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
