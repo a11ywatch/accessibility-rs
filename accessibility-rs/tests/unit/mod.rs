@@ -8,3 +8,4 @@ pub mod img;
 pub mod input;
 pub mod label;
 pub mod meta;
+pub mod area;

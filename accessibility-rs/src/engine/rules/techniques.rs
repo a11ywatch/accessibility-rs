@@ -5,6 +5,8 @@ use strum_macros::IntoStaticStr;
 pub enum Techniques {
     /// <https://www.w3.org/TR/WCAG20-TECHS/H2>
     H2,
+    /// <https://www.w3.org/TR/WCAG20-TECHS/H24>
+    H24,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H25>
     H25,
     /// <https://www.w3.org/TR/WCAG20-TECHS/H32.html>
