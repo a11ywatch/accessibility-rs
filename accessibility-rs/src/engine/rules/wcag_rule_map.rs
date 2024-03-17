@@ -114,22 +114,22 @@ lazy_static! {
                                             "h1",
                                             "h2",
                                             "h3",
-                                            "h4", 
-                                            "h5", 
-                                            "h6", 
-                                            "a", 
-                                            "button", 
-                                            "p", 
-                                            "img", 
-                                            "span", 
-                                            "div", 
-                                            "li", 
-                                            "ol", 
-                                            "td", 
-                                            "th", 
-                                            "tr", 
-                                            "textarea", 
-                                            "select", 
+                                            "h4",
+                                            "h5",
+                                            "h6",
+                                            "a",
+                                            "button",
+                                            "p",
+                                            "img",
+                                            "span",
+                                            "div",
+                                            "li",
+                                            "ol",
+                                            "td",
+                                            "th",
+                                            "tr",
+                                            "textarea",
+                                            "select",
                                             "input"].contains(&element.value().name()) {
                                             let style = accessibility_tree::style::cascade::style_for_element_ref(
                                                 &element,
@@ -161,13 +161,13 @@ lazy_static! {
 
                                                                     if contrast_ratio <= min_contrast {
                                                                         let message =  t!(
-                                                                            &get_message_i18n_str_raw( 
-                                                                                &Guideline::Distinguishable, 
-                                                                                "", 
-                                                                                "3_G18_or_G145.Fail", 
-                                                                                ""), 
-                                                                            locale = auditor.locale, 
-                                                                            required = min_contrast.to_string(), 
+                                                                            &get_message_i18n_str_raw(
+                                                                                &Guideline::Distinguishable,
+                                                                                "",
+                                                                                "3_G18_or_G145.Fail",
+                                                                                ""),
+                                                                            locale = auditor.locale,
+                                                                            required = min_contrast.to_string(),
                                                                             value = contrast_ratio.to_string());
 
                                                                         validation_errors.push(Validation::new_custom_issue(false, "", message).into())
@@ -528,6 +528,38 @@ lazy_static! {
 
                     Validation::new(valid, "", elements, Default::default()).into()
                 }),
+            ])),
+            ("area",Vec::from([
+                Rule::new(Techniques::H24.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes,_auditor| {
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+
+                    for ele in nodes {
+                        let ele = ele.0;
+                        if !has_alt_prop(ele) {
+                            valid = false;
+                            elements.push(get_unique_selector(&ele));
+                        }
+                    }
+                    
+                    Validation::new(valid, "ImageMapAreaNoAlt", elements, Default::default()).into()
+                })
+            ])),
+            ("map",Vec::from([
+                Rule::new(Techniques::H24.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes,_auditor|{
+                    let mut valid = true;
+                    let mut elements = Vec::new();
+
+                    for ele in nodes{
+                        let ele = ele.0;
+                        if !has_alt_prop(ele){
+                            valid =  false;
+                            elements.push(get_unique_selector(&ele));
+                        }
+                    }
+
+                    Validation::new(valid,"ImageMapNoAlt",elements, Default::default()).into()
+                })
             ])),
             ("fieldset", Vec::from([
                 Rule::new(Techniques::H71.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {

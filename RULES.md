@@ -8,6 +8,7 @@ List of [WCAG2.1 techniques](https://www.w3.org/TR/WCAG21/) and whether or not w
 | -------------------------------------------------- | ---------------------------------------------------------------------------- | ----- | ----- | --------------- | -------- |
 | [G18](https://www.w3.org/TR/WCAG20-TECHS/G18.html) | element has insufficient contrast at this conformance level                  | AAA   | error |                 |          |
 | [H2](https://www.w3.org/TR/WCAG20-TECHS/H2.html)   | img element in link has alt text that duplicates the text content of link    | A-AAA | error | EG              | ✅       |
+| [H24](https://www.w3.org/TR/WCAG20-TECHS/H24.html) | Image map and areas must have alt texts.                                     | A-AAA | error | ImageMapNoAlt   | ✅
 | [H25](https://www.w3.org/TR/WCAG20-TECHS/H25.html) | empty titles                                                                 | A-AAA | error |                 | ✅       |
 | [H30](https://www.w3.org/TR/WCAG20-TECHS/H30.html) | text alternative img                                                         | A-AAA | error |                 | ✅       |
 | [H32](https://www.w3.org/TR/WCAG20-TECHS/H32.html) | missing form submit button                                                   | A-AAA | error |                 | ✅       |
