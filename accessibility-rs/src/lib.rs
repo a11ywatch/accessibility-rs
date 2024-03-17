@@ -3,13 +3,13 @@
 //! Audit html to see how it complies with WCAG
 //! standards.
 //!
-//! Accessibility-RS is a web accessibility
+//! accessibility-rs is a web accessibility
 //! engine that can replicate websites without
 //! a browser to get complex accessibility reports.
 //!
-//! # How to use Accessibility-RS
+//! # How to use accessibility-rs
 //!
-//! There are a couple of ways to use Accessibility-RS:
+//! There are a couple of ways to use accessibility-rs:
 //!
 //! - **Audit** perform an audit against an html page.
 //!   - [`audit`] is used to audit a web page for issues.

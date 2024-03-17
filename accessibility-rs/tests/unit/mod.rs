@@ -1,5 +1,6 @@
 pub mod anchor;
 pub mod applet;
+pub mod area;
 pub mod contrast;
 pub mod fieldset;
 pub mod heading;
@@ -8,4 +9,3 @@ pub mod img;
 pub mod input;
 pub mod label;
 pub mod meta;
-pub mod area;

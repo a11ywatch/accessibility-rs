@@ -420,24 +420,57 @@ lazy_static! {
                     let mut elements = Vec::new();
 
                     for ele in nodes {
-                        match ele.0.attr("for") {
-                            Some(s) => {
-                                let selector = unsafe { Selector::parse(&("#".to_string() + &s)).unwrap_unchecked() };
-                                let root_tree = ele.0.tree().root();
+                        let has_valid_aria_label = ele.0.attr("aria-label").map_or(false, |s| !s.trim().is_empty());
+                        let mut has_valid_text_match = false;
 
-                                match ElementRef::new(root_tree) {
-                                    t => {
-                                        let e = t.select(&selector);
+                        if !has_valid_aria_label && ele.0.text().next().is_some() {
+                            for child in ele.0.children() {
+                                match ElementRef::wrap(child) {
+                                    Some(child_element) => {
+                                        let name = child_element.value().name();
 
-                                        if e.count() == 0 {
-                                            valid = false;
-                                            elements.push(get_unique_selector(&ele.0))
+                                        if vec!["textareas", "select"].contains(&name) {
+                                            has_valid_text_match = true;
+                                        } else if name == "input" {
+                                            match child_element.attr("type") {
+                                                Some(s) => {
+                                                     if vec!["text", "file", "password"].contains(&s) {
+                                                        has_valid_text_match = true;
+                                                     }
+                                                }
+                                                _ => ()
+                                            }
+                                        }
+
+                                        if has_valid_text_match {
+                                            break;
                                         }
                                     }
+                                    _ => ()
                                 }
                             }
-                            _ => ()
                         }
+
+                        if !has_valid_aria_label && !has_valid_text_match {
+                             match ele.0.attr("for") {
+                                 Some(s) => {
+                                     let selector = unsafe { Selector::parse(&("#".to_string() + &s)).unwrap_unchecked() };
+                                     let root_tree = ele.0.tree().root();
+
+                                     match ElementRef::new(root_tree) {
+                                         t => {
+                                             let e = t.select(&selector);
+
+                                             if e.count() == 0 {
+                                                 valid = false;
+                                                 elements.push(get_unique_selector(&ele.0))
+                                             }
+                                         }
+                                     }
+                                 }
+                                 _ => ()
+                             }
+                         }
                     }
 
                     Validation::new(valid, "NonExistent", elements, Default::default()).into()
@@ -541,7 +574,7 @@ lazy_static! {
                             elements.push(get_unique_selector(&ele));
                         }
                     }
-                    
+
                     Validation::new(valid, "ImageMapAreaNoAlt", elements, Default::default()).into()
                 })
             ])),

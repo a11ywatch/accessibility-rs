@@ -1,7 +1,6 @@
 //! Test for anchors.
 
-use accessibility_rs::{engine::audit, AuditConfig};
-use maud::html;
+use accessibility_rs::AuditConfig;
 
 #[test]
 fn _audit_missing_alt_area() {
