@@ -5,6 +5,8 @@ type M = &'static str;
 /// messages to display for issues
 #[derive(std::cmp::Eq, PartialEq, PartialOrd, Ord)]
 pub struct Messages {
+    /// arabic
+    ar: M,
     /// english
     en: M,
     /// spanish
@@ -13,6 +15,8 @@ pub struct Messages {
     de: M,
     /// japanese
     ja: M,
+    /// korean
+    ko: M,
     /// portugese portugal
     pt_pt: M,
     /// portugese brazil
