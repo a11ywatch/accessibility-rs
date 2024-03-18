@@ -4,22 +4,21 @@ use accessibility_scraper::ElementRef;
 use accessibility_scraper::Html;
 use accessibility_tree::style::StyleSet;
 use markup5ever::local_name;
-use slotmap::DefaultKey;
-use taffy::Taffy;
+use taffy::TaffyTree;
 
 /// The configuration for auditing
 pub struct Auditor<'a> {
     /// the html document
     pub document: &'a Html,
     /// the tree to map to nodes
-    pub tree: std::collections::BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<DefaultKey>)>>,
+    pub tree: std::collections::BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<taffy::NodeId>)>>,
     /// styles for the audit
     pub author: StyleSet,
     /// the matching context for css selectors
     pub match_context:
         selectors::matching::MatchingContext<'a, accessibility_scraper::selector::Simple>,
     /// layout handling
-    pub taffy: Option<Taffy>,
+    pub taffy: Option<TaffyTree>,
     /// language to get results in
     pub locale: &'a str,
 }

@@ -18,14 +18,13 @@ lazy_static = { workspace = true }
 accessibility-scraper = { version = "0.0.6", features = ["main"], default-features = false, path = "../accessibility-scraper" }
 accessibility-tree = { version = "0.0.6", path = "../accessibility-tree/victor" }
 getrandom = { version = "0.2", features = ["js"] }
-taffy = { version = "0.3.13" }
+taffy = { version = "0.4.0" }
 serde = { version = "1.0", features = ["derive"] }
 selectors = { workspace = true }
 smallvec = { workspace = true }
 ego-tree = { workspace = true }
 markup5ever = "0.11.0"
 cssparser = { workspace = true }
-slotmap = "1.0.6"
 strum = "0.25"
 strum_macros = "0.25"
 rust-i18n = "2"

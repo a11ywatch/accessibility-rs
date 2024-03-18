@@ -1,5 +1,3 @@
-use slotmap::DefaultKey;
-
 use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
 use crate::ElementRef;
@@ -104,7 +102,7 @@ impl From<Vec<Validation>> for RuleValidation {
 }
 
 type ValidateFn =
-    fn(&Vec<(ElementRef<'_>, Option<DefaultKey>)>, &mut crate::Auditor<'_>) -> RuleValidation;
+    fn(&Vec<(ElementRef<'_>, Option<taffy::NodeId>)>, &mut crate::Auditor<'_>) -> RuleValidation;
 
 /// the rule validation method that should be performed.
 #[derive(Debug)]

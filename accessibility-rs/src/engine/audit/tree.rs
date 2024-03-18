@@ -4,7 +4,6 @@ use accessibility_scraper::ElementRef;
 use accessibility_scraper::Html;
 use accessibility_tree::style::StyleSet;
 use selectors::matching::MatchingContext;
-use slotmap::DefaultKey;
 use std::collections::BTreeMap;
 use std::collections::HashSet;
 use taffy::prelude::*;
@@ -20,11 +19,11 @@ pub fn parse_accessibility_tree<'a, 'b, 'c>(
     _author: &StyleSet,
     match_context: MatchingContext<'c, Simple>, // todo: return the nodes with a tuple of the layout node and the element node
 ) -> (
-    BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<DefaultKey>)>>,
-    Option<Taffy>,
+    BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<NodeId>)>>,
+    Option<TaffyTree>,
     MatchingContext<'c, Simple>,
 ) {
-    let mut accessibility_tree: BTreeMap<&str, Vec<(ElementRef<'_>, Option<DefaultKey>)>> =
+    let mut accessibility_tree: BTreeMap<&str, Vec<(ElementRef<'_>, Option<NodeId>)>> =
         BTreeMap::from(if document.root_element().value().name() == "html" {
             [("title".into(), Default::default())]
         } else {
@@ -52,19 +51,19 @@ pub fn parse_accessibility_tree_bounded<'a, 'b, 'c>(
     author: &StyleSet,
     match_context: MatchingContext<'c, Simple>, // todo: return the nodes with a tuple of the layout node and the element node
 ) -> (
-    BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<DefaultKey>)>>,
-    Option<Taffy>,
+    BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<NodeId>)>>,
+    Option<TaffyTree>,
     MatchingContext<'c, Simple>,
 ) {
-    let mut taffy = Taffy::new();
-    let mut accessibility_tree: BTreeMap<&str, Vec<(ElementRef<'_>, Option<DefaultKey>)>> =
+    let mut taffy = TaffyTree::new();
+    let mut accessibility_tree: BTreeMap<&str, Vec<(ElementRef<'_>, Option<NodeId>)>> =
         BTreeMap::from(if document.root_element().value().name() == "html" {
             [("title".into(), Default::default())]
         } else {
             [(Default::default(), Default::default())]
         });
     let mut matching_context = match_context;
-    let mut layout_leafs: Vec<Node> = vec![];
+    let mut layout_leafs: Vec<NodeId> = vec![];
 
     // push taffy layout in order from elements
     for node in document.tree.nodes() {
@@ -123,8 +122,8 @@ pub fn parse_accessibility_tree_bounded<'a, 'b, 'c>(
                 flex_direction: FlexDirection::Column,
                 // compute the default layout from CDP
                 size: Size {
-                    width: points(800.0),
-                    height: points(600.0),
+                    width: length(800.0),
+                    height: length(600.0),
                 },
                 ..Default::default()
             },

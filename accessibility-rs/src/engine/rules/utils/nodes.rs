@@ -2,9 +2,8 @@ use crate::engine::rules::rule::Validation;
 use crate::ElementRef;
 use accessibility_scraper::Selector;
 use selectors::Element;
-use slotmap::DefaultKey;
 
-type ElementNodes<'a> = Vec<(ElementRef<'a>, Option<DefaultKey>)>;
+type ElementNodes<'a> = Vec<(ElementRef<'a>, Option<taffy::NodeId>)>;
 
 /// a valid alt attribute for image
 pub fn has_alt(ele: ElementRef<'_>) -> bool {

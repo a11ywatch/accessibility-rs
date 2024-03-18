@@ -6,7 +6,6 @@ use accessibility_tree::style::ComputedValues;
 use accessibility_tree::style::StyleSet;
 use ego_tree::NodeRef;
 use selectors::matching::MatchingContext;
-use slotmap::DefaultKey;
 use std::collections::HashSet;
 use std::sync::Arc;
 use taffy::prelude::*;
@@ -20,7 +19,7 @@ lazy_static! {
 /// length to taffy dimensions
 pub fn length_dimensions(v: &LengthOrPercentageOrAuto) -> Dimension {
     match v {
-        LengthOrPercentageOrAuto::Length(l) => Dimension::Points(l.px),
+        LengthOrPercentageOrAuto::Length(l) => Dimension::Length(l.px),
         LengthOrPercentageOrAuto::Percentage(l) => Dimension::Percent(l.unit_value),
         LengthOrPercentageOrAuto::Auto => Dimension::Auto,
     }
@@ -44,7 +43,7 @@ pub fn node_layout_style(style: Arc<ComputedValues>, element: &ElementRef) -> St
                     let w = w.parse::<f32>();
                     match w {
                         Ok(w) => {
-                            size.width = points(w);
+                            size.width = length(w);
                         }
                         _ => (),
                     }
@@ -59,7 +58,7 @@ pub fn node_layout_style(style: Arc<ComputedValues>, element: &ElementRef) -> St
 
                     match h {
                         Ok(h) => {
-                            size.height = points(h);
+                            size.height = length(h);
                         }
                         _ => (),
                     }
@@ -72,9 +71,9 @@ pub fn node_layout_style(style: Arc<ComputedValues>, element: &ElementRef) -> St
     // todo: determine if all children at the top level have floats set to use flex-row
     Style {
         size,
-        border: points(style.border_width().inner_px()),
-        padding: points(style.padding().inner_px()),
-        margin: points(style.margin().inner_px()),
+        border: length(style.border_width().inner_px()),
+        padding: length(style.padding().inner_px()),
+        margin: length(style.margin().inner_px()),
         ..Default::default()
     }
 }
@@ -85,8 +84,8 @@ pub fn push_leaf<'a, 'b, 'c>(
     author: &StyleSet,
     document: &'a Html,
     mut matching_context: &mut MatchingContext<'c, Simple>,
-    taffy: &mut Taffy,
-    l_leafs: &mut Vec<Node>,
+    taffy: &mut TaffyTree,
+    l_leafs: &mut Vec<NodeId>,
 ) {
     match ElementRef::wrap(*node) {
         Some(element) => {
@@ -101,7 +100,7 @@ pub fn push_leaf<'a, 'b, 'c>(
 
                 if node.has_children() {
                     let children = node.children();
-                    let mut child_leafs: Vec<Node> = vec![];
+                    let mut child_leafs: Vec<NodeId> = vec![];
 
                     // iterate all children and push into one leaf
                     for child in children {
@@ -135,9 +134,9 @@ pub fn leaf<'a, 'b, 'c>(
     author: &StyleSet,
     document: &'a Html,
     mut matching_context: &mut MatchingContext<'c, Simple>,
-    taffy: &mut Taffy,
-) -> DefaultKey {
-    let mut l_leafs: Vec<Node> = vec![];
+    taffy: &mut TaffyTree,
+) -> NodeId {
+    let mut l_leafs: Vec<NodeId> = vec![];
     let mut children = element.children();
 
     while let Some(child) = children.next() {
