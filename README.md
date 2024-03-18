@@ -41,7 +41,7 @@ time: [1.1316 ms 1.1101 ms 1.1478 ms]
 
 ## Examples
 
-1. [Wasm](https://webassembly.org/) example view [kayle_innate](https://github.com/a11ywatch/kayle/blob/main/kayle_innate/kayle_innate/src/lib.rs#L35).
+1. [Wasm](https://webassembly.org/) example view [kayle_innate](https://github.com/a11ywatch/kayle/blob/main/kayle_innate/src/lib.rs#L18).
 1. Example integrating with a [headless browser](https://github.com/a11ywatch/kayle/blob/main/kayle/tests/innate.ts#L14).
 
 ### Contributing
