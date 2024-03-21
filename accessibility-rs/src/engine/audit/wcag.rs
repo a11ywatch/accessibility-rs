@@ -45,28 +45,22 @@ impl WCAGAAA {
         let mut issues: Vec<Issue> = Vec::new();
 
         for node in auditor.tree.clone().iter() {
-            if RULES_A.contains_key(&*node.0) {
-                match RULES_A.get(&*node.0) {
-                    Some(rules) => {
-                        for rule in rules {
-                            match (rule.validate)(&node.1, &mut auditor) {
-                                RuleValidation::Single(validation) => push_issue(
-                                    validation,
-                                    rule,
-                                    &node.0,
-                                    &auditor.locale,
-                                    &mut issues,
-                                ),
-                                RuleValidation::Multi(validation) => {
-                                    for v in validation {
-                                        push_issue(v, rule, &node.0, &auditor.locale, &mut issues)
-                                    }
+            match RULES_A.get(&*node.0) {
+                Some(rules) => {
+                    for rule in rules {
+                        match (rule.validate)(&node.1, &mut auditor) {
+                            RuleValidation::Single(validation) => {
+                                push_issue(validation, rule, &node.0, &auditor.locale, &mut issues)
+                            }
+                            RuleValidation::Multi(validation) => {
+                                for v in validation {
+                                    push_issue(v, rule, &node.0, &auditor.locale, &mut issues)
                                 }
-                            };
-                        }
+                            }
+                        };
                     }
-                    _ => (),
                 }
+                _ => (),
             }
         }
 
