@@ -17,11 +17,11 @@ lazy_static! {
     pub static ref RULES_A: BTreeMap<&'static str, Vec<Rule>> =
         vec![
             ("html", Vec::from([
-                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _auditor, _match_content| {
                     let n = nodes[0].0;
                     Validation::new_issue(!n.attr("lang").unwrap_or_default().is_empty() || !n.attr("xml:lang").unwrap_or_default().is_empty(), "2").into()
                 }),
-                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _auditor, _match_content| {
                     let lang = nodes[0].0.attr("lang").unwrap_or_default();
                     let alphabetic = lang.chars().all(|x| x.is_alphabetic());
                     // <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>
@@ -33,7 +33,7 @@ lazy_static! {
                         alphabetic && lang.len() < 12
                     }, "3.Lang").into()
                 }),
-                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H57.into(), IssueType::Error, Principle::Understandable, Guideline::Readable, "1", |nodes, _auditor, _match_content| {
                     let lang = nodes[0].0.attr("xml:lang").unwrap_or_default();
                     let alphabetic = lang.chars().all(|x| x == '_' || x.is_alphabetic());
                    // <https://www.rfc-editor.org/rfc/bcp/bcp47.txt>
@@ -45,14 +45,14 @@ lazy_static! {
                         alphabetic && lang.len() < 12
                     }, "3.XmlLang").into()
                 }),
-                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _auditor| {
+                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _auditor, _match_content| {
                     let selector = unsafe { Selector::parse("head > title").unwrap_unchecked() };
 
                     Validation::new_issue(nodes[0].0.select(&selector).count() >= 1, "1.NoTitleEl").into()
                 })
             ])),
             ("meta", Vec::from([
-                Rule::new(Techniques::F40.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "1", |nodes, _auditor| {
+                Rule::new(Techniques::F40.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
 
                     for node in nodes {
@@ -68,7 +68,7 @@ lazy_static! {
 
                     Validation::new_issue(valid, "2").into()
                 }),
-                Rule::new(Techniques::F41.into(), IssueType::Error, Principle::Understandable, Guideline::EnoughTime, "1", |nodes, _auditor| {
+                Rule::new(Techniques::F41.into(), IssueType::Error, Principle::Understandable, Guideline::EnoughTime, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
 
                     for node in nodes {
@@ -86,7 +86,7 @@ lazy_static! {
                 }),
             ])),
             ("title", Vec::from([
-                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _auditor| {
+                Rule::new(Techniques::H25.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "2", |nodes, _auditor, _match_content| {
                     let mut valid = true;
                     for node in nodes {
                         let e = node.0.inner_html().is_empty();
@@ -98,7 +98,7 @@ lazy_static! {
                 }),
             ])),
             ("body", Vec::from([
-                Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Perceivable, Guideline::Distinguishable, "1", |nodes, auditor| {
+                Rule::new(Techniques::G18.into(), IssueType::Error, Principle::Perceivable, Guideline::Distinguishable, "1", |nodes, auditor, match_context| {
                     use rgb::RGB8;
                     let mut validation_errors = Vec::new();
 
@@ -135,7 +135,7 @@ lazy_static! {
                                                 &element,
                                                 &auditor.author,
                                                 &auditor.document,
-                                                &mut auditor.match_context,
+                                                 match_context,
                                             );
 
                                             let font_size = style.font.font_size.0;
@@ -149,7 +149,7 @@ lazy_static! {
                                                                 &parent_element,
                                                                 &auditor.author,
                                                                 &auditor.document,
-                                                                &mut auditor.match_context,
+                                                                match_context,
                                                             );
 
                                                             match parent_style.background.background_color {
@@ -193,17 +193,17 @@ lazy_static! {
                 }),
             ])),
             ("iframe", Vec::from([
-                Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _auditor, _match_context| {
                     validate_missing_attr(nodes, "title", "1").into()
                 }),
             ])),
             ("frame", Vec::from([
-                Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H64.into(), IssueType::Error, Principle::Operable, Guideline::Navigable, "1", |nodes, _auditor, _match_context| {
                     validate_missing_attr(nodes, "title", "1").into()
                 }),
             ])),
             ("form", Vec::from([
-                Rule::new(Techniques::H32.into(), IssueType::Error, Principle::Operable, Guideline::Predictable, "2", |nodes, _auditor| {
+                Rule::new(Techniques::H32.into(), IssueType::Error, Principle::Operable, Guideline::Predictable, "2", |nodes, _auditor, _match_context| {
                     let mut valid = false;
                     let mut elements = Vec::new();
                     let selector = unsafe { Selector::parse("button[type=submit]").unwrap_unchecked() };
@@ -223,7 +223,7 @@ lazy_static! {
 
                     Validation::new(valid, "2", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H36.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H36.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor, _match_context| {
                     let mut valid = false;
                     let mut elements = Vec::new();
                     let selector = unsafe { Selector::parse("input[type=image][name=submit]").unwrap_unchecked() };
@@ -245,7 +245,7 @@ lazy_static! {
                 }),
             ])),
             ("a", Vec::from([
-                Rule::new(Techniques::H2.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H2.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let selector = unsafe { Selector::parse("img").unwrap_unchecked() };
                     let mut elements = Vec::new();
@@ -272,7 +272,7 @@ lazy_static! {
 
                     Validation::new(valid, "EG5", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H30.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H30.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let selector = unsafe { Selector::parse("img").unwrap_unchecked() };
                     let mut elements = Vec::new();
@@ -292,7 +292,7 @@ lazy_static! {
 
                     Validation::new(valid, "2", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _auditor| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -311,7 +311,7 @@ lazy_static! {
                     }
                     Validation::new(valid, "A.NoContent", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _auditor| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
                     for ele in nodes {
@@ -326,7 +326,7 @@ lazy_static! {
                 }),
             ])),
             ("img", Vec::from([
-                Rule::new(Techniques::H37.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H37.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -341,7 +341,7 @@ lazy_static! {
 
                     Validation::new(valid, "", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H67.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H67.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -357,37 +357,37 @@ lazy_static! {
                 }),
             ])),
             ("h1", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor, _match_context| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h2", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor, _match_context| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h3", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor, _match_context| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h4", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor, _match_context| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h5", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor, _match_context| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("h6", Vec::from([
-                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H42.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor, _match_context| {
                     validate_empty_nodes(nodes, "2").into()
                 }),
             ])),
             ("label", Vec::from([
-                Rule::new(Techniques::H93.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H93.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
                     let mut id_map: HashMap<&str, u8> = HashMap::new();
@@ -415,7 +415,7 @@ lazy_static! {
 
                     Validation::new(valid, "1", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H44.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H44.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -477,7 +477,7 @@ lazy_static! {
                 })
             ])),
             ("input", Vec::from([
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, auditor| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -505,7 +505,7 @@ lazy_static! {
 
                     Validation::new(valid, "", elements, message).into()
                 }),
-                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, auditor| {
+                Rule::new(Techniques::H91.into(), IssueType::Error, Principle::Robust, Guideline::Compatible, "2", |nodes, auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -541,12 +541,12 @@ lazy_static! {
                 }),
             ])),
             ("blink", Vec::from([
-                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "2", |nodes, _auditor| {
+                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Operable, Guideline::EnoughTime, "2", |nodes, _auditor, _match_context| {
                     Validation::new_issue(nodes.is_empty(), "").into()
                 }),
             ])),
             ("object", Vec::from([
-                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
+                Rule::new(Techniques::F47.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -563,7 +563,7 @@ lazy_static! {
                 }),
             ])),
             ("area",Vec::from([
-                Rule::new(Techniques::H24.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes,_auditor| {
+                Rule::new(Techniques::H24.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes,_auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -579,7 +579,7 @@ lazy_static! {
                 })
             ])),
             ("map",Vec::from([
-                Rule::new(Techniques::H24.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes,_auditor|{
+                Rule::new(Techniques::H24.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes,_auditor, _match_context|{
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -595,7 +595,7 @@ lazy_static! {
                 })
             ])),
             ("fieldset", Vec::from([
-                Rule::new(Techniques::H71.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H71.into(), IssueType::Error, Principle::Perceivable, Guideline::Adaptable, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let selector = unsafe { Selector::parse("legend").unwrap_unchecked() };
                     let mut elements = Vec::new();
@@ -621,7 +621,7 @@ lazy_static! {
                 }),
             ])),
             ("applet", Vec::from([
-                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 
@@ -635,7 +635,7 @@ lazy_static! {
 
                     Validation::new(valid, "2", elements, Default::default()).into()
                 }),
-                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor| {
+                Rule::new(Techniques::H35.into(), IssueType::Error, Principle::Perceivable, Guideline::TextAlternatives, "1", |nodes, _auditor, _match_context| {
                     let mut valid = true;
                     let mut elements = Vec::new();
 

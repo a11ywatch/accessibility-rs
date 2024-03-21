@@ -95,12 +95,12 @@ impl<'a> AuditConfig<'a> {
 pub fn audit(config: AuditConfig) -> Vec<Issue> {
     let document = accessibility_scraper::Html::parse_document(config.html);
     let mut nth_index_cache = selectors::NthIndexCache::from(Default::default());
-    let mut auditor = Auditor::new(
+    let (auditor, mut match_context) = Auditor::new(
         &document,
         &config.css,
         engine::styles::css_cache::build_matching_context(&mut nth_index_cache),
         config.bounding_box,
         config.locale,
     );
-    engine::audit::wcag::WCAGAAA::audit(&mut auditor)
+    engine::audit::wcag::WCAGAAA::audit(auditor, &mut match_context)
 }

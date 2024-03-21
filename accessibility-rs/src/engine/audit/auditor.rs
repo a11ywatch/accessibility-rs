@@ -14,9 +14,6 @@ pub struct Auditor<'a> {
     pub tree: std::collections::BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<taffy::NodeId>)>>,
     /// styles for the audit
     pub author: StyleSet,
-    /// the matching context for css selectors
-    pub match_context:
-        selectors::matching::MatchingContext<'a, accessibility_scraper::selector::Simple>,
     /// layout handling
     pub taffy: Option<TaffyTree>,
     /// language to get results in
@@ -34,7 +31,10 @@ impl<'a> Auditor<'a> {
         >,
         bounds: bool,
         locale: &'a str,
-    ) -> Auditor<'a> {
+    ) -> (
+        Auditor<'a>,
+        selectors::matching::MatchingContext<'a, accessibility_scraper::selector::Simple>,
+    ) {
         // TODO: make stylesheet building optional and only on first requirement
         let author = {
             let mut author = accessibility_tree::style::StyleSetBuilder::new();
@@ -63,13 +63,15 @@ impl<'a> Auditor<'a> {
             parse_accessibility_tree(&document, &author, match_context)
         };
 
-        Auditor {
-            document,
-            tree,
-            author,
+        (
+            Auditor {
+                document,
+                tree,
+                author,
+                taffy,
+                locale,
+            },
             match_context,
-            taffy,
-            locale,
-        }
+        )
     }
 }

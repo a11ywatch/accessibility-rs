@@ -41,14 +41,20 @@ pub struct WCAGAAA;
 /// wcag rules to test for
 impl WCAGAAA {
     /// audit html against WCAGAAA standards
-    pub fn audit(mut auditor: &mut Auditor<'_>) -> Vec<Issue> {
+    pub fn audit(
+        auditor: Auditor<'_>,
+        mut match_context: &mut selectors::matching::MatchingContext<
+            '_,
+            accessibility_scraper::selector::Simple,
+        >,
+    ) -> Vec<Issue> {
         let mut issues: Vec<Issue> = Vec::new();
 
-        for node in auditor.tree.clone().iter() {
+        for node in auditor.tree.iter() {
             match RULES_A.get(&*node.0) {
                 Some(rules) => {
                     for rule in rules {
-                        match (rule.validate)(&node.1, &mut auditor) {
+                        match (rule.validate)(&node.1, &auditor, &mut match_context) {
                             RuleValidation::Single(validation) => {
                                 push_issue(validation, rule, &node.0, &auditor.locale, &mut issues)
                             }
