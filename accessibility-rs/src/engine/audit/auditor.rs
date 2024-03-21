@@ -22,19 +22,7 @@ pub struct Auditor<'a> {
 
 impl<'a> Auditor<'a> {
     /// Create a new auditor that can be used to validate accessibility
-    pub fn new(
-        document: &'a Html,
-        css_rules: &str,
-        match_context: selectors::matching::MatchingContext<
-            'a,
-            accessibility_scraper::selector::Simple,
-        >,
-        bounds: bool,
-        locale: &'a str,
-    ) -> (
-        Auditor<'a>,
-        selectors::matching::MatchingContext<'a, accessibility_scraper::selector::Simple>,
-    ) {
+    pub fn new(document: &'a Html, css_rules: &str, bounds: bool, locale: &'a str) -> Auditor<'a> {
         // TODO: make stylesheet building optional and only on first requirement
         let author = {
             let mut author = accessibility_tree::style::StyleSetBuilder::new();
@@ -57,21 +45,18 @@ impl<'a> Auditor<'a> {
             author.finish()
         };
 
-        let (tree, taffy, match_context) = if bounds {
-            parse_accessibility_tree_bounded(&document, &author, match_context)
+        let (tree, taffy) = if bounds {
+            parse_accessibility_tree_bounded(&document, &author)
         } else {
-            parse_accessibility_tree(&document, &author, match_context)
+            parse_accessibility_tree(&document, &author)
         };
 
-        (
-            Auditor {
-                document,
-                tree,
-                author,
-                taffy,
-                locale,
-            },
-            match_context,
-        )
+        Auditor {
+            document,
+            tree,
+            author,
+            taffy,
+            locale,
+        }
     }
 }

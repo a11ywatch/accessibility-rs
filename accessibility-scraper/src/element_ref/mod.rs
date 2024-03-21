@@ -9,6 +9,9 @@ use html5ever::serialize::{serialize, SerializeOpts, TraversalScope};
 use crate::node::Element;
 use crate::{Node, Selector};
 
+unsafe impl Send for Node {}
+unsafe impl Sync for Node {}
+
 /// Wrapper around a reference to an element node.
 ///
 /// This wrapper implements the `Element` trait from the `selectors` crate, which allows it to be

@@ -2,7 +2,6 @@ use crate::dom;
 use crate::style::declaration_block::DeclarationBlock;
 use crate::style::properties::{ComputedValues, Phase};
 use crate::style::rules::{CssRule, RulesParser};
-use accessibility_scraper::selectors::matching::MatchingContext;
 use accessibility_scraper::{ElementRef, Html};
 use cssparser::{Parser, ParserInput, RuleListParser};
 use smallvec::SmallVec;
@@ -118,7 +117,6 @@ pub fn _style_for_element<'a>(
     _document: &accessibility_scraper::Html,
     node: &ElementRef<'a>,
     parent_style: Option<&ComputedValues>,
-    match_context: &mut MatchingContext<'_, accessibility_scraper::selector::Simple>,
 ) -> Arc<ComputedValues> {
     // use smallvec::SmallVec;
     let style_attr_block;
@@ -127,15 +125,15 @@ pub fn _style_for_element<'a>(
         author: SmallVec::new(),
     };
 
-    // let mut nth_index_cache = selectors::NthIndexCache::from(Default::default());
-    // let mut match_context = selectors::matching::MatchingContext::new(
-    //     selectors::matching::MatchingMode::Normal,
-    //     None,
-    //     Some(&mut nth_index_cache),
-    //     selectors::matching::QuirksMode::NoQuirks,
-    //     // selectors::matching::NeedsSelectorFlags::No,
-    //     // selectors::matching::IgnoreNthChildForInvalidation::No,
-    // );
+    let mut nth_index_cache = selectors::NthIndexCache::from(Default::default());
+    let mut match_context = selectors::matching::MatchingContext::new(
+        selectors::matching::MatchingMode::Normal,
+        None,
+        Some(&mut nth_index_cache),
+        selectors::matching::QuirksMode::NoQuirks,
+        // selectors::matching::NeedsSelectorFlags::No,
+        // selectors::matching::IgnoreNthChildForInvalidation::No,
+    );
 
     for &(ref selector, ref block) in &USER_AGENT_STYLESHEET.rules {
         if selectors::matching::matches_selector(
@@ -143,7 +141,7 @@ pub fn _style_for_element<'a>(
             0,
             None,
             node,
-            match_context,
+            &mut match_context,
             &mut |_, _| {},
         ) {
             matching.ua.push(block)
@@ -157,7 +155,7 @@ pub fn _style_for_element<'a>(
             0,
             None,
             node,
-            match_context,
+            &mut match_context,
             &mut |_, _| {},
         ) {
             matching.author.push(block)
@@ -183,24 +181,16 @@ pub fn style_for_element_ref(
     node: &ElementRef,
     style_set: &StyleSet,
     document: &Html,
-    mut match_context: &mut MatchingContext<'_, accessibility_scraper::selector::Simple>,
 ) -> Arc<ComputedValues> {
     let parent_styles = match node.parent() {
         Some(n) => match accessibility_scraper::element_ref::ElementRef::wrap(n) {
             Some(element) => {
-                let _parent_styles =
-                    _style_for_element(&style_set, &document, &element, None, &mut match_context);
+                let _parent_styles = _style_for_element(&style_set, &document, &element, None);
                 Some(_parent_styles)
             }
             _ => None,
         },
         _ => None,
     };
-    _style_for_element(
-        &style_set,
-        &document,
-        node,
-        parent_styles.as_deref(),
-        &mut match_context,
-    )
+    _style_for_element(&style_set, &document, node, parent_styles.as_deref())
 }

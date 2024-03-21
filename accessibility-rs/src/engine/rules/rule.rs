@@ -101,11 +101,8 @@ impl From<Vec<Validation>> for RuleValidation {
     }
 }
 
-type ValidateFn = fn(
-    &Vec<(ElementRef<'_>, Option<taffy::NodeId>)>,
-    &crate::Auditor<'_>,
-    &mut selectors::matching::MatchingContext<'_, accessibility_scraper::selector::Simple>,
-) -> RuleValidation;
+type ValidateFn =
+    fn(&Vec<(ElementRef<'_>, Option<taffy::NodeId>)>, &crate::Auditor<'_>) -> RuleValidation;
 
 /// the rule validation method that should be performed.
 #[derive(Debug)]

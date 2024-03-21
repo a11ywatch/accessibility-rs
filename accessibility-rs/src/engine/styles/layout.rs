@@ -1,11 +1,9 @@
-use accessibility_scraper::selector::Simple;
 use accessibility_scraper::ElementRef;
 use accessibility_scraper::Html;
 use accessibility_tree::style::values::LengthOrPercentageOrAuto;
 use accessibility_tree::style::ComputedValues;
 use accessibility_tree::style::StyleSet;
 use ego_tree::NodeRef;
-use selectors::matching::MatchingContext;
 use std::collections::HashSet;
 use std::sync::Arc;
 use taffy::prelude::*;
@@ -83,7 +81,6 @@ pub fn push_leaf<'a, 'b, 'c>(
     node: &NodeRef<'_, accessibility_scraper::Node>,
     author: &StyleSet,
     document: &'a Html,
-    mut matching_context: &mut MatchingContext<'c, Simple>,
     taffy: &mut TaffyTree,
     l_leafs: &mut Vec<NodeId>,
 ) {
@@ -92,10 +89,7 @@ pub fn push_leaf<'a, 'b, 'c>(
             let name = element.value().name();
             if !NODE_IGNORE.contains(name) {
                 let style = accessibility_tree::style::cascade::style_for_element_ref(
-                    &element,
-                    &author,
-                    &document,
-                    &mut matching_context,
+                    &element, &author, &document,
                 );
 
                 if node.has_children() {
@@ -104,14 +98,7 @@ pub fn push_leaf<'a, 'b, 'c>(
 
                     // iterate all children and push into one leaf
                     for child in children {
-                        push_leaf(
-                            &child,
-                            author,
-                            document,
-                            matching_context,
-                            taffy,
-                            &mut child_leafs,
-                        );
+                        push_leaf(&child, author, document, taffy, &mut child_leafs);
                     }
 
                     l_leafs.push(
@@ -133,29 +120,17 @@ pub fn leaf<'a, 'b, 'c>(
     element: &ElementRef,
     author: &StyleSet,
     document: &'a Html,
-    mut matching_context: &mut MatchingContext<'c, Simple>,
     taffy: &mut TaffyTree,
 ) -> NodeId {
     let mut l_leafs: Vec<NodeId> = vec![];
     let mut children = element.children();
 
     while let Some(child) = children.next() {
-        push_leaf(
-            &child,
-            author,
-            document,
-            matching_context,
-            taffy,
-            &mut l_leafs,
-        );
+        push_leaf(&child, author, document, taffy, &mut l_leafs);
     }
 
-    let style = accessibility_tree::style::cascade::style_for_element_ref(
-        &element,
-        &author,
-        &document,
-        &mut matching_context,
-    );
+    let style =
+        accessibility_tree::style::cascade::style_for_element_ref(&element, &author, &document);
 
     let leaf_style = node_layout_style(style, &element);
 

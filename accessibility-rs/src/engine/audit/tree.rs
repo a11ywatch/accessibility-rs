@@ -1,9 +1,7 @@
 use crate::engine::styles::layout::leaf;
-use accessibility_scraper::selector::Simple;
 use accessibility_scraper::ElementRef;
 use accessibility_scraper::Html;
 use accessibility_tree::style::StyleSet;
-use selectors::matching::MatchingContext;
 use std::collections::BTreeMap;
 use std::collections::HashSet;
 use taffy::prelude::*;
@@ -17,11 +15,9 @@ lazy_static! {
 pub fn parse_accessibility_tree<'a, 'b, 'c>(
     document: &'a Html,
     _author: &StyleSet,
-    match_context: MatchingContext<'c, Simple>, // todo: return the nodes with a tuple of the layout node and the element node
 ) -> (
     BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<NodeId>)>>,
     Option<TaffyTree>,
-    MatchingContext<'c, Simple>,
 ) {
     let mut accessibility_tree: BTreeMap<&str, Vec<(ElementRef<'_>, Option<NodeId>)>> =
         BTreeMap::from(if document.root_element().value().name() == "html" {
@@ -42,18 +38,16 @@ pub fn parse_accessibility_tree<'a, 'b, 'c>(
         };
     }
 
-    (accessibility_tree, None, match_context)
+    (accessibility_tree, None)
 }
 
 /// try to fix all possible issues using a spec against the tree with bounding boxs.
 pub fn parse_accessibility_tree_bounded<'a, 'b, 'c>(
     document: &'a Html,
     author: &StyleSet,
-    match_context: MatchingContext<'c, Simple>, // todo: return the nodes with a tuple of the layout node and the element node
 ) -> (
     BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<NodeId>)>>,
     Option<TaffyTree>,
-    MatchingContext<'c, Simple>,
 ) {
     let mut taffy = TaffyTree::new();
     let mut accessibility_tree: BTreeMap<&str, Vec<(ElementRef<'_>, Option<NodeId>)>> =
@@ -62,7 +56,6 @@ pub fn parse_accessibility_tree_bounded<'a, 'b, 'c>(
         } else {
             [(Default::default(), Default::default())]
         });
-    let mut matching_context = match_context;
     let mut layout_leafs: Vec<NodeId> = vec![];
 
     // push taffy layout in order from elements
@@ -74,13 +67,7 @@ pub fn parse_accessibility_tree_bounded<'a, 'b, 'c>(
                     if NODE_IGNORE.contains(name) {
                         taffy.new_leaf(Default::default()).unwrap()
                     } else {
-                        leaf(
-                            &element,
-                            &author,
-                            document,
-                            &mut matching_context,
-                            &mut taffy,
-                        )
+                        leaf(&element, &author, document, &mut taffy)
                     }
                 };
                 accessibility_tree
@@ -98,13 +85,7 @@ pub fn parse_accessibility_tree_bounded<'a, 'b, 'c>(
                 match ElementRef::wrap(child) {
                     Some(element) => {
                         if !NODE_IGNORE.contains(element.value().name()) {
-                            let leaf = leaf(
-                                &element,
-                                &author,
-                                document,
-                                &mut matching_context,
-                                &mut taffy,
-                            );
+                            let leaf = leaf(&element, &author, document, &mut taffy);
 
                             layout_leafs.push(leaf)
                         }
@@ -140,5 +121,5 @@ pub fn parse_accessibility_tree_bounded<'a, 'b, 'c>(
     //     println!("Leaf Position {:?}", taffy.layout(lea).unwrap());
     // }
 
-    (accessibility_tree, Some(taffy), matching_context)
+    (accessibility_tree, Some(taffy))
 }
