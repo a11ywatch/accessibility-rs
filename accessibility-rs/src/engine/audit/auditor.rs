@@ -7,6 +7,7 @@ use markup5ever::local_name;
 use taffy::TaffyTree;
 
 /// The configuration for auditing
+#[derive(Clone, Debug)]
 pub struct Auditor<'a> {
     /// the html document
     pub document: &'a Html,
@@ -14,15 +15,18 @@ pub struct Auditor<'a> {
     pub tree: std::collections::BTreeMap<&'a str, Vec<(ElementRef<'a>, Option<taffy::NodeId>)>>,
     /// styles for the audit
     pub author: StyleSet,
-    /// layout handling
-    pub taffy: Option<TaffyTree>,
     /// language to get results in
     pub locale: &'a str,
 }
 
 impl<'a> Auditor<'a> {
     /// Create a new auditor that can be used to validate accessibility
-    pub fn new(document: &'a Html, css_rules: &str, bounds: bool, locale: &'a str) -> Auditor<'a> {
+    pub fn new(
+        document: &'a Html,
+        css_rules: &str,
+        bounds: bool,
+        locale: &'a str,
+    ) -> (Auditor<'a>, Option<TaffyTree>) {
         // TODO: make stylesheet building optional and only on first requirement
         let author = {
             let mut author = accessibility_tree::style::StyleSetBuilder::new();
@@ -51,12 +55,14 @@ impl<'a> Auditor<'a> {
             parse_accessibility_tree(&document, &author)
         };
 
-        Auditor {
-            document,
-            tree,
-            author,
+        (
+            Auditor {
+                document,
+                tree,
+                author,
+                locale,
+            },
             taffy,
-            locale,
-        }
+        )
     }
 }

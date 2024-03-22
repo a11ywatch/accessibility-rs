@@ -41,20 +41,24 @@ pub struct WCAGAAA;
 /// wcag rules to test for
 impl WCAGAAA {
     /// audit html against WCAGAAA standards
-    pub fn audit(auditor: Auditor<'_>) -> Vec<Issue> {
+    pub fn audit(auditor: (Auditor<'_>, Option<taffy::TaffyTree>)) -> Vec<Issue> {
         let mut issues: Vec<Issue> = Vec::new();
 
-        for node in auditor.tree.iter() {
+        for node in auditor.0.tree.iter() {
             match RULES_A.get(&*node.0) {
                 Some(rules) => {
                     for rule in rules {
-                        match (rule.validate)(&node.1, &auditor) {
-                            RuleValidation::Single(validation) => {
-                                push_issue(validation, rule, &node.0, &auditor.locale, &mut issues)
-                            }
+                        match (rule.validate)(&node.1, &auditor.0) {
+                            RuleValidation::Single(validation) => push_issue(
+                                validation,
+                                rule,
+                                &node.0,
+                                &auditor.0.locale,
+                                &mut issues,
+                            ),
                             RuleValidation::Multi(validation) => {
                                 for v in validation {
-                                    push_issue(v, rule, &node.0, &auditor.locale, &mut issues)
+                                    push_issue(v, rule, &node.0, &auditor.0.locale, &mut issues)
                                 }
                             }
                         };
