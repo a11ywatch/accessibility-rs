@@ -1,3 +1,5 @@
+/// Audit utils
+pub mod audit_utils;
 /// the auditor
 pub mod auditor;
 /// the node tree

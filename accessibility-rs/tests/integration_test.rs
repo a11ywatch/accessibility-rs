@@ -47,3 +47,14 @@ fn _audit_large_with_layout() {
     ));
     println!("{:?}", report)
 }
+
+#[test]
+fn _audit_xlarge() {
+    let report = accessibility_rs::audit(AuditConfig::new(
+        mock::MOCK_WEBSITE_XLARGE_HTML,
+        &mock::MOCK_CSS_RULES_XLARGE,
+        false,
+        "en",
+    ));
+    println!("{:?}", report)
+}

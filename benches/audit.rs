@@ -20,6 +20,10 @@ pub fn bench_speed(c: &mut Criterion) {
         b.iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_HTML))))
     });
 
+    group.bench_function(format!("audit: {}", "large-xlarge html"), |b| {
+        b.iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_LARGE_HTML))))
+    });
+
     group.finish();
 }
 
