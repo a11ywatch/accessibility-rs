@@ -10,9 +10,6 @@ categories = ["accessibility"]
 documentation = "https://docs.rs/accessibility-rs"
 include = ["/src", "../LICENSE_MIT", "../LICENSE_APACHE", "../README.md", "locales"]
 
-[features]
-default = []
-
 [dependencies]
 lazy_static = { workspace = true }
 accessibility-scraper = { version = "0.0.7", features = ["main"], default-features = false, path = "../accessibility-scraper" }
@@ -30,6 +27,13 @@ strum_macros = "0.25"
 rust-i18n = "2"
 contrast = "0.1.0"
 rgb = "0.8.37"
+rayon = { version = "1.10.0", optional = true }
+crossbeam-channel = { version = "0.5.12", optional = true }
+
+[features]
+default = []
+rayon = ["dep:rayon", "dep:crossbeam-channel"]
+rayon_wasm = ["rayon/web_spin_lock"]
 
 [dev-dependencies]
 maud = "0.25.0"
