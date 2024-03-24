@@ -6,7 +6,7 @@ The Rust web accessibility engine.
 
 ```toml
 [dependencies]
-accessibility-rs = "^0.0.49"
+accessibility-rs = "^0.0.55"
 ```
 
 ```rs
