@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-tree"
-version = "0.0.10"
+version = "0.0.11"
 authors = ["Jeff Mendez <jeff@a11ywatch.com"]
 license = "MIT OR Apache-2.0"
 description = "Accessibility tree binding CSS styles and vectors to elements. Used mainly for accessibility-rs crate."
@@ -22,7 +22,7 @@ lock_api = "0.1"
 num-traits = "0.2"
 rayon = "1"
 rayon_croissant = "0.1.1"
-accessibility-scraper = { version = "0.0.9", features = ["main"], default-features = false, path = "../../accessibility-scraper" }
+accessibility-scraper = { version = "0.0.11", features = ["main"], default-features = false, path = "../../accessibility-scraper" }
 selectors = { workspace = true }
 smallbitvec = "2.4"
 smallvec = { workspace = true }

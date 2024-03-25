@@ -62,17 +62,18 @@ impl Html {
     /// # extern crate html5ever;
     /// # extern crate accessibility_scraper;
     /// # extern crate tendril;
-    /// # fn main() {
+    ///   use accessibility_scraper::html::Html;
+    ///   use crate::tendril::TendrilSink;
+    ///   #[tokio::main]
+    /// # async fn main() {
     /// # let document = "";
     ///    use tokio_stream::{self as stream, StreamExt};
-    ///    let mut doc = Self::new_document();
-    ///    doc.quirks_mode = QuirksMode::Quirks;
-    ///    let mut parser = driver::parse_document(doc, Default::default());
+    ///    let mut parser = html5ever::driver::parse_document(Html::new_document(), Default::default());
     ///    let mut stream = stream::iter(document.lines());
     ///    while let Some(item) = stream.next().await {
     ///        parser.process(item.into())
     ///    }
-    ///    parser.finish()
+    ///    parser.finish();
     /// # }
     /// ```
     #[cfg(feature = "tokio")]

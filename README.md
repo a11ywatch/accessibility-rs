@@ -6,7 +6,7 @@ The Rust web accessibility engine.
 
 ```toml
 [dependencies]
-accessibility-rs = "^0.0.58"
+accessibility-rs = "^0.0.59"
 ```
 
 ```rs
@@ -32,11 +32,12 @@ With the Tokio runtime.
 
 ```toml
 [dependencies]
-accessibility-rs = { version = "^0.0.58", features = ["tokio"]}
+accessibility-rs = { version = "^0.0.59", features = ["tokio"]}
 ```
 
 ```rs
 use accessibility_rs::{audit, AuditConfig};
+use tokio;
 
 #[tokio::main]
 async fn main() {
@@ -72,11 +73,11 @@ async fn main() {
 
 ```sh
 audit-speed/core/audit: small html (4k iterations)
-time: [60.988 µs 61.067 µs 61.157 µs]
+time: [55.689 µs 56.246 µs 57.110 µs]
 audit-speed/core/audit: medium html (4k iterations)
-time: [890.56 µs 905.52 µs 923.23 µs]
+time: [824.07 µs 830.30 µs 839.37 µs]
 audit-speed/core/audit: large html (4k iterations)
-time: [1.1316 ms 1.1101 ms 1.1478 ms]
+time: [1.1206 ms 1.1260 ms 1.1321 ms]
 ```
 
 ## Examples

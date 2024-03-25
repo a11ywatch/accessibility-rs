@@ -4,6 +4,7 @@ use accessibility_rs::AuditConfig;
 use maud::html;
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// anchor has valid contrast.
 fn _audit_contrast_text_anchor() {
     let markup = html! {

@@ -5,6 +5,7 @@ use accessibility_rs::AuditConfig;
 use crate::mocks::mock;
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// missing title element
 fn _audit_missing_title() {
     let audit = accessibility_rs::audit(AuditConfig::basic(mock::MOCK_WEBSITE_HTML));
@@ -21,6 +22,7 @@ fn _audit_missing_title() {
 }
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// meta refresh redirect
 fn _audit_meta_refresh() {
     let audit = accessibility_rs::audit(AuditConfig::basic(
@@ -74,6 +76,7 @@ fn _audit_meta_refresh() {
 }
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// no blink elements
 fn _audit_blink_found() {
     let audit = accessibility_rs::audit(AuditConfig::basic(
@@ -99,6 +102,7 @@ fn _audit_blink_found() {
 }
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// iframe missing title
 fn _iframe_missing_title() {
     let audit = accessibility_rs::audit(AuditConfig {
@@ -192,6 +196,7 @@ fn _iframe_missing_title() {
 }
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// incorrect xml:lang
 fn _xml_lang_incorrect_format() {
     let audit = accessibility_rs::audit(AuditConfig::basic(

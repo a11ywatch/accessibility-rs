@@ -3,6 +3,7 @@ use accessibility_rs::AuditConfig;
 use maud::html;
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// label needs unique target ids
 fn _audit_label_valid_name() {
     let markup = html! {
@@ -21,6 +22,7 @@ fn _audit_label_valid_name() {
 }
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// label has id that does not exist
 fn _audit_label_id_noexist() {
     let markup = html! {

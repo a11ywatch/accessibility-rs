@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-scraper"
-version = "0.0.9"
+version = "0.0.11"
 edition = "2021"
 description = "HTML parsing and querying with CSS selectors with CSS binding styles to elements."
 keywords = ["html", "css", "selector", "scraping"]

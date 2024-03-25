@@ -23,9 +23,18 @@
 //! ```no_run
 //! use accessibility_rs::{audit, AuditConfig};
 //!
+//! #[cfg(not(feature = "tokio"))]
 //! fn main() {
 //!     let config = AuditConfig::basic(r###"<html><body><h1>My Title</h1><input type="text" placeholder="Type me"></input><img src="tabby_cat.png"></img></body></html>"###);
 //!     let audit = audit(config);
+//!     println!("{:?}", audit);
+//! }
+//!
+//! #[cfg(feature = "tokio")]
+//! #[tokio::main]
+//! async fn main() {
+//!     let config = AuditConfig::basic(r###"<html><body><h1>My Title</h1><input type="text" placeholder="Type me"></input><img src="tabby_cat.png"></img></body></html>"###);
+//!     let audit = audit(config).await;
 //!     println!("{:?}", audit);
 //! }
 //! ```

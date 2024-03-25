@@ -2,6 +2,7 @@
 use accessibility_rs::AuditConfig;
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// input is missing a valid name
 fn _audit_input_valid_name() {
     let audit = accessibility_rs::audit(AuditConfig::basic(

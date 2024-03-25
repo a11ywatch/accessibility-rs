@@ -3,6 +3,7 @@
 use accessibility_rs::AuditConfig;
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 fn _audit_missing_alt_area() {
     //alt attribute missing on first <area> tag
     let html = r#"
@@ -23,6 +24,7 @@ fn _audit_missing_alt_area() {
 }
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 fn _audit_missing_alt_map() {
     // alt attribute missing on <map> tag
     let html = r#"

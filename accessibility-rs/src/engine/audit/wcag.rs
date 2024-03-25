@@ -93,7 +93,7 @@ impl WCAGAAA {
     }
 
     /// Audit html against WCAGAAA standards
-    #[cfg(feature = "rayon")]
+    #[cfg(all(feature = "rayon", not(feature = "tokio")))]
     pub fn audit(auditor: (Auditor<'_>, Option<taffy::TaffyTree>)) -> Vec<Issue> {
         use crate::engine::audit::audit_utils::evaluate_rules_in_parallel;
 
@@ -121,7 +121,7 @@ impl WCAGAAA {
     }
 
     /// Audit html against WCAGAAA standards
-    #[cfg(all(not(feature = "rayon"), feature = "tokio"))]
+    #[cfg(feature = "tokio")]
     pub async fn audit(auditor: (Auditor<'_>, Option<taffy::TaffyTree>)) -> Vec<Issue> {
         WCAGAAA::run_audit(auditor).await
     }

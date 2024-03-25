@@ -4,6 +4,7 @@ use accessibility_rs::AuditConfig;
 use maud::html;
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// anchor contains single img element without alt
 fn _audit_missing_fieldset_legend() {
     let m = html! {

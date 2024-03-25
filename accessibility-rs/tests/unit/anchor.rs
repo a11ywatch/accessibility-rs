@@ -4,6 +4,7 @@ use accessibility_rs::AuditConfig;
 use maud::html;
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// anchor contains single img element without alt
 fn _audit_missing_alt_anchor_img() {
     let audit = accessibility_rs::audit(AuditConfig::basic(
@@ -26,6 +27,7 @@ fn _audit_missing_alt_anchor_img() {
 }
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// anchor contains valid href with no content
 fn _audit_missing_anchor_content_valid_href() {
     let markup = html! {
@@ -40,6 +42,7 @@ fn _audit_missing_anchor_content_valid_href() {
 }
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// anchor is empty void
 fn _audit_missing_anchor_content() {
     let markup = html! {
@@ -54,6 +57,7 @@ fn _audit_missing_anchor_content() {
 }
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// anchor text matches img alt
 fn _audit_img_alt_matches_text_anchor() {
     let audit = accessibility_rs::audit(AuditConfig::basic(

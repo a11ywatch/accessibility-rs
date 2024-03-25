@@ -3,6 +3,7 @@
 use accessibility_rs::AuditConfig;
 
 #[test]
+#[cfg(not(feature = "tokio"))]
 /// empty headings
 fn _audit_headings_empty() {
     let audit = accessibility_rs::audit(AuditConfig::basic(
