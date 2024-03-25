@@ -57,6 +57,23 @@ pub enum Conformance {
 
 /// configs for the audit
 #[derive(Default)]
+#[cfg(feature = "tokio")]
+pub struct AuditConfig {
+    /// the html source code
+    pub html: String,
+    /// the css rules to apply
+    pub css: String,
+    /// extract bounding box of elements
+    pub bounding_box: bool,
+    /// the locale of the audit translations
+    pub locale: String,
+    /// the guideline spec
+    pub conformance: Conformance,
+}
+
+/// configs for the audit
+#[derive(Default)]
+#[cfg(not(feature = "tokio"))]
 pub struct AuditConfig<'a> {
     /// the html source code
     pub html: &'a str,
@@ -70,14 +87,15 @@ pub struct AuditConfig<'a> {
     pub conformance: Conformance,
 }
 
+#[cfg(not(feature = "tokio"))]
 impl<'a> AuditConfig<'a> {
     /// a new audit configuration
     pub fn new(html: &'a str, css: &'a str, bounding_box: bool, locale: &'a str) -> Self {
         AuditConfig {
-            html,
-            css,
+            html: html.into(),
+            css: css.into(),
             bounding_box,
-            locale,
+            locale: locale.into(),
             ..Default::default()
         }
     }
@@ -85,15 +103,46 @@ impl<'a> AuditConfig<'a> {
     /// basic audit
     pub fn basic(html: &'a str) -> Self {
         AuditConfig {
-            html,
+            html: html.into(),
+            ..Default::default()
+        }
+    }
+}
+
+#[cfg(feature = "tokio")]
+impl AuditConfig {
+    /// a new audit configuration
+    pub fn new(html: &str, css: &str, bounding_box: bool, locale: &str) -> Self {
+        AuditConfig {
+            html: html.into(),
+            css: css.into(),
+            bounding_box,
+            locale: locale.into(),
+            ..Default::default()
+        }
+    }
+
+    /// basic audit
+    pub fn basic(html: &str) -> Self {
+        AuditConfig {
+            html: html.into(),
             ..Default::default()
         }
     }
 }
 
 /// audit a web page passing the html and css rules.
+#[cfg(feature = "tokio")]
+pub async fn audit(config: AuditConfig) -> Vec<Issue> {
+    let document = accessibility_scraper::Html::parse_document(&config.html).await;
+    let auditor = Auditor::new(&document, &config.css, config.bounding_box, &config.locale);
+    engine::audit::wcag::WCAGAAA::audit(auditor).await
+}
+
+/// audit a web page passing the html and css rules.
+#[cfg(not(feature = "tokio"))]
 pub fn audit(config: AuditConfig) -> Vec<Issue> {
-    let document = accessibility_scraper::Html::parse_document(config.html);
-    let auditor = Auditor::new(&document, &config.css, config.bounding_box, config.locale);
+    let document = accessibility_scraper::Html::parse_document(&config.html);
+    let auditor = Auditor::new(&document, &config.css, config.bounding_box, &config.locale);
     engine::audit::wcag::WCAGAAA::audit(auditor)
 }

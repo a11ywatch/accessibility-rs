@@ -64,6 +64,40 @@ impl Html {
     /// # extern crate tendril;
     /// # fn main() {
     /// # let document = "";
+    ///    use tokio_stream::{self as stream, StreamExt};
+    ///    let mut doc = Self::new_document();
+    ///    doc.quirks_mode = QuirksMode::Quirks;
+    ///    let mut parser = driver::parse_document(doc, Default::default());
+    ///    let mut stream = stream::iter(document.lines());
+    ///    while let Some(item) = stream.next().await {
+    ///        parser.process(item.into())
+    ///    }
+    ///    parser.finish()
+    /// # }
+    /// ```
+    #[cfg(feature = "tokio")]
+    pub async fn parse_document(document: &str) -> Self {
+        use tokio_stream::{self as stream, StreamExt};
+        let mut parser = driver::parse_document(Self::new_document(), Default::default());
+        let stream = stream::iter(document.lines());
+        tokio::pin!(stream);
+
+        while let Some(item) = stream.next().await {
+            parser.process(item.into())
+        }
+        parser.finish()
+    }
+
+    /// Parses a string of HTML as a document.
+    ///
+    /// This is a convenience method for the following:
+    ///
+    /// ```
+    /// # extern crate html5ever;
+    /// # extern crate accessibility_scraper;
+    /// # extern crate tendril;
+    /// # fn main() {
+    /// # let document = "";
     /// use html5ever::driver::{self, ParseOpts};
     /// use accessibility_scraper::Html;
     /// use tendril::TendrilSink;
@@ -72,6 +106,7 @@ impl Html {
     /// let html = parser.one(document);
     /// # }
     /// ```
+    #[cfg(not(feature = "tokio"))]
     pub fn parse_document(document: &str) -> Self {
         let parser = driver::parse_document(Self::new_document(), Default::default());
         parser.one(document)
@@ -170,6 +205,7 @@ mod tests {
     use super::Selector;
 
     #[test]
+    #[cfg(not(feature = "tokio"))]
     fn root_element_fragment() {
         let html = Html::parse_fragment(r#"<a href="http://github.com">1</a>"#);
         let root_ref = html.root_element();
@@ -181,7 +217,21 @@ mod tests {
         assert_eq!(href.value().attr("href").unwrap(), "http://github.com");
     }
 
+    #[tokio::test]
+    #[cfg(feature = "tokio")]
+    async fn root_element_fragment() {
+        let html = Html::parse_fragment(r#"<a href="http://github.com">1</a>"#);
+        let root_ref = html.root_element();
+        let href = root_ref
+            .select(&Selector::parse("a").unwrap())
+            .next()
+            .unwrap();
+        assert_eq!(href.inner_html(), "1");
+        assert_eq!(href.value().attr("href").unwrap(), "http://github.com");
+    }
+
     #[test]
+    #[cfg(not(feature = "tokio"))]
     fn root_element_document_doctype() {
         let html = Html::parse_document("<!DOCTYPE html>\n<title>abc</title>");
         let root_ref = html.root_element();
@@ -193,6 +243,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(feature = "tokio"))]
     fn root_element_document_comment() {
         let html = Html::parse_document("<!-- comment --><title>abc</title>");
         let root_ref = html.root_element();
@@ -204,6 +255,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(feature = "tokio"))]
     fn select_is_reversible() {
         let html = Html::parse_document("<p>element1</p><p>element2</p><p>element3</p>");
         let selector = Selector::parse("p").unwrap();
@@ -216,6 +268,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(feature = "tokio"))]
     fn select_has_a_size_hint() {
         let html = Html::parse_document("<p>element1</p><p>element2</p><p>element3</p>");
         let selector = Selector::parse("p").unwrap();
@@ -225,6 +278,7 @@ mod tests {
     }
 
     #[cfg(feature = "atomic")]
+    #[cfg(not(feature = "tokio"))]
     #[test]
     fn html_is_send() {
         fn send_sync<S: Send>() {}

@@ -116,7 +116,8 @@ fn _iframe_missing_title() {
             </body>
           </noframes>
         </frameset>
-      </html>"###,
+      </html>"###
+            .into(),
         ..Default::default()
     });
     let mut valid = true;

@@ -7,8 +7,13 @@ edition = "2021"
 [dependencies]
 criterion = { version = "0.5.1", features = ["html_reports", "async_tokio"] }
 accessibility-rs = { path = "../accessibility-rs" }
+tokio = { version = "1.36.0", features = ["full"], optional = true }
 
 [[bench]]
 name = "audit"
 path = "audit.rs"
 harness = false
+
+[features]
+tokio = ["dep:tokio"]
+rayon = ["accessibility-rs/rayon"]
