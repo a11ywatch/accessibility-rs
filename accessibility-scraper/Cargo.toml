@@ -1,26 +1,22 @@
 [package]
 name = "accessibility-scraper"
-version = "0.0.7"
+version = "0.0.8"
 edition = "2021"
-
 description = "HTML parsing and querying with CSS selectors with CSS binding styles to elements."
 keywords = ["html", "css", "selector", "scraping"]
-
 authors = [
     "June McEnroe <june@causal.agency>",
     "Jeff Mendez <jeff@a11ywatch.com>",
 ]
 license = "ISC"
-
 repository = "https://github.com/a11ywatch/accessibility-rs"
 readme = "README.md"
-
 [dependencies]
 cssparser = { workspace = true }
 ego-tree = { workspace = true }
 html5ever = { workspace = true }
 selectors = { workspace = true }
-smallvec = "1"
+smallvec = { workspace = true }
 tendril = "0.4.3"
 ahash = "0.8"
 indexmap = { version = "2.0.0", optional = true }
@@ -31,7 +27,7 @@ version = "0.2.21"
 optional = true
 
 [features]
-default = ["main", "errors"]
+default = ["main"]
 deterministic = ["indexmap"]
 main = ["getopts"]
 atomic = []
