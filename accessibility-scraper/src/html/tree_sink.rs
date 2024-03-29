@@ -1,11 +1,11 @@
 use super::Html;
-use crate::node::{Comment, Doctype, Element, Node, ProcessingInstruction, Text};
+use crate::node::{Doctype, Element, Node, ProcessingInstruction, Text};
 use crate::tendril_util::make as make_tendril;
 use ego_tree::NodeId;
-use html5ever::tendril::StrTendril;
-use html5ever::tree_builder::{ElementFlags, NodeOrText, QuirksMode, TreeSink};
-use html5ever::Attribute;
-use html5ever::{ExpandedName, QualName};
+use fast_html5ever::tendril::StrTendril;
+use fast_html5ever::tree_builder::{ElementFlags, NodeOrText, QuirksMode, TreeSink};
+use fast_html5ever::Attribute;
+use fast_html5ever::{ExpandedName, QualName};
 use std::borrow::Cow;
 
 /// Note: does not support the `<template>` element.
@@ -75,12 +75,12 @@ impl TreeSink for Html {
     }
 
     // Create a comment node.
-    fn create_comment(&mut self, text: StrTendril) -> Self::Handle {
-        self.tree
-            .orphan(Node::Comment(Comment {
-                comment: make_tendril(text),
-            }))
-            .id()
+    fn create_comment(&mut self, _text: StrTendril) {
+        // self.tree
+        //     .orphan(Node::Comment(Comment {
+        //         comment: make_tendril(text),
+        //     }))
+        //     .id()
     }
 
     // Append a DOCTYPE element to the Document node.

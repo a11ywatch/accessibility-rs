@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use crate::fonts::{Em, FontDesignUnit};
 use std::fmt::{self, Write};
 

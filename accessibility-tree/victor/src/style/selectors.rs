@@ -2,7 +2,7 @@ use crate::dom::{Document, Node, NodeId};
 use crate::style::errors::RuleParseErrorKind;
 use accessibility_scraper::selector::CssLocalName;
 use accessibility_scraper::selector::Simple;
-use html5ever::{LocalName, Namespace};
+use fast_html5ever::{LocalName, Namespace};
 use selectors::attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint};
 use selectors::context::{MatchingContext, MatchingMode, QuirksMode};
 use selectors::matching::{matches_selector, ElementSelectorFlags};
