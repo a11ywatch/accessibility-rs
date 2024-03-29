@@ -89,3 +89,11 @@ async fn _audit_xlarge() {
     .await;
     println!("{:?}", report)
 }
+
+#[cfg(all(feature = "spider", not(feature = "rayon")))]
+#[tokio::test]
+async fn _audit_website() {
+    let audit_config = AuditConfig::new_website("https://choosealicense.com", "", false, "");
+    let report = accessibility_rs::audit(audit_config).await;
+    println!("{:?}", report)
+}

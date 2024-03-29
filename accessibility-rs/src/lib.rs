@@ -30,10 +30,19 @@
 //!     println!("{:?}", audit);
 //! }
 //!
-//! #[cfg(feature = "tokio")]
+//! #[cfg(all(feature = "tokio", not(feature = "spider")))]
 //! #[tokio::main]
 //! async fn main() {
 //!     let config = AuditConfig::basic(r###"<html><body><h1>My Title</h1><input type="text" placeholder="Type me"></input><img src="tabby_cat.png"></img></body></html>"###);
+//!     let audit = audit(config).await;
+//!     println!("{:?}", audit);
+//! }
+//!
+//! #[cfg(feature = "spider")]
+//! #[tokio::main]
+//! async fn main() {
+//!     let mut config = AuditConfig::default();
+//!     config.url = "https://example.com".into();
 //!     let audit = audit(config).await;
 //!     println!("{:?}", audit);
 //! }
@@ -44,6 +53,9 @@
 extern crate lazy_static;
 #[macro_use]
 extern crate rust_i18n;
+
+#[cfg(feature = "spider")]
+pub use spider;
 
 /// the main engine for accessibility auditing.
 pub mod engine;
@@ -78,6 +90,9 @@ pub struct AuditConfig {
     pub locale: String,
     /// the guideline spec
     pub conformance: Conformance,
+    /// crawl and perform audits on the entire website
+    #[cfg(feature = "spider")]
+    pub url: String,
 }
 
 /// configs for the audit
@@ -94,6 +109,9 @@ pub struct AuditConfig<'a> {
     pub locale: &'a str,
     /// the guideline spec
     pub conformance: Conformance,
+    /// crawl and perform audits on the entire website
+    #[cfg(feature = "spider")]
+    pub url: &'a str,
 }
 
 #[cfg(not(feature = "tokio"))]
@@ -115,6 +133,29 @@ impl<'a> AuditConfig<'a> {
             html: html.into(),
             ..Default::default()
         }
+    }
+
+    /// a new audit configuration crawling a website. This does nothing without the 'spider' flag enabled.
+    #[cfg(feature = "spider")]
+    pub fn new_website(url: &'a str, css: &'a str, bounding_box: bool, locale: &'a str) -> Self {
+        AuditConfig {
+            url: url.into(),
+            css: css.into(),
+            bounding_box,
+            locale: locale.into(),
+            ..Default::default()
+        }
+    }
+
+    /// a new audit configuration crawling a website. This does nothing without the 'spider' flag enabled.
+    #[cfg(not(feature = "spider"))]
+    pub fn new_website(
+        _url: &'a str,
+        _css: &'a str,
+        _bounding_box: bool,
+        _locale: &'a str,
+    ) -> Self {
+        AuditConfig::default()
     }
 }
 
@@ -138,14 +179,76 @@ impl AuditConfig {
             ..Default::default()
         }
     }
+
+    /// a new audit configuration crawling a website. This does nothing without the 'spider' flag enabled.
+    #[cfg(feature = "spider")]
+    pub fn new_website(url: &str, css: &str, bounding_box: bool, locale: &str) -> Self {
+        AuditConfig {
+            url: url.into(),
+            css: css.into(),
+            bounding_box,
+            locale: locale.into(),
+            ..Default::default()
+        }
+    }
+    /// a new audit configuration crawling a website. This does nothing without the 'spider' flag enabled.
+    #[cfg(not(feature = "spider"))]
+    pub fn new_website(_url: &str, _css: &str, _bounding_box: bool, _locale: &str) -> Self {
+        AuditConfig::default()
+    }
 }
 
 /// audit a web page passing the html and css rules.
-#[cfg(feature = "tokio")]
+#[cfg(all(feature = "tokio", not(feature = "spider")))]
 pub async fn audit(config: AuditConfig) -> Vec<Issue> {
     let document = accessibility_scraper::Html::parse_document(&config.html).await;
     let auditor = Auditor::new(&document, &config.css, config.bounding_box, &config.locale);
     engine::audit::wcag::WCAGAAA::audit(auditor).await
+}
+
+#[cfg(feature = "spider")]
+#[derive(Debug, Clone)]
+/// The accessibility audit results either a single page or entire website.
+pub enum AuditResults {
+    /// Crawl results from multiple websites
+    Page(spider::hashbrown::HashMap<String, Vec<Issue>>),
+    /// Raw html markup results
+    Html(Vec<Issue>),
+}
+
+/// audit a web page passing the html and css rules.
+#[cfg(all(feature = "spider"))]
+pub async fn audit(config: AuditConfig) -> AuditResults {
+    if !config.url.is_empty() {
+        use spider::website::Website;
+        let mut website: Website = Website::new(&config.url);
+        let mut rx2: tokio::sync::broadcast::Receiver<spider::page::Page> =
+            website.subscribe(16).unwrap();
+        let bounding_box = config.bounding_box;
+        let locale = config.locale;
+
+        let audits = tokio::spawn(async move {
+            let mut issues: spider::hashbrown::HashMap<String, Vec<Issue>> =
+                spider::hashbrown::HashMap::new();
+
+            while let Ok(res) = rx2.recv().await {
+                let document = accessibility_scraper::Html::parse_document(&res.get_html()).await;
+                let auditor = Auditor::new(&document, &"", bounding_box, &locale);
+                let issue = engine::audit::wcag::WCAGAAA::audit(auditor).await;
+                issues.insert(res.get_url().into(), issue);
+            }
+
+            issues
+        });
+
+        website.crawl().await;
+        website.unsubscribe();
+        AuditResults::Page(audits.await.unwrap_or_default())
+    } else {
+        let document = accessibility_scraper::Html::parse_document(&config.html).await;
+        let auditor = Auditor::new(&document, &config.css, config.bounding_box, &config.locale);
+        AuditResults::Html(engine::audit::wcag::WCAGAAA::audit(auditor).await)
+    }
 }
 
 /// audit a web page passing the html and css rules.

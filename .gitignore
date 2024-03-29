@@ -2,3 +2,4 @@
 target
 accessibility-rs.**
 accessibility-rs.node
+accessibility-rs/storage

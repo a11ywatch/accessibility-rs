@@ -5,7 +5,7 @@ use std::fmt;
 
 use smallvec::SmallVec;
 
-use html5ever::{LocalName, Namespace};
+use fast_html5ever::{LocalName, Namespace};
 use selectors::{
     matching,
     parser::{self, SelectorParseErrorKind},

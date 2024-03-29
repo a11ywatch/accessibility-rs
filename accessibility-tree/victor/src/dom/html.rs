@@ -1,7 +1,7 @@
 use super::*;
-use html5ever::interface::tree_builder::{ElementFlags, NodeOrText, QuirksMode, TreeSink};
-use html5ever::tendril::{StrTendril, TendrilSink};
-use html5ever::{self, parse_document, ExpandedName};
+use fast_html5ever::interface::tree_builder::{ElementFlags, NodeOrText, QuirksMode, TreeSink};
+use fast_html5ever::tendril::{StrTendril, TendrilSink};
+use fast_html5ever::{self, parse_document, ExpandedName};
 use std::borrow::Cow;
 use std::collections::HashSet;
 
@@ -103,7 +103,7 @@ impl TreeSink for Sink {
     fn create_element(
         &mut self,
         name: QualName,
-        attrs: Vec<html5ever::Attribute>,
+        attrs: Vec<fast_html5ever::Attribute>,
         ElementFlags {
             mathml_annotation_xml_integration_point,
             ..
@@ -123,10 +123,10 @@ impl TreeSink for Sink {
         element
     }
 
-    fn create_comment(&mut self, text: StrTendril) -> NodeId {
-        self.new_node(NodeData::Comment {
-            _contents: text.into(),
-        })
+    fn create_comment(&mut self, _text: StrTendril) {
+        // self.new_node(NodeData::Comment {
+        //     _contents: text.into(),
+        // })
     }
 
     fn create_pi(&mut self, target: StrTendril, data: StrTendril) -> NodeId {
@@ -179,7 +179,7 @@ impl TreeSink for Sink {
         self.document.append(Document::document_node_id(), node)
     }
 
-    fn add_attrs_if_missing(&mut self, &target: &NodeId, attrs: Vec<html5ever::Attribute>) {
+    fn add_attrs_if_missing(&mut self, &target: &NodeId, attrs: Vec<fast_html5ever::Attribute>) {
         let element = if let NodeData::Element(element) = &mut self.document[target].data {
             element
         } else {
@@ -212,8 +212,8 @@ impl TreeSink for Sink {
     }
 }
 
-impl From<html5ever::Attribute> for Attribute {
-    fn from(attr: html5ever::Attribute) -> Self {
+impl From<fast_html5ever::Attribute> for Attribute {
+    fn from(attr: fast_html5ever::Attribute) -> Self {
         Self {
             name: attr.name,
             value: attr.value.into(),

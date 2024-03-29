@@ -9,7 +9,7 @@ use std::ops::Deref;
 use std::slice::Iter as SliceIter;
 
 use crate::{selector::CssLocalName, selectors::attr::CaseSensitivity, StrTendril};
-use html5ever::{Attribute, LocalName, QualName};
+use fast_html5ever::{Attribute, LocalName, QualName};
 use once_cell::unsync::OnceCell;
 
 /// An HTML node.

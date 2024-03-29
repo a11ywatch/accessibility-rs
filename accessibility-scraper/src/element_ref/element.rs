@@ -1,6 +1,6 @@
 use super::ElementRef;
 use crate::selector::{CssLocalName, CssString, NonTSPseudoClass, PseudoElement, Simple};
-use html5ever::{LocalName, Namespace};
+use fast_html5ever::{LocalName, Namespace};
 use selectors::{
     attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint},
     matching, Element, OpaqueElement,

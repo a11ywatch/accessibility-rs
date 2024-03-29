@@ -56,6 +56,27 @@ async fn main() {
 }
 ```
 
+With the Spider full website crawling.
+
+```toml
+[dependencies]
+accessibility-rs = { version = "^0.0.61", features = ["spider"]}
+```
+
+```rs
+use accessibility_rs::{audit, AuditConfig};
+use tokio;
+
+#[tokio::main]
+async fn main() {
+  let css = "";
+  // pass in raw html, optional css, bounding box clips, and locale for audit
+  let audit = accessibility_rs::audit(&AuditConfig::new_website(&"https://choosealicense.com".into())).await;
+  println!("{:?}", audit);
+}
+```
+
+
 ### Documentation
 
 [Module documentation with examples](https://docs.rs/accessibility-rs).
@@ -68,6 +89,7 @@ async fn main() {
 1. Shortest path CSS selectors for elements.
 1. i18n support for multiple languages.
 1. Re-creating layout tree to get element position coordinates.
+1. Crawling full websites lightning-fast using [spider](https://github.com/spider-rs/spider).
 
 ## [Benchmarks](./benches/)
 
@@ -78,6 +100,8 @@ audit-speed/core/audit: medium html (4k iterations)
 time: [824.07 µs 830.30 µs 839.37 µs]
 audit-speed/core/audit: large html (4k iterations)
 time: [1.1206 ms 1.1260 ms 1.1321 ms]
+audit-speed/core/audit: spider audit html (4k iterations)
+time: [263.33 ms 266.55 ms 269.93 ms]
 ```
 
 ## Examples
@@ -90,6 +114,7 @@ time: [1.1206 ms 1.1260 ms 1.1321 ms]
 1. [tokio](https://docs.rs/tokio/latest/tokio/): Enable tokio async runtime handling. Recommended for high freq server usage.
 1. [rayon](https://docs.rs/rayon/latest/rayon/): Parallelism with rayon. (Expensive test future handling)
 1. [rayon_wasm](https://lib.rs/crates/rayon-wasm): Enable the wasm runtime for rayon.
+1. [spider](https://docs.rs/spider-rs/latest/spider/): Crawl entire websites using spider. Full website audits of 100-1,000 pages within milliseconds.
 
 ### Contributing
 

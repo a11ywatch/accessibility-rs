@@ -13,7 +13,7 @@ pub mod style;
 #[macro_use]
 extern crate cssparser;
 #[macro_use]
-extern crate html5ever;
+extern crate fast_html5ever;
 #[macro_use]
 extern crate victor_tree_internal_proc_macros;
 

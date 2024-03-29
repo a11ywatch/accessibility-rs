@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// clip bounding box
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Clip {
     /// the x coords
     pub x: u32,
@@ -14,7 +14,7 @@ pub struct Clip {
 }
 
 /// Extra help information for the issue
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RunnerExtras {
     /// the url to get more information on the issue
     pub help_url: &'static str,
@@ -25,7 +25,7 @@ pub struct RunnerExtras {
 }
 
 /// Details of the problem
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Issue {
     /// the context of the issue or raw html
     pub context: String,

@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-rs"
-version = "0.0.59"
+version = "0.0.62"
 authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -12,8 +12,8 @@ include = ["/src", "../LICENSE_MIT", "../LICENSE_APACHE", "../README.md", "local
 
 [dependencies]
 lazy_static = { workspace = true }
-accessibility-scraper = { version = "0.0.11", features = ["main"], default-features = false, path = "../accessibility-scraper" }
-accessibility-tree = { version = "0.0.11", path = "../accessibility-tree/victor" }
+accessibility-scraper = { version = "0.0.12", features = ["main"], default-features = false, path = "../accessibility-scraper" }
+accessibility-tree = { version = "0.0.12", path = "../accessibility-tree/victor" }
 getrandom = { version = "0.2", features = ["js"] }
 taffy = { version = "0.4.0" }
 serde = { version = "1.0", features = ["derive"] }
@@ -31,12 +31,32 @@ rayon = { version = "1.10.0", optional = true }
 crossbeam-channel = { version = "0.5.12", optional = true }
 tokio = { version = "1.36.0", features = ["macros"], optional = true }
 tokio-stream = { version = "0.1.15", optional = true }
+spider = { version = "1.89.4", optional = true }
 
 [features]
 default = []
 rayon = ["dep:rayon", "dep:crossbeam-channel"]
 rayon_wasm = ["rayon/web_spin_lock"]
 tokio = ["dep:tokio", "dep:tokio-stream", "accessibility-scraper/tokio", "accessibility-tree/tokio"]
+spider = ["tokio", "dep:spider", "accessibility-scraper/spider"]
+spider_ua_generator = ["tokio", "spider/ua_generator"]
+spider_chrome = ["spider", "spider/chrome"]
+spider_chrome_cpu = ["spider", "spider/chrome_cpu"]
+spider_screenshot = ["spider", "spider/chrome_screenshot"]
+spider_smart = ["spider", "spider/smart"]
+spider_headed = ["spider", "spider/chrome_headed"]
+spider_store_page = ["spider", "spider/chrome_store_page"]
+spider_stealth = ["spider", "spider/chrome_stealth"]
+spider_intercept = ["spider", "spider/chrome_intercept"]
+spider_headless_new = ["spider", "spider/chrome_headless_new"]
+spider_real_browser = ["spider", "spider/real_browser"]
+spider_openai = ["spider", "spider/openai"]
+spider_openai_slim_fit = ["spider", "spider/openai_slim_fit"]
+spider_budget = ["spider", "spider/budget"]
+spider_cache = ["spider", "spider/cache"]
+spider_cache_mem = ["spider", "spider/cache_mem"]
+spider_sitemap = ["tokio", "spider/sitemap"]
+spider_control = ["tokio", "spider/control"]
 
 [dev-dependencies]
 maud = "0.25.0"
