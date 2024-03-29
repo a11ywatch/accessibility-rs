@@ -4,7 +4,7 @@ use std::ops::Deref;
 
 use ego_tree::iter::{Edge, Traverse};
 use ego_tree::NodeRef;
-use html5ever::serialize::{serialize, SerializeOpts, TraversalScope};
+use fast_html5ever::serialize::{serialize, SerializeOpts, TraversalScope};
 
 use crate::node::Element;
 use crate::{Node, Selector};

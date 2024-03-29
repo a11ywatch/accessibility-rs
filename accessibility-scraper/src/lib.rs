@@ -136,7 +136,7 @@
 )]
 
 #[macro_use]
-pub extern crate html5ever;
+pub extern crate fast_html5ever;
 
 pub use cssparser;
 pub use ego_tree;
@@ -156,7 +156,7 @@ pub mod selector;
 
 #[cfg(feature = "atomic")]
 pub(crate) mod tendril_util {
-    use html5ever::tendril;
+    use fast_html5ever::tendril;
     /// Atomic equivalent to the default `StrTendril` type.
     pub type StrTendril = tendril::Tendril<tendril::fmt::UTF8, tendril::Atomic>;
 
@@ -168,7 +168,7 @@ pub(crate) mod tendril_util {
 
 #[cfg(not(feature = "atomic"))]
 pub(crate) mod tendril_util {
-    use html5ever::tendril;
+    use fast_html5ever::tendril;
     /// Primary string tendril type.
     pub type StrTendril = tendril::StrTendril;
 

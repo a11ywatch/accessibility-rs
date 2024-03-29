@@ -5,10 +5,10 @@ use std::borrow::Cow;
 
 use ego_tree::iter::Nodes;
 use ego_tree::Tree;
-use html5ever::serialize::SerializeOpts;
-use html5ever::tree_builder::QuirksMode;
-use html5ever::QualName;
-use html5ever::{driver, serialize};
+use fast_html5ever::serialize::SerializeOpts;
+use fast_html5ever::tree_builder::QuirksMode;
+use fast_html5ever::QualName;
+use fast_html5ever::{driver, serialize};
 use tendril::TendrilSink;
 
 use crate::selector::Selector;
@@ -76,7 +76,7 @@ impl Html {
     ///    parser.finish();
     /// # }
     /// ```
-    #[cfg(feature = "tokio")]
+    #[cfg(all(feature = "tokio", not(feature = "spider")))]
     pub async fn parse_document(document: &str) -> Self {
         use tokio_stream::{self as stream, StreamExt};
         let mut parser = driver::parse_document(Self::new_document(), Default::default());
@@ -97,9 +97,37 @@ impl Html {
     /// # extern crate html5ever;
     /// # extern crate accessibility_scraper;
     /// # extern crate tendril;
+    ///   use accessibility_scraper::html::Html;
+    ///   use crate::tendril::TendrilSink;
+    ///   #[tokio::main]
+    /// # async fn main() {
+    /// # let document = "";
+    ///    use tokio_stream::{self as stream, StreamExt};
+    ///    let mut parser = html5ever::driver::parse_document(Html::new_document(), Default::default());
+    ///    let mut stream = stream::iter(document.lines());
+    ///    while let Some(item) = stream.next().await {
+    ///        parser.process(item.into())
+    ///    }
+    ///    parser.finish();
+    /// # }
+    /// ```
+    #[cfg(feature = "spider")]
+    pub async fn parse_document(document: &str) -> Self {
+        let parser = driver::parse_document(Self::new_document(), Default::default());
+        parser.one(document)
+    }
+
+    /// Parses a string of HTML as a document.
+    ///
+    /// This is a convenience method for the following:
+    ///
+    /// ```
+    /// # extern crate html5ever;
+    /// # extern crate accessibility_scraper;
+    /// # extern crate tendril;
     /// # fn main() {
     /// # let document = "";
-    /// use html5ever::driver::{self, ParseOpts};
+    /// use fast_html5ever::driver::{self, ParseOpts};
     /// use accessibility_scraper::Html;
     /// use tendril::TendrilSink;
     ///
@@ -147,7 +175,7 @@ impl Html {
     pub fn html(&self) -> String {
         let opts = SerializeOpts {
             scripting_enabled: false, // It's not clear what this does.
-            traversal_scope: html5ever::serialize::TraversalScope::IncludeNode,
+            traversal_scope: fast_html5ever::serialize::TraversalScope::IncludeNode,
             create_missing_parent: false,
         };
         let mut buf = Vec::new();

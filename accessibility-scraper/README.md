@@ -132,7 +132,7 @@ assert_eq!(vec!["Hello, ", "world!"], text);
 ### Manipulating the DOM
 
 ```rust
-use html5ever::tree_builder::TreeSink;
+use fast_html5ever::tree_builder::TreeSink;
 use accessibility-scraper::{Html, Selector};
 
 let html = "<html><body>hello<p class=\"hello\">REMOVE ME</p></body></html>";

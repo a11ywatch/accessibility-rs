@@ -89,3 +89,12 @@ async fn _audit_xlarge() {
     .await;
     println!("{:?}", report)
 }
+
+#[cfg(feature = "spider")]
+#[spider::tokio::test]
+async fn _audit_website() {
+    let mut audit_config = AuditConfig::default();
+    audit_config.url = "https://choosealicense.com";
+    let report = accessibility_rs::audit(audit_config).await;
+    println!("{:?}", report)
+}

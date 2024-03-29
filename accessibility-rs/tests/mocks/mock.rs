@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 /// mock website data from drake.com
 pub static MOCK_WEBSITE_HTML: &'static str = r###"
 <html class="no-js" lang="en"><!--<![endif]--><head><style>.hs-cta-wrapper p, .hs-cta-wrapper div { margin: 0; padding: 0; } a#cta_button_5479613_e9c3ff65-5303-42df-b466-cd64a84bfc67 {

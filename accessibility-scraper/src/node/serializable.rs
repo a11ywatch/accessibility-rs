@@ -1,7 +1,7 @@
 use std::io::Error;
 
 use ego_tree::{iter::Edge, NodeRef};
-use html5ever::serialize::{Serializer, TraversalScope};
+use fast_html5ever::serialize::{Serializer, TraversalScope};
 
 use crate::Node;
 

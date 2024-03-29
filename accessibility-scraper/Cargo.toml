@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-scraper"
-version = "0.0.11"
+version = "0.0.12"
 edition = "2021"
 description = "HTML parsing and querying with CSS selectors with CSS binding styles to elements."
 keywords = ["html", "css", "selector", "scraping"]
@@ -14,7 +14,7 @@ readme = "README.md"
 [dependencies]
 cssparser = { workspace = true }
 ego-tree = { workspace = true }
-html5ever = { workspace = true }
+fast_html5ever = { workspace = true }
 selectors = { workspace = true }
 smallvec = { workspace = true }
 tendril = "0.4.3"
@@ -35,3 +35,4 @@ main = ["getopts"]
 atomic = []
 errors = []
 tokio = ["dep:tokio", "dep:tokio-stream"]
+spider = []
