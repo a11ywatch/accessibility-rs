@@ -14,12 +14,12 @@ use accessibility_rs::{audit, AuditConfig};
 
 fn main() {
   let html = r###"<html lang="en">
-      <body>     
+      <body>
           <a href="routes.html">
               <img src="topo.gif">
               Golf
-          </a> 
-      </body> 
+          </a>
+      </body>
   </html>"###;
   let css = "";
   // pass in raw html, optional css, bounding box clips, and locale for audit
@@ -41,13 +41,13 @@ use tokio;
 
 #[tokio::main]
 async fn main() {
-  let html = r###"<html lang="en"> 
-      <body>     
+  let html = r###"<html lang="en">
+      <body>
           <a href="routes.html">
               <img src="topo.gif">
               Golf
-          </a> 
-      </body> 
+          </a>
+      </body>
   </html>"###;
   let css = "";
   // pass in raw html, optional css, bounding box clips, and locale for audit
@@ -69,13 +69,10 @@ use tokio;
 
 #[tokio::main]
 async fn main() {
-  let css = "";
-  // pass in raw html, optional css, bounding box clips, and locale for audit
   let audit = accessibility_rs::audit(&AuditConfig::new_website(&"https://choosealicense.com".into())).await;
   println!("{:?}", audit);
 }
 ```
-
 
 ### Documentation
 
