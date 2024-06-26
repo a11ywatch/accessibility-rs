@@ -6,7 +6,7 @@ The Rust web accessibility engine.
 
 ```toml
 [dependencies]
-accessibility-rs = "^0.0.59"
+accessibility-rs = "^0.0.64"
 ```
 
 ```rs
@@ -32,7 +32,7 @@ With the Tokio runtime.
 
 ```toml
 [dependencies]
-accessibility-rs = { version = "^0.0.59", features = ["tokio"]}
+accessibility-rs = { version = "^0.0.64", features = ["tokio"]}
 ```
 
 ```rs
@@ -60,7 +60,7 @@ With the Spider full website crawling.
 
 ```toml
 [dependencies]
-accessibility-rs = { version = "^0.0.61", features = ["spider"]}
+accessibility-rs = { version = "^0.0.64", features = ["spider"]}
 ```
 
 ```rs

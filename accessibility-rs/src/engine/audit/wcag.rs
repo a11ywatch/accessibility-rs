@@ -115,7 +115,11 @@ impl WCAGAAA {
     }
 
     /// Audit html against WCAGAAA standards
-    #[cfg(all(not(feature = "rayon"), not(feature = "spider"), not(feature = "tokio")))]
+    #[cfg(all(
+        not(feature = "rayon"),
+        not(feature = "spider"),
+        not(feature = "tokio")
+    ))]
     pub fn audit(auditor: (Auditor<'_>, Option<taffy::TaffyTree>)) -> Vec<Issue> {
         WCAGAAA::run_audit(auditor)
     }
