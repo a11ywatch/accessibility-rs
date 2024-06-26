@@ -6,7 +6,7 @@ The Rust web accessibility engine.
 
 ```toml
 [dependencies]
-accessibility-rs = "^0.0.64"
+accessibility-rs = "^0.1"
 ```
 
 ```rs
@@ -32,7 +32,7 @@ With the Tokio runtime.
 
 ```toml
 [dependencies]
-accessibility-rs = { version = "^0.0.64", features = ["tokio"]}
+accessibility-rs = { version = "^0.1", features = ["tokio"]}
 ```
 
 ```rs
@@ -60,7 +60,7 @@ With the Spider full website crawling.
 
 ```toml
 [dependencies]
-accessibility-rs = { version = "^0.0.64", features = ["spider"]}
+accessibility-rs = { version = "^0.1", features = ["spider"]}
 ```
 
 ```rs
@@ -72,6 +72,28 @@ async fn main() {
   let audit = accessibility_rs::audit(&AuditConfig::new_website(&"https://choosealicense.com".into())).await;
   println!("{:?}", audit);
 }
+```
+
+If you need to use concurrency use TendrilSink.
+
+```rs
+use accessibility_rs::{fast_html5ever, Auditor, Html};
+use fast_html5ever::driver::{self, ParseOpts};
+use tendril::TendrilSink;
+
+let parser = driver::parse_document(
+    Html::new_document(),
+    ParseOpts::default(),
+);
+let document = parser.one("<html>MY html code </html>");
+
+let auditor = Auditor::new(
+    &document, &"", false, &"en",
+);
+
+let issues =
+    accessibility_rs::engine::audit::wcag::WCAGAAA::audit(auditor)
+        .await;
 ```
 
 ### Documentation
@@ -87,6 +109,7 @@ async fn main() {
 1. i18n support for multiple languages.
 1. Re-creating layout tree to get element position coordinates.
 1. Crawling full websites lightning-fast using [spider](https://github.com/spider-rs/spider).
+1. Low-level built to be used as an engine in browsers.
 
 ## [Benchmarks](./benches/)
 

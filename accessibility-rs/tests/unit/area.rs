@@ -14,7 +14,7 @@ fn _audit_missing_alt_area() {
       <area shape="circle" coords="337,300,44" alt="Cup of coffee" href="coffee.htm">
     </map>"#;
     let audit: Vec<accessibility_rs::engine::issue::Issue> =
-        accessibility_rs::audit(AuditConfig::basic(html));
+        accessibility_rs::audit(&AuditConfig::basic(html));
 
     let valid = audit
         .iter()
@@ -35,7 +35,7 @@ fn _audit_missing_alt_map() {
       <area shape="circle" coords="337,300,44" alt="Cup of coffee" href="coffee.htm">
     </map>"#;
     let audit: Vec<accessibility_rs::engine::issue::Issue> =
-        accessibility_rs::audit(AuditConfig::basic(html));
+        accessibility_rs::audit(&AuditConfig::basic(html));
 
     let valid = audit.iter().any(|x| x.message == "1_1_1_H24.ImageMapNoAlt");
 

@@ -5,7 +5,7 @@ use accessibility_rs::AuditConfig;
 #[cfg(not(feature = "tokio"))]
 /// input is missing a valid name
 fn _audit_input_valid_name() {
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html lang="en">
     <head>     
        <title>Missing Form control name: Do not Use.</title>

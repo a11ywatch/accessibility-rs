@@ -6,7 +6,7 @@ use accessibility_rs::AuditConfig;
 #[cfg(not(feature = "tokio"))]
 /// empty headings
 fn _audit_headings_empty() {
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>     
        <title>Valid headings</title>
@@ -48,7 +48,7 @@ fn _audit_headings_empty() {
 
     assert_eq!(valid, true);
 
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>     
        <title>Do not use missing Headings conent.</title>

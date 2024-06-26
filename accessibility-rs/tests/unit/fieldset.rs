@@ -15,7 +15,7 @@ fn _audit_missing_fieldset_legend() {
         }
     };
 
-    let audit = accessibility_rs::audit(AuditConfig::basic(&m.into_string()));
+    let audit = accessibility_rs::audit(&AuditConfig::basic(&m.into_string()));
 
     let valid = !audit
         .iter()

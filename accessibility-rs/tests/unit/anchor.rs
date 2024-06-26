@@ -7,7 +7,7 @@ use maud::html;
 #[cfg(not(feature = "tokio"))]
 /// anchor contains single img element without alt
 fn _audit_missing_alt_anchor_img() {
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>     
        <title>Decrative Img: Do not use!</title>
@@ -33,7 +33,7 @@ fn _audit_missing_anchor_content_valid_href() {
     let markup = html! {
         a href="www.example.com";
     };
-    let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
+    let audit = accessibility_rs::audit(&AuditConfig::basic(&markup.into_string()));
     let valid = !audit
         .iter()
         .any(|x| x.code == "WCAGAAA.Principle4.Guideline4_1.H91");
@@ -48,7 +48,7 @@ fn _audit_missing_anchor_content() {
     let markup = html! {
         a { "" }
     };
-    let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
+    let audit = accessibility_rs::audit(&AuditConfig::basic(&markup.into_string()));
     let valid = !audit
         .iter()
         .any(|x| x.code == "WCAGAAA.Principle4.Guideline4_1.H91");
@@ -60,7 +60,7 @@ fn _audit_missing_anchor_content() {
 #[cfg(not(feature = "tokio"))]
 /// anchor text matches img alt
 fn _audit_img_alt_matches_text_anchor() {
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>     
        <title>Decrative Img: Do not use!</title>

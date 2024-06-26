@@ -2,8 +2,6 @@ use crate::engine::issue::Issue;
 use crate::engine::rules::rule::RuleValidation;
 use crate::engine::rules::wcag_rule_map::RULES_A;
 use crate::Auditor;
-#[cfg(feature = "rayon")]
-use rayon::prelude::*;
 
 #[derive(Default)]
 /// Baseline for all rules

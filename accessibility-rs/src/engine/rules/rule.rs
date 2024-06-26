@@ -1,6 +1,6 @@
 use crate::engine::rules::techniques::Techniques;
 use crate::engine::rules::wcag_base::{Guideline, IssueType, Principle};
-use crate::ElementRef;
+use accessibility_scraper::ElementRef;
 
 /// the validation response
 #[derive(Default, Debug)]

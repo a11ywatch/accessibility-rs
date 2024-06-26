@@ -26,7 +26,7 @@
 //! #[cfg(not(feature = "tokio"))]
 //! fn main() {
 //!     let config = AuditConfig::basic(r###"<html><body><h1>My Title</h1><input type="text" placeholder="Type me"></input><img src="tabby_cat.png"></img></body></html>"###);
-//!     let audit = audit(config);
+//!     let audit = audit(&config);
 //!     println!("{:?}", audit);
 //! }
 //!
@@ -34,7 +34,7 @@
 //! #[tokio::main]
 //! async fn main() {
 //!     let config = AuditConfig::basic(r###"<html><body><h1>My Title</h1><input type="text" placeholder="Type me"></input><img src="tabby_cat.png"></img></body></html>"###);
-//!     let audit = audit(config).await;
+//!     let audit = audit(&config).await;
 //!     println!("{:?}", audit);
 //! }
 //!
@@ -43,7 +43,7 @@
 //! async fn main() {
 //!     let mut config = AuditConfig::default();
 //!     config.url = "https://example.com".into();
-//!     let audit = audit(config).await;
+//!     let audit = audit(&config).await;
 //!     println!("{:?}", audit);
 //! }
 //! ```
@@ -62,9 +62,13 @@ pub mod engine;
 /// locales for translations.
 pub mod i18n;
 
-use crate::engine::audit::auditor::Auditor;
-use crate::engine::issue::Issue;
-use accessibility_scraper::ElementRef;
+pub use accessibility_scraper;
+pub use accessibility_scraper::fast_html5ever;
+pub use accessibility_scraper::ElementRef;
+pub use accessibility_scraper::Html;
+
+pub use crate::engine::audit::auditor::Auditor;
+pub use crate::engine::issue::Issue;
 
 i18n!("locales", fallback = "en");
 
@@ -218,14 +222,14 @@ pub enum AuditResults {
 
 /// audit a web page passing the html and css rules.
 #[cfg(all(feature = "spider"))]
-pub async fn audit(config: AuditConfig) -> AuditResults {
+pub async fn audit(config: &AuditConfig) -> AuditResults {
     if !config.url.is_empty() {
         use spider::website::Website;
         let mut website: Website = Website::new(&config.url);
         let mut rx2: tokio::sync::broadcast::Receiver<spider::page::Page> =
             website.subscribe(16).unwrap();
         let bounding_box = config.bounding_box;
-        let locale = config.locale;
+        let locale = config.locale.clone();
 
         let audits = tokio::spawn(async move {
             let mut issues: spider::hashbrown::HashMap<String, Vec<Issue>> =
@@ -253,7 +257,7 @@ pub async fn audit(config: AuditConfig) -> AuditResults {
 
 /// audit a web page passing the html and css rules.
 #[cfg(not(feature = "tokio"))]
-pub fn audit(config: AuditConfig) -> Vec<Issue> {
+pub fn audit(config: &AuditConfig) -> Vec<Issue> {
     let document = accessibility_scraper::Html::parse_document(&config.html);
     let auditor = Auditor::new(&document, &config.css, config.bounding_box, &config.locale);
     engine::audit::wcag::WCAGAAA::audit(auditor)
