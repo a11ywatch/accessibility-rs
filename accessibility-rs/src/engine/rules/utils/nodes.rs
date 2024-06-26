@@ -1,5 +1,5 @@
 use crate::engine::rules::rule::Validation;
-use crate::ElementRef;
+use accessibility_scraper::ElementRef;
 use accessibility_scraper::Selector;
 use selectors::Element;
 

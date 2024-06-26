@@ -10,19 +10,23 @@ pub fn bench_speed(c: &mut Criterion) {
     group.sample_size(50);
 
     group.bench_function(format!("audit: {}", "small html"), |b| {
-        b.iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_SMALL_HTML))))
+        b.iter(|| black_box(audit(&AuditConfig::basic(mock::MOCK_WEBSITE_SMALL_HTML))))
     });
 
     group.bench_function(format!("audit: {}", "medium html"), |b| {
-        b.iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_A11YWATCH_HTML))))
+        b.iter(|| {
+            black_box(audit(&AuditConfig::basic(
+                mock::MOCK_WEBSITE_A11YWATCH_HTML,
+            )))
+        })
     });
 
     group.bench_function(format!("audit: {}", "medium-large html"), |b| {
-        b.iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_HTML))))
+        b.iter(|| black_box(audit(&AuditConfig::basic(mock::MOCK_WEBSITE_HTML))))
     });
 
     group.bench_function(format!("audit: {}", "large-xlarge html"), |b| {
-        b.iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_LARGE_HTML))))
+        b.iter(|| black_box(audit(&AuditConfig::basic(mock::MOCK_WEBSITE_LARGE_HTML))))
     });
 
     group.finish();
@@ -36,22 +40,25 @@ pub fn bench_speed(c: &mut Criterion) {
 
     group.bench_function(format!("audit: {}", "small html"), |b| {
         b.to_async(&rt)
-            .iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_SMALL_HTML))))
+            .iter(|| black_box(audit(&AuditConfig::basic(mock::MOCK_WEBSITE_SMALL_HTML))))
     });
 
     group.bench_function(format!("audit: {}", "medium html"), |b| {
-        b.to_async(&rt)
-            .iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_A11YWATCH_HTML))))
+        b.to_async(&rt).iter(|| {
+            black_box(audit(&AuditConfig::basic(
+                mock::MOCK_WEBSITE_A11YWATCH_HTML,
+            )))
+        })
     });
 
     group.bench_function(format!("audit: {}", "medium-large html"), |b| {
         b.to_async(&rt)
-            .iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_HTML))))
+            .iter(|| black_box(audit(&AuditConfig::basic(mock::MOCK_WEBSITE_HTML))))
     });
 
     group.bench_function(format!("audit: {}", "large-xlarge html"), |b| {
         b.to_async(&rt)
-            .iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_LARGE_HTML))))
+            .iter(|| black_box(audit(&AuditConfig::basic(mock::MOCK_WEBSITE_LARGE_HTML))))
     });
 
     group.finish();
@@ -65,31 +72,34 @@ pub fn bench_speed(c: &mut Criterion) {
 
     group.bench_function(format!("audit: {}", "small html"), |b| {
         b.to_async(&rt)
-            .iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_SMALL_HTML))))
+            .iter(|| black_box(audit(&AuditConfig::basic(mock::MOCK_WEBSITE_SMALL_HTML))))
     });
 
     group.bench_function(format!("audit: {}", "medium html"), |b| {
-        b.to_async(&rt)
-            .iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_A11YWATCH_HTML))))
+        b.to_async(&rt).iter(|| {
+            black_box(audit(&AuditConfig::basic(
+                mock::MOCK_WEBSITE_A11YWATCH_HTML,
+            )))
+        })
     });
 
     group.bench_function(format!("audit: {}", "medium-large html"), |b| {
         b.to_async(&rt)
-            .iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_HTML))))
+            .iter(|| black_box(audit(&AuditConfig::basic(mock::MOCK_WEBSITE_HTML))))
     });
 
     group.bench_function(format!("audit: {}", "large-xlarge html"), |b| {
         b.to_async(&rt)
-            .iter(|| black_box(audit(AuditConfig::basic(mock::MOCK_WEBSITE_LARGE_HTML))))
+            .iter(|| black_box(audit(&AuditConfig::basic(mock::MOCK_WEBSITE_LARGE_HTML))))
     });
 
     group.bench_function(format!("audit: {}", "spider audit html"), |b| {
         b.to_async(&rt).iter(|| {
-            black_box(audit(AuditConfig::new_website(
+            black_box(audit(&AuditConfig::new_website(
                 "https://choosealicense.com",
                 "",
                 false,
-                ""
+                "",
             )))
         })
     });

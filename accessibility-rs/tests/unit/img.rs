@@ -5,7 +5,7 @@ use accessibility_rs::AuditConfig;
 #[cfg(not(feature = "tokio"))]
 /// img is missing an alt
 fn _audit_img_missing_alt() {
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>     
        <title>Missing Alt: Do not Use.</title>
@@ -31,7 +31,7 @@ fn _audit_img_missing_alt() {
 #[cfg(not(feature = "tokio"))]
 /// img is missing an alt
 fn _audit_form_submit_img_missing_alt() {
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>     
        <title>Missing Alt: Do not Use.</title>
@@ -60,7 +60,7 @@ fn _audit_form_submit_img_missing_alt() {
 #[cfg(not(feature = "tokio"))]
 /// img has empty alt and title
 fn _audit_form_submit_img_has_alt_and_title() {
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>     
        <title>Contains Title with Alt: Do not Use.</title>

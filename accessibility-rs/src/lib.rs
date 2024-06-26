@@ -62,9 +62,13 @@ pub mod engine;
 /// locales for translations.
 pub mod i18n;
 
-use crate::engine::audit::auditor::Auditor;
-use crate::engine::issue::Issue;
-use accessibility_scraper::ElementRef;
+pub use accessibility_scraper;
+pub use accessibility_scraper::fast_html5ever;
+pub use accessibility_scraper::Html;
+pub use accessibility_scraper::ElementRef;
+
+pub use crate::engine::audit::auditor::Auditor;
+pub use crate::engine::issue::Issue;
 
 i18n!("locales", fallback = "en");
 
@@ -218,7 +222,7 @@ pub enum AuditResults {
 
 /// audit a web page passing the html and css rules.
 #[cfg(all(feature = "spider"))]
-pub async fn audit(config: AuditConfig) -> AuditResults {
+pub async fn audit(config: &AuditConfig) -> AuditResults {
     if !config.url.is_empty() {
         use spider::website::Website;
         let mut website: Website = Website::new(&config.url);
@@ -253,7 +257,7 @@ pub async fn audit(config: AuditConfig) -> AuditResults {
 
 /// audit a web page passing the html and css rules.
 #[cfg(not(feature = "tokio"))]
-pub fn audit(config: AuditConfig) -> Vec<Issue> {
+pub fn audit(config: &AuditConfig) -> Vec<Issue> {
     let document = accessibility_scraper::Html::parse_document(&config.html);
     let auditor = Auditor::new(&document, &config.css, config.bounding_box, &config.locale);
     engine::audit::wcag::WCAGAAA::audit(auditor)

@@ -1,6 +1,6 @@
 [package]
 name = "accessibility-rs"
-version = "0.0.64"
+version = "0.1.6"
 authors = ["The A11yWatch Project Developers", "Jeff Mendez <jeff@a11ywatch.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -12,11 +12,11 @@ include = ["/src", "../LICENSE_MIT", "../LICENSE_APACHE", "../README.md", "local
 
 [dependencies]
 lazy_static = { workspace = true }
-accessibility-scraper = { version = "0.0.12", features = ["main"], default-features = false, path = "../accessibility-scraper" }
-accessibility-tree = { version = "0.0.12", path = "../accessibility-tree/victor" }
+accessibility-scraper = { version = "0.0.14", features = ["main"], default-features = false, path = "../accessibility-scraper" }
+accessibility-tree = { version = "0.0.14", path = "../accessibility-tree/victor" }
 getrandom = { version = "0.2", features = ["js"] }
-taffy = { version = "0.4.0" }
-serde = { version = "1.0", features = ["derive"] }
+taffy = { version = "0.5" }
+serde = { version = "1", features = ["derive"] }
 selectors = { workspace = true }
 smallvec = { workspace = true }
 ego-tree = { workspace = true }
@@ -29,7 +29,7 @@ contrast = "0.1"
 rgb = "0.8"
 rayon = { version = "1", optional = true }
 crossbeam-channel = { version = "0.5", optional = true }
-tokio = { version = "1", features = ["macros"], optional = true }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "parking_lot"], optional = true }
 tokio-stream = { version = "0.1", optional = true }
 spider = { version = "1.98.2", optional = true }
 

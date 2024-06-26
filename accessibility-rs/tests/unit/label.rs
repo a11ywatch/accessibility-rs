@@ -12,7 +12,7 @@ fn _audit_label_valid_name() {
         label for="accessibility" { "My label" }
     };
 
-    let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
+    let audit = accessibility_rs::audit(&AuditConfig::basic(&markup.into_string()));
 
     let valid = !audit
         .iter()
@@ -30,7 +30,7 @@ fn _audit_label_id_noexist() {
         input type="text" placeholder="Accessibility rocks!" value="Here";
     };
 
-    let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
+    let audit = accessibility_rs::audit(&AuditConfig::basic(&markup.into_string()));
 
     let valid = !audit
         .iter()

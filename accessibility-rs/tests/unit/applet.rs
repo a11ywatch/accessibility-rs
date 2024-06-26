@@ -6,7 +6,7 @@ use accessibility_rs::AuditConfig;
 #[cfg(not(feature = "tokio"))]
 /// missing applet alt
 fn _audit_missing_applet_alt() {
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html lang="en">
        <head>     
           <title>Missing applet alt: Do not use this!</title>
@@ -34,7 +34,7 @@ fn _audit_missing_applet_alt() {
 #[cfg(not(feature = "tokio"))]
 /// missing applet body
 fn _audit_missing_applet_body() {
-    let audit = accessibility_rs::audit(AuditConfig::basic(
+    let audit = accessibility_rs::audit(&AuditConfig::basic(
         r###"<html lang="en">
        <head>     
           <title>Missing applet alt: Do not use this!</title>

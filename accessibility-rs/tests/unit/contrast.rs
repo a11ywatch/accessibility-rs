@@ -12,7 +12,7 @@ fn _audit_contrast_text_anchor() {
             a href="www.example.com" style="color:blue;" { "example" };
         }
     };
-    let audit = accessibility_rs::audit(AuditConfig::basic(&markup.into_string()));
+    let audit = accessibility_rs::audit(&AuditConfig::basic(&markup.into_string()));
 
     let valid = !audit
         .iter()
